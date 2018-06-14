@@ -5,7 +5,7 @@ import styles from './styles.scss';
 
 const Album = (props) => (
   <div className={styles.container}>
-    <img className={styles.art} src={props.album.attributes.artwork.url.replace('{w}', '120').replace('{h}', '120')} alt="" />
+    <img className={styles.art} src={props.album.attributes.artwork.url.replace('{w}', '400').replace('{h}', '400')} alt="" />
     <span className={styles.title}>{props.album.attributes.name}</span>
     <span className={styles.artist}>{props.album.attributes.artistName}</span>
   </div>
