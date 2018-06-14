@@ -4,6 +4,7 @@ import 'babel-polyfill';
 import React, { Component } from 'react';
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
+import Library from './components/Library';
 
 class App extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class App extends Component {
         <Header />
         {
           this.state.isLoggedIn ? (
-            <h1>App</h1>
+            <Library />
           ) : (
             <LoginContainer onLoginSuccess={this.onLoginSuccess} />
           )

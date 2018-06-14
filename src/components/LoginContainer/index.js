@@ -10,6 +10,7 @@ class LoginContainer extends Component {
 
   async onLoginButtonClicked() {
     const musicUserToken = await window.MusicKitInstance.authorize();
+    window.localStorage.setItem('musicUserToken', musicUserToken);
     this.props.onLoginSuccess();
   }
 
