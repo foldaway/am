@@ -5,6 +5,9 @@ import React, { Component } from 'react';
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
 import Library from './components/Library';
+import TrackList from './components/TrackList';
+
+import styles from './App.scss';
 
 const checkIsLogged = () => {
   try {
@@ -32,11 +35,14 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.container}>
         <Header />
         {
           this.state.isLoggedIn ? (
-            <Library />
+            <div className={styles['main-content']}>
+              <Library />
+              <TrackList />
+            </div>
           ) : (
             <LoginContainer onLoginSuccess={this.onLoginSuccess} />
           )

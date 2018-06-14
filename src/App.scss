@@ -1,0 +1,8 @@
+.container {
+  display: grid;
+
+  .main-content {
+    display: grid;
+    grid-auto-flow: column;
+  }
+}

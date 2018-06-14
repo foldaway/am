@@ -1,7 +1,11 @@
 import React from 'react';
 
+import styles from './styles.scss';
+
 const Header = () => (
-  <h1>AM</h1>
+  <div className={styles.container}>
+    <h1>AM</h1>
+  </div>
 );
 
 export default Header;
