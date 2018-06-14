@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Album from '../Album';
+import styles from './styles.scss';
 
 class Library extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class Library extends Component {
       albums.push(...temp);
 
       await this.sleep(30);
+      break;
     } while (temp.length > 0);
 
     this.setState({ albums });
@@ -34,7 +36,7 @@ class Library extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.container}>
         {
           this.state.albums.map((album) => <Album key={album.id} album={album} />)
         }

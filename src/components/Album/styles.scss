@@ -1,0 +1,14 @@
+.container {
+  display: grid;
+  justify-items: center;
+
+  .art {
+    width: 200px;
+    height: 200px;
+  }
+
+  .title {
+    font-weight: 700;
+    text-align: center;
+  }
+}
