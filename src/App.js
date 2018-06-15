@@ -47,7 +47,11 @@ class App extends Component {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
               <Library onAlbumSelected={this.setCurrentAlbum} />
-              <TrackList album={this.state.currentAlbum} />
+              {
+                this.state.currentAlbum !== null ? (
+                  <TrackList album={this.state.currentAlbum} />
+                ) : null
+              }
             </div>
           ) : (
             <LoginContainer onLoginSuccess={this.onLoginSuccess} />

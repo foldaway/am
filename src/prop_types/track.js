@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 
 export default PropTypes.shape({
-  id: PropTypes.string,
   attributes: PropTypes.shape({
+    id: PropTypes.string,
+    albumName: PropTypes.string,
     artistName: PropTypes.string,
     artwork: PropTypes.shape({
       width: PropTypes.number,
@@ -10,6 +11,6 @@ export default PropTypes.shape({
       url: PropTypes.string,
     }),
     name: PropTypes.string,
-    trackCount: PropTypes.number,
+    trackNumber: PropTypes.number,
   }),
 });

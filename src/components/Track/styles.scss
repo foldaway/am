@@ -1,0 +1,10 @@
+.container {
+  display: grid;
+  grid-auto-flow: column;
+  justify-items: center;
+
+  .title {
+    font-weight: 700;
+    text-align: center;
+  }
+}
