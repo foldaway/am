@@ -24,13 +24,19 @@ class App extends Component {
 
     this.state = {
       isLoggedIn: checkIsLogged(),
+      currentAlbum: null,
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
+    this.setCurrentAlbum = this.setCurrentAlbum.bind(this);
   }
 
   onLoginSuccess() {
     this.setState({ isLoggedIn: true });
+  }
+
+  setCurrentAlbum(currentAlbum) {
+    this.setState({ currentAlbum });
   }
 
   render() {
@@ -40,8 +46,8 @@ class App extends Component {
         {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
-              <Library />
-              <TrackList />
+              <Library onAlbumSelected={this.setCurrentAlbum} />
+              <TrackList album={this.state.currentAlbum} />
             </div>
           ) : (
             <LoginContainer onLoginSuccess={this.onLoginSuccess} />
