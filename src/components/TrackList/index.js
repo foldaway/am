@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import Album from '../Album';
 import Track from '../Track';
+import PlayerControls from '../PlayerControls';
+
 import albumPropType from '../../prop_types/album';
 
 class TrackList extends Component {
@@ -12,6 +14,7 @@ class TrackList extends Component {
     };
 
     this.loadTracks = this.loadTracks.bind(this);
+    this.playTrack = this.playTrack.bind(this);
     this.loadTracks();
   }
 
@@ -24,6 +27,12 @@ class TrackList extends Component {
     this.setState({ tracks: albumData.relationships.tracks.data });
   }
 
+  async playTrack(track) {
+    await window.MusicKitInstance.setQueue({ album: this.props.album.id });
+    await window.MusicKitInstance.changeToMediaAtIndex(track.attributes.trackNumber);
+    await window.MusicKitInstance.play();
+  }
+
   render() {
     return (
       <div>
@@ -31,9 +40,10 @@ class TrackList extends Component {
         <Album album={this.props.album} />
         {
           this.state.tracks.map((track) => (
-            <Track key={track.id} track={track} onSelected={() => {}} />
+            <Track key={track.id} track={track} onSelected={this.playTrack} />
           ))
         }
+        <PlayerControls />
       </div>
     );
   }
