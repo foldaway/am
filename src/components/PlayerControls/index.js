@@ -60,7 +60,9 @@ class PlayerControls extends Component {
           { this.state.isPlaying ? 'Pause' : 'Play' }
         </button>
         <button className={styles.next} onClick={() => player.skipToNextItem()}>Next</button>
-        <progress value={this.state.currentPlaybackTime} max={progressMax} />
+        <progress value={this.state.currentPlaybackTime * 1000} max={progressMax} />
+        <span className={styles['current-time']}>{this.state.currentPlaybackTime}s</span>
+        <span className={styles.duration}>{progressMax / 1000}s</span>
         <span className={styles.bitrate}>{this.state.bitrate}</span>
       </div>
     );
