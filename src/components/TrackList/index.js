@@ -29,7 +29,7 @@ class TrackList extends Component {
 
   async playTrack(track) {
     await window.MusicKitInstance.setQueue({ album: this.props.album.id });
-    await window.MusicKitInstance.changeToMediaAtIndex(track.attributes.trackNumber);
+    await window.MusicKitInstance.changeToMediaAtIndex(track.attributes.trackNumber - 1);
     await window.MusicKitInstance.play();
   }
 
