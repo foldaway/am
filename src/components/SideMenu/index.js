@@ -36,8 +36,8 @@ class SideMenu extends Component {
       <div className={styles.container}>
         <div className={styles.section}>
           <span className={styles.title}>Library</span>
-          <span onClick={() => props.onSelected('albums')}>Albums</span>
-          <span onClick={() => props.onSelected('songs')}>Songs</span>
+          <span onClick={() => this.props.onSelected('albums')}>Albums</span>
+          <span onClick={() => this.props.onSelected('songs')}>Songs</span>
         </div>
         <div className={styles.section}>
           <span className={styles.title}>Playlists</span>
@@ -45,7 +45,7 @@ class SideMenu extends Component {
             this.state.playlists.map((playlist) => (
               <span
                 key={playlist.id}
-                onClick={() => props.onSelected('playlist', playlist)}>
+                onClick={() => this.props.onSelected('playlist', playlist)}>
                 {playlist.attributes.name}
               </span>
             ))

@@ -7,29 +7,21 @@ import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
 import AlbumLibrary from './components/AlbumLibrary';
 import SongLibrary from './components/SongLibrary';
+import PlaylistLibrary from './components/PlaylistLibrary';
 import Player from './components/Player';
 import SideMenu from './components/SideMenu';
 
 import styles from './App.scss';
-
-const checkIsLogged = () => {
-  try {
-    window.MusicKit.getInstance();
-    return true;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
-};
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isLoggedIn: checkIsLogged(),
+      isLoggedIn: window.MusicKitInstance.isAuthorized,
       currentSong: null,
-      view: 'Albums',
+      selectedPlaylist: null,
+      view: 'albums',
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
@@ -48,6 +40,8 @@ class App extends Component {
         return <AlbumLibrary onAlbumSelected={this.setCurrentSong} />;
       case 'songs':
         return <SongLibrary onSongSelected={this.setCurrentSong} />;
+      case 'playlist':
+        return <PlaylistLibrary playlist={this.state.selectedPlaylist} onSongSelected={this.setCurrentSong} />;
       default:
         return null;
     }
@@ -57,8 +51,8 @@ class App extends Component {
     this.setState({ currentSong });
   }
 
-  setView(view) {
-    this.setState({ view });
+  setView(view, selectedPlaylist) {
+    this.setState({ view, selectedPlaylist });
   }
 
   render() {
