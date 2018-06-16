@@ -44,9 +44,9 @@ class App extends Component {
 
   getView() {
     switch (this.state.view) {
-      case 'Albums':
+      case 'albums':
         return <AlbumLibrary onAlbumSelected={this.setCurrentSong} />;
-      case 'Songs':
+      case 'songs':
         return <SongLibrary onSongSelected={this.setCurrentSong} />;
       default:
         return null;
@@ -68,7 +68,7 @@ class App extends Component {
         {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
-              <SideMenu onSelected={(e) => this.setView(e.target.textContent)} />
+              <SideMenu onSelected={this.setView} />
               <div className={styles.view}>
                 { this.getView() }
               </div>
