@@ -19,15 +19,22 @@ class App extends Component {
 
     this.state = {
       isLoggedIn: window.MusicKitInstance.isAuthorized,
-      currentSong: null,
       selectedPlaylist: null,
       view: 'albums',
+      queue: [],
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.getView = this.getView.bind(this);
-    this.setCurrentSong = this.setCurrentSong.bind(this);
+    this.enqueueMedia = this.enqueueMedia.bind(this);
     this.setView = this.setView.bind(this);
+    this.updateState = this.updateState.bind(this);
+
+    const { Events } = window.MusicKit;
+    const { player } = window.MusicKitInstance;
+
+    player.queue.addEventListener(Events.queueItemsDidChange, this.updateState);
+    player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
   }
 
   onLoginSuccess() {
@@ -37,22 +44,33 @@ class App extends Component {
   getView() {
     switch (this.state.view) {
       case 'albums':
-        return <AlbumLibrary onAlbumSelected={this.setCurrentSong} />;
+        return <AlbumLibrary onAlbumSelected={this.enqueueMedia} />;
       case 'songs':
-        return <SongLibrary onSongSelected={this.setCurrentSong} />;
+        return <SongLibrary onSongSelected={this.enqueueMedia} />;
       case 'playlist':
-        return <PlaylistLibrary playlist={this.state.selectedPlaylist} onSongSelected={this.setCurrentSong} />;
+        return (<PlaylistLibrary
+          playlist={this.state.selectedPlaylist}
+          onSongSelected={this.enqueueMedia}
+        />);
       default:
         return null;
     }
   }
 
-  setCurrentSong(currentSong) {
-    this.setState({ currentSong });
-  }
-
   setView(view, selectedPlaylist) {
     this.setState({ view, selectedPlaylist });
+  }
+
+  updateState() {
+    this.setState({ queue: window.MusicKitInstance.player.queue.items });
+  }
+
+  async enqueueMedia(media) {
+    const { player } = window.MusicKitInstance;
+    await player.queue.append({ items: [media] });
+    if (!player.isPlaying) {
+      await window.MusicKitInstance.play();
+    }
   }
 
   render() {
@@ -66,13 +84,7 @@ class App extends Component {
               <div className={styles.view}>
                 { this.getView() }
               </div>
-              {
-                this.state.currentSong !== null ? (
-                  <div className={styles.player}>
-                    <Player song={this.state.currentSong} />
-                  </div>
-                ) : null
-              }
+              <Player queue={this.state.queue} />
             </div>
           ) : (
             <div>
