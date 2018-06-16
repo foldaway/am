@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { PlaybackControls, TimeMarker, ProgressBar } from 'react-player-controls';
 
 import styles from './styles.scss';
+import controlsStyles from './controls.scss';
 
 const padTimeUnit = (time) => (time < 10 ? `0${time.toFixed(0)}` : time.toFixed(0));
 
@@ -25,7 +27,7 @@ class PlayerControls extends Component {
       isPlaying: false,
       nowPlayingItem: null,
       playbackMillis: 0,
-      playbackState: PlaybackStates.none,
+      currentBufferedProgress: 0,
     };
 
     this.togglePlay = this.togglePlay.bind(this);
@@ -48,29 +50,55 @@ class PlayerControls extends Component {
     this.setState({
       bitrate: player.bitrate,
       playbackMillis: player.currentPlaybackTime * 1000,
-      playbackState: player.playbackState,
+      currentBufferedProgress: player.currentBufferedProgress,
       nowPlayingItem: player.nowPlayingItem,
       isPlaying: player.isPlaying,
     });
   }
 
   render() {
-    const { PlaybackStates } = window.MusicKit;
     const { player } = window.MusicKitInstance;
-    const progressValue = this.state.playbackState === PlaybackStates.playing ?
-      this.state.playbackMillis : null;
     const progressMax = this.state.nowPlayingItem !== null ?
       this.state.nowPlayingItem.attributes.durationInMillis : 0;
     return (
       <div className={styles.container}>
-        <progress value={progressValue} max={progressMax} />
-        <span className={styles['current-time']}>{getFormattedTime(this.state.playbackMillis)}</span>
-        <span className={styles.duration}>{getFormattedTime(progressMax)}</span>
+        <ProgressBar
+          className={controlsStyles.ProgressBar}
+          childClasses={{
+            buffered: controlsStyles['ProgressBar-buffered'],
+            elapsed: controlsStyles['ProgressBar-elapsed'],
+            intent: controlsStyles['ProgressBar-intent'],
+            handle: controlsStyles['ProgressBar-handle'],
+            seek: controlsStyles['ProgressBar-seek'],
+          }}
+          extraClasses={this.state.nowPlayingItem !== null ? [
+            controlsStyles.isSeekable,
+          ] : []}
+          bufferedTime={this.state.currentBufferedProgress * (this.state.playbackMillis / 1000)}
+          currentTime={this.state.playbackMillis / 1000}
+          totalTime={progressMax / 1000}
+          isSeekable={this.state.nowPlayingItem !== null}
+          onSeek={(time) => player.seekToTime(time)}
+        />
+        <TimeMarker
+          currentTime={this.state.playbackMillis / 1000}
+          totalTime={progressMax / 1000}
+          markerSeparator="/"
+        />
+        <PlaybackControls
+          className={controlsStyles.TimeMarker}
+          childClasses={controlsStyles}
+          extraClasses={this.state.nowPlayingItem !== null ? [
+            controlsStyles.isPlayable,
+          ] : []}
+          isPlaying={this.state.isPlaying}
+          isPlayable={this.state.nowPlayingItem !== null}
+        />
         <span className={styles.bitrate}>{this.state.bitrate}kbps</span>
-        <button className={styles['play-pause']} onClick={this.togglePlay}>
+        {/* <button className={styles['play-pause']} onClick={this.togglePlay}>
           { this.state.isPlaying ? 'Pause' : 'Play' }
         </button>
-        <button className={styles.next} onClick={() => player.skipToNextItem()}>Next</button>
+        <button className={styles.next} onClick={() => player.skipToNextItem()}>Next</button> */}
       </div>
     );
   }
