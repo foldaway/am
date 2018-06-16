@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
 import AlbumLibrary from './components/AlbumLibrary';
+import SongLibrary from './components/SongLibrary';
 import TrackList from './components/TrackList';
 import SideMenu from './components/SideMenu';
 
@@ -44,6 +45,8 @@ class App extends Component {
     switch (this.state.view) {
       case 'Albums':
         return <AlbumLibrary onAlbumSelected={this.setCurrentAlbum} />;
+      case 'Songs':
+        return <SongLibrary onSongSelected={() => {}} />;
       default:
         return null;
     }

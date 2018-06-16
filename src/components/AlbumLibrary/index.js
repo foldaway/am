@@ -30,12 +30,10 @@ class AlbumLibrary extends Component {
       });
       albums.push(...temp);
 
-      await sleep(30);
-      break;
+      await sleep(10);
     } while (temp.length > 0);
 
     this.setState({ albums });
-    console.log(albums);
   }
 
   render() {

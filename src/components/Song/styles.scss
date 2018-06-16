@@ -1,0 +1,19 @@
+.container {
+  display: grid;
+  grid-template-areas:
+    "art title"
+    "art artist";
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 8px;
+  align-items: center;
+
+  .art {
+    grid-area: art;
+    width: 40px;
+  }
+
+  .artist {
+    font-size: 0.8em;
+    color: gray;
+  }
+}
