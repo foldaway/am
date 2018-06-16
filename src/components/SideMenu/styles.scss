@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+
+  .section {
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-weight: 700;
+      font-size: 0.7em;
+      color: gray;
+    }
+
+    button {
+      -webkit-appearance: none;
+      display: block;
+      border: none;
+      padding: 0;
+    }
+  }
+}

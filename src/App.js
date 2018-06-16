@@ -2,10 +2,12 @@ import 'normalize.css';
 import 'babel-polyfill';
 
 import React, { Component } from 'react';
+
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
 import AlbumLibrary from './components/AlbumLibrary';
 import TrackList from './components/TrackList';
+import SideMenu from './components/SideMenu';
 
 import styles from './App.scss';
 
@@ -25,18 +27,34 @@ class App extends Component {
     this.state = {
       isLoggedIn: checkIsLogged(),
       currentAlbum: null,
+      view: 'Albums',
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
+    this.getView = this.getView.bind(this);
     this.setCurrentAlbum = this.setCurrentAlbum.bind(this);
+    this.setView = this.setView.bind(this);
   }
 
   onLoginSuccess() {
     this.setState({ isLoggedIn: true });
   }
 
+  getView() {
+    switch (this.state.view) {
+      case 'Albums':
+        return <AlbumLibrary onAlbumSelected={this.setCurrentAlbum} />;
+      default:
+        return null;
+    }
+  }
+
   setCurrentAlbum(currentAlbum) {
     this.setState({ currentAlbum });
+  }
+
+  setView(view) {
+    this.setState({ view });
   }
 
   render() {
@@ -46,7 +64,8 @@ class App extends Component {
         {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
-              <AlbumLibrary onAlbumSelected={this.setCurrentAlbum} />
+              <SideMenu onSelected={(e) => this.setView(e.target.textContent)} />
+              { this.getView() }
               {
                 this.state.currentAlbum !== null ? (
                   <TrackList album={this.state.currentAlbum} />
