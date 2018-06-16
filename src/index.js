@@ -5,8 +5,8 @@ import App from './App';
 
 import './index.scss';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-
 window.MusicKitInstance = window.MusicKit.configure({
   developerToken: 'abcdef',
 });
+
+ReactDOM.render(<App />, document.getElementById('root'));

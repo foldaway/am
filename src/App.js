@@ -17,6 +17,7 @@ const checkIsLogged = () => {
     window.MusicKit.getInstance();
     return true;
   } catch (e) {
+    console.error(e);
     return false;
   }
 };
