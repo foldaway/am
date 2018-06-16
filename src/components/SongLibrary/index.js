@@ -50,6 +50,7 @@ class SongLibrary extends Component {
   render() {
     return (
       <div className={styles.container}>
+        <span className={styles.title}>Songs</span>
         {
           this.state.songs.map((song) => (
             <Song key={song.id} song={song} onSelected={() => this.props.onSongSelected(song)} />

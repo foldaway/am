@@ -13,9 +13,11 @@
     grid-template-areas:
       "side-menu view"
       "player player";
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr 6fr;
     grid-template-rows: 1fr auto;
+    grid-column-gap: 10px;
     overflow: hidden;
+    padding: 0 20px;
 
     .view {
       grid-area: view;
@@ -24,6 +26,7 @@
 
     .player {
       grid-area: player;
+      padding: 20px 0;
     }
   }
 }

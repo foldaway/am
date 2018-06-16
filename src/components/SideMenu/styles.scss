@@ -1,17 +1,33 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  padding: 0 20px;
+  display: grid;
+  grid-auto-flow: row;
   overflow-y: scroll;
+  grid-row-gap: 10px;
+  grid-template-rows: auto 1fr;
+  grid-template-areas: "library" "playlists";
 
   .section {
     display: flex;
     flex-direction: column;
 
-    .title {
-      font-weight: 700;
-      font-size: 0.7em;
-      color: gray;
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 0.9em;
+      margin-bottom: 5px;
+
+      &.title {
+        font-weight: 700;
+        font-size: 0.7em;
+        color: gray;
+        margin-bottom: 10px;
+      }
+
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
     }
 
     button {
