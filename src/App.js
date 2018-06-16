@@ -7,7 +7,7 @@ import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
 import AlbumLibrary from './components/AlbumLibrary';
 import SongLibrary from './components/SongLibrary';
-import TrackList from './components/TrackList';
+import Player from './components/Player';
 import SideMenu from './components/SideMenu';
 
 import styles from './App.scss';
@@ -71,7 +71,7 @@ class App extends Component {
               { this.getView() }
               {
                 this.state.currentAlbum !== null ? (
-                  <TrackList album={this.state.currentAlbum} />
+                  <Player album={this.state.currentAlbum} />
                 ) : null
               }
             </div>

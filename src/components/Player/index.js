@@ -6,7 +6,7 @@ import PlayerControls from '../PlayerControls';
 
 import albumPropType from '../../prop_types/album';
 
-class TrackList extends Component {
+class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,8 +49,8 @@ class TrackList extends Component {
   }
 }
 
-TrackList.propTypes = {
+Player.propTypes = {
   album: albumPropType.isRequired,
 };
 
-export default TrackList;
+export default Player;
