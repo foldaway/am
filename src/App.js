@@ -27,13 +27,13 @@ class App extends Component {
 
     this.state = {
       isLoggedIn: checkIsLogged(),
-      currentAlbum: null,
+      currentSong: null,
       view: 'Albums',
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.getView = this.getView.bind(this);
-    this.setCurrentAlbum = this.setCurrentAlbum.bind(this);
+    this.setCurrentSong = this.setCurrentSong.bind(this);
     this.setView = this.setView.bind(this);
   }
 
@@ -44,16 +44,16 @@ class App extends Component {
   getView() {
     switch (this.state.view) {
       case 'Albums':
-        return <AlbumLibrary onAlbumSelected={this.setCurrentAlbum} />;
+        return <AlbumLibrary onAlbumSelected={this.setCurrentSong} />;
       case 'Songs':
-        return <SongLibrary onSongSelected={() => {}} />;
+        return <SongLibrary onSongSelected={this.setCurrentSong} />;
       default:
         return null;
     }
   }
 
-  setCurrentAlbum(currentAlbum) {
-    this.setState({ currentAlbum });
+  setCurrentSong(currentSong) {
+    this.setState({ currentSong });
   }
 
   setView(view) {
@@ -72,9 +72,9 @@ class App extends Component {
                 { this.getView() }
               </div>
               {
-                this.state.currentAlbum !== null ? (
+                this.state.currentSong !== null ? (
                   <div className={styles.player}>
-                    <Player album={this.state.currentAlbum} />
+                    <Player song={this.state.currentSong} />
                   </div>
                 ) : null
               }
