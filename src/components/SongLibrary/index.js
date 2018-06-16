@@ -21,19 +21,7 @@ class SongLibrary extends Component {
   }
 
   async load() {
-    const songs = [];
-    let temp = [];
-    do {
-      temp = await window.MusicKitInstance.api.library.songs(null, {
-        limit: 100,
-        offset: songs.length,
-      });
-      songs.push(...temp);
-
-      await sleep(10);
-    } while (temp.length > 0);
-
-    songs.sort((a, b) => {
+    const sortFunc = (a, b) => {
       const aa = a.attributes;
       const ba = b.attributes;
 
@@ -43,9 +31,20 @@ class SongLibrary extends Component {
       return aa.artistName.localeCompare(ba.artistName) ||
         aan.localeCompare(ban) ||
         aa.name.localeCompare(ba.name);
-    });
+    };
 
-    this.setState({ songs });
+    let temp = [];
+    do {
+      temp = await window.MusicKitInstance.api.library.songs(null, {
+        limit: 100,
+        offset: this.state.songs.length,
+      });
+      this.setState({
+        songs: [...this.state.songs, ...temp].sort(sortFunc),
+      });
+
+      await sleep(10);
+    } while (temp.length > 0);
   }
 
   render() {

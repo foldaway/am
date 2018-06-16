@@ -21,19 +21,19 @@ class AlbumLibrary extends Component {
   }
 
   async load() {
-    const albums = [];
     let temp = [];
     do {
       temp = await window.MusicKitInstance.api.library.albums(null, {
         limit: 100,
-        offset: albums.length,
+        offset: this.state.albums.length,
       });
-      albums.push(...temp);
+
+      this.setState({
+        albums: [...this.state.albums, ...temp],
+      });
 
       await sleep(10);
     } while (temp.length > 0);
-
-    this.setState({ albums });
   }
 
   render() {
