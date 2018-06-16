@@ -19,8 +19,8 @@ const Player = (props) => (
     </div>
     <div className={styles.song}>
       {
-        props.queue.length > 0 ? (
-          <Song song={props.queue[0]} />
+        props.nowPlayingItem !== null ? (
+          <Song song={props.nowPlayingItem} />
         ) : null
       }
     </div>
@@ -32,6 +32,7 @@ const Player = (props) => (
 
 Player.propTypes = {
   queue: PropTypes.arrayOf(trackPropType).isRequired,
+  nowPlayingItem: trackPropType.isRequired,
 };
 
 export default Player;

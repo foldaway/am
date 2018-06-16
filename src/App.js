@@ -22,6 +22,7 @@ class App extends Component {
       selectedPlaylist: null,
       view: 'albums',
       queue: [],
+      nowPlayingItem: null,
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
@@ -33,6 +34,7 @@ class App extends Component {
     const { Events } = window.MusicKit;
     const { player } = window.MusicKitInstance;
 
+    player.addEventListener(Events.playbackStateDidChange, this.updateState);
     player.queue.addEventListener(Events.queueItemsDidChange, this.updateState);
     player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
   }
@@ -62,7 +64,11 @@ class App extends Component {
   }
 
   updateState() {
-    this.setState({ queue: window.MusicKitInstance.player.queue.items });
+    const { player } = window.MusicKitInstance;
+    this.setState({
+      queue: player.queue.items,
+      nowPlayingItem: player.nowPlayingItem,
+    });
   }
 
   async enqueueMedia(media) {
@@ -84,7 +90,7 @@ class App extends Component {
               <div className={styles.view}>
                 { this.getView() }
               </div>
-              <Player queue={this.state.queue} />
+              <Player queue={this.state.queue} nowPlayingItem={this.state.nowPlayingItem} />
             </div>
           ) : (
             <div>
