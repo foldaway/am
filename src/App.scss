@@ -1,9 +1,29 @@
 .container {
   display: grid;
+  grid-template-areas:
+    "header"
+    "main-content";
+  grid-auto-flow: row;
+  grid-auto-rows: auto 1fr;
+  height: 100%;
 
   .main-content {
+    grid-area: main-content;
     display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: 1fr 4fr auto;
+    grid-template-areas:
+      "side-menu view"
+      "player player";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+
+    .view {
+      grid-area: view;
+      overflow-y: scroll;
+    }
+
+    .player {
+      grid-area: player;
+    }
   }
 }

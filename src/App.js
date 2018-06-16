@@ -68,15 +68,21 @@ class App extends Component {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
               <SideMenu onSelected={(e) => this.setView(e.target.textContent)} />
-              { this.getView() }
+              <div className={styles.view}>
+                { this.getView() }
+              </div>
               {
                 this.state.currentAlbum !== null ? (
-                  <Player album={this.state.currentAlbum} />
+                  <div className={styles.player}>
+                    <Player album={this.state.currentAlbum} />
+                  </div>
                 ) : null
               }
             </div>
           ) : (
-            <LoginContainer onLoginSuccess={this.onLoginSuccess} />
+            <div>
+              <LoginContainer onLoginSuccess={this.onLoginSuccess} />
+            </div>
           )
         }
       </div>
