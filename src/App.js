@@ -4,7 +4,7 @@ import 'babel-polyfill';
 import React, { Component } from 'react';
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
-import Library from './components/Library';
+import AlbumLibrary from './components/AlbumLibrary';
 import TrackList from './components/TrackList';
 
 import styles from './App.scss';
@@ -46,7 +46,7 @@ class App extends Component {
         {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
-              <Library onAlbumSelected={this.setCurrentAlbum} />
+              <AlbumLibrary onAlbumSelected={this.setCurrentAlbum} />
               {
                 this.state.currentAlbum !== null ? (
                   <TrackList album={this.state.currentAlbum} />

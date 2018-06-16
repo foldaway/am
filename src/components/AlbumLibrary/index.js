@@ -8,7 +8,7 @@ import styles from './styles.scss';
 
 const sleep = async (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
-class Library extends Component {
+class AlbumLibrary extends Component {
   constructor(props) {
     super(props);
 
@@ -51,8 +51,8 @@ class Library extends Component {
   }
 }
 
-Library.propTypes = {
+AlbumLibrary.propTypes = {
   onAlbumSelected: PropTypes.func.isRequired,
 };
 
-export default Library;
+export default AlbumLibrary;
