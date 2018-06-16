@@ -30,9 +30,13 @@ const Player = (props) => (
   </div>
 );
 
+Player.defaultProps = {
+  nowPlayingItem: null,
+};
+
 Player.propTypes = {
   queue: PropTypes.arrayOf(trackPropType).isRequired,
-  nowPlayingItem: trackPropType.isRequired,
+  nowPlayingItem: trackPropType,
 };
 
 export default Player;
