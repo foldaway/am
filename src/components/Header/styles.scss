@@ -1,4 +1,5 @@
 @import '../../stylesheets/mixins.scss';
+@import '../../stylesheets/variables.scss';
 
 .container {
   display: grid;
@@ -7,5 +8,6 @@
 
   span {
     @include large-title;
+    color: $red;
   }
 }
