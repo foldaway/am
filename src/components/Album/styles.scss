@@ -7,7 +7,7 @@
     "title"
     "artist"
     "songs";
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: 1fr auto auto auto;
   font-size: 0.9em;
   grid-row-gap: 3px;
 
@@ -16,11 +16,15 @@
     height: auto;
     margin-bottom: 4px;
     border-radius: 6px;
+    align-self: center;
   }
 
   .title {
     font-weight: 400;
     color: $black;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 
   .artist {
