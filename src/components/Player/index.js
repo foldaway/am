@@ -12,13 +12,16 @@ class Player extends Component {
   constructor(props) {
     super(props);
 
+    this.activeRef = null;
     this.activeRefFunc = (e) => {
       this.activeRef = e;
     };
   }
 
   componentDidUpdate() {
-    this.activeRef.scrollIntoView({ behaviour: 'smooth' });
+    if (this.activeRef !== null) {
+      this.activeRef.scrollIntoView({ behaviour: 'smooth' });
+    }
   }
 
   render() {
