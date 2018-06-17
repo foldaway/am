@@ -49,7 +49,12 @@ class PlayerControls extends Component {
   render() {
     const progressMax = this.state.nowPlayingItem !== null ?
       this.state.nowPlayingItem.attributes.durationInMillis : 0;
-    const { onSeek, onPlaybackChange, onPrevious, onNext } = this.props;
+    const {
+      onSeek,
+      onPlaybackChange,
+      onPrevious,
+      onNext,
+    } = this.props;
     return (
       <div className={styles.container}>
         <ProgressBar

@@ -31,9 +31,10 @@ const Player = ({ queue, nowPlayingItem }) => (
         onSeek={(time) => window.MusicKitInstance.player.seekToTime(time)}
         onPrevious={() => window.MusicKitInstance.player.changeToMediaAtIndex(queue.position - 1)}
         onNext={() => window.MusicKitInstance.player.skipToNextItem()}
-        onPlaybackChange={(isPlaying) => (isPlaying ?
-          window.MusicKitInstance.player.pause() :
-          window.MusicKitInstance.player.play())}
+        onPlaybackChange={(isPaused) => (isPaused ?
+          window.MusicKitInstance.player.play() :
+          window.MusicKitInstance.player.pause()
+        )}
       />
     </div>
   </div>
