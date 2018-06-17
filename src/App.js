@@ -21,7 +21,7 @@ class App extends Component {
       isLoggedIn: window.MusicKitInstance.isAuthorized,
       selectedPlaylist: null,
       view: 'albums',
-      queue: [],
+      queue: { items: [] },
       nowPlayingItem: null,
     };
 
@@ -66,7 +66,7 @@ class App extends Component {
   updateState() {
     const { player } = window.MusicKitInstance;
     this.setState({
-      queue: player.queue.items,
+      queue: player.queue,
       nowPlayingItem: player.nowPlayingItem,
     });
   }

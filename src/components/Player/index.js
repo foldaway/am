@@ -8,24 +8,33 @@ import trackPropType from '../../prop_types/track';
 
 import styles from './styles.scss';
 
-const Player = (props) => (
+const Player = ({ queue, nowPlayingItem }) => (
   <div className={styles.container}>
     <div className={styles.queue}>
       {
-        props.queue.map((item) => (
+        queue.items.map((item) => (
           <Song key={item.id} song={item} />
         ))
       }
     </div>
     <div className={styles.song}>
       {
-        props.nowPlayingItem !== null ? (
-          <Song song={props.nowPlayingItem} />
+        nowPlayingItem !== null ? (
+          <Song song={nowPlayingItem} />
         ) : null
       }
     </div>
     <div className={styles.controls}>
-      <PlayerControls />
+      <PlayerControls
+        hasPrevious={queue.position > 0}
+        hasNext={queue.position < queue.length - 1}
+        onSeek={(time) => window.MusicKitInstance.player.seekToTime(time)}
+        onPrevious={() => window.MusicKitInstance.player.changeToMediaAtIndex(queue.position - 1)}
+        onNext={() => window.MusicKitInstance.player.skipToNextItem()}
+        onPlaybackChange={(isPlaying) => (isPlaying ?
+          window.MusicKitInstance.player.pause() :
+          window.MusicKitInstance.player.play())}
+      />
     </div>
   </div>
 );
@@ -35,7 +44,10 @@ Player.defaultProps = {
 };
 
 Player.propTypes = {
-  queue: PropTypes.arrayOf(trackPropType).isRequired,
+  queue: PropTypes.shape({
+    items: PropTypes.arrayOf(trackPropType),
+    position: PropTypes.number,
+  }).isRequired,
   nowPlayingItem: trackPropType,
 };
 
