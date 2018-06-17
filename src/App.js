@@ -10,6 +10,7 @@ import SongLibrary from './components/SongLibrary';
 import PlaylistLibrary from './components/PlaylistLibrary';
 import Player from './components/Player';
 import SideMenu from './components/SideMenu';
+import SearchCatalog from './components/SearchCatalog';
 
 import styles from './App.scss';
 
@@ -67,6 +68,8 @@ class App extends Component {
         return <AlbumLibrary onAlbumSelected={this.playAlbum} />;
       case 'songs':
         return <SongLibrary onSongSelected={this.playSong} />;
+      case 'search':
+        return <SearchCatalog onSongSelected={this.playSong} onAlbumSelected={this.playAlbum} />;
       case 'playlist':
         return (<PlaylistLibrary
           playlist={this.state.selectedPlaylist}

@@ -40,6 +40,10 @@ class SideMenu extends Component {
           <span onClick={() => this.props.onSelected('songs')}>Songs</span>
         </div>
         <div className={styles.section}>
+          <span className={styles.title}>Catalog</span>
+          <span onClick={() => this.props.onSelected('search')}>Search</span>
+        </div>
+        <div className={styles.section}>
           <span className={styles.title}>Playlists</span>
           {
             this.state.playlists.map((playlist) => (

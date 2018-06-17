@@ -21,7 +21,9 @@ class Album extends Component {
   }
 
   async loadTracks() {
-    const { relationships } = await window.MusicKitInstance.api.library.album(this.props.album.id);
+    const { isLibrary } = this.props.album.attributes.playParams;
+    const api = isLibrary ? window.MusicKitInstance.api.library : window.MusicKitInstance.api;
+    const { relationships } = await api.album(this.props.album.id);
     this.setState({
       songs: relationships.tracks.data,
     });

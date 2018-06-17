@@ -5,7 +5,7 @@
   grid-auto-flow: row;
   overflow-y: scroll;
   grid-row-gap: 10px;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto auto 1fr;
   grid-template-areas: "library" "playlists";
   background-color: $faintgray;
   padding: 10px 20px 10px 20px;
