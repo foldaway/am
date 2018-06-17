@@ -64,7 +64,8 @@ class PlaylistLibrary extends Component {
   }
 
   render() {
-    const { attributes } = this.props.playlist;
+    const { playlist } = this.props;
+    const { attributes } = playlist;
     const description = ('description' in attributes) ? attributes.description.standard : '';
     return (
       <div className={styles.container}>
@@ -74,8 +75,8 @@ class PlaylistLibrary extends Component {
         <p className={styles.description}>{description}</p>
         <div className={styles.songs}>
           {
-            this.state.songs.length > 0 ? this.state.songs.map((song) => (
-              <Song key={song.id} song={song} onSelected={() => this.props.onSongSelected(song)} />
+            this.state.songs.length > 0 ? this.state.songs.map((song, index) => (
+              <Song key={song.id} song={song} onSelected={() => this.props.onSongSelected(playlist, index)} />
             )) : <Loader />
           }
         </div>

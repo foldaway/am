@@ -51,8 +51,8 @@ class Album extends Component {
         <div className={styles.songs}>
           {
             this.state.isSongListVisible && this.state.songs.length > 0 ?
-            this.state.songs.map((song) => (
-              <AlbumSong key={song.id} song={song} onSelected={onSelected} />
+            this.state.songs.map((song, index) => (
+              <AlbumSong key={song.id} song={song} onSelected={() => onSelected(album, index)} />
             )) : null
           }
           {

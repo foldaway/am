@@ -26,7 +26,6 @@ class App extends Component {
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.getView = this.getView.bind(this);
-    this.enqueueMedia = this.enqueueMedia.bind(this);
     this.setView = this.setView.bind(this);
     this.updateState = this.updateState.bind(this);
 
@@ -36,6 +35,29 @@ class App extends Component {
     player.addEventListener(Events.playbackStateDidChange, this.updateState);
     player.queue.addEventListener(Events.queueItemsDidChange, this.updateState);
     player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
+
+    this.enqueueMedia = async (media) => {
+      await player.queue.append({ items: [media] });
+      if (!player.isPlaying) {
+        if (player.queue.length > 0) {
+          // Existing items
+          await player.changeToMediaAtIndex(player.queue.length - 1);
+        }
+        await window.MusicKitInstance.play();
+      }
+    };
+
+    this.playQueue = async (queueObj, queueIndex) => {
+      await window.MusicKitInstance.setQueue(queueObj);
+      await player.changeToMediaAtIndex(queueIndex);
+      await window.MusicKitInstance.play();
+    };
+
+    this.playAlbum = async (album, queueIndex) => this.playQueue({ album: album.id }, queueIndex);
+    this.playPlaylist = async (playlist, queueIndex) => this.playQueue(
+      { playlist: playlist.id },
+      queueIndex,
+    );
   }
 
   componentWillUnmount() {
@@ -49,13 +71,13 @@ class App extends Component {
   getView() {
     switch (this.state.view) {
       case 'albums':
-        return <AlbumLibrary onAlbumSelected={this.enqueueMedia} />;
+        return <AlbumLibrary onAlbumSelected={this.playAlbum} />;
       case 'songs':
         return <SongLibrary onSongSelected={this.enqueueMedia} />;
       case 'playlist':
         return (<PlaylistLibrary
           playlist={this.state.selectedPlaylist}
-          onSongSelected={this.enqueueMedia}
+          onSongSelected={this.playPlaylist}
         />);
       default:
         return null;
@@ -72,18 +94,6 @@ class App extends Component {
       queue: player.queue,
       nowPlayingItemIndex: player.nowPlayingItemIndex,
     });
-  }
-
-  async enqueueMedia(media) {
-    const { player } = window.MusicKitInstance;
-    await player.queue.append({ items: [media] });
-    if (!player.isPlaying) {
-      if (player.queue.length > 0) {
-        // Existing items
-        await player.changeToMediaAtIndex(player.queue.length - 1);
-      }
-      await window.MusicKitInstance.play();
-    }
   }
 
   render() {
