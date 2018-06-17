@@ -18,6 +18,7 @@ class SongLibrary extends Component {
     };
 
     this.load = this.load.bind(this);
+    this.getSongElements = this.getSongElements.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +28,29 @@ class SongLibrary extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
+  }
+
+  getSongElements() {
+    const elements = [];
+    let temp = '';
+
+    this.state.songs.forEach((song, index) => {
+      const firstArtistNameLetter = song.attributes.artistName[0];
+      if (temp !== firstArtistNameLetter) {
+        elements.push(<span key={firstArtistNameLetter} className={styles['group-title']}>{firstArtistNameLetter}</span>);
+      }
+      temp = firstArtistNameLetter;
+
+      elements.push((
+        <Song
+          key={song.id}
+          song={song}
+          onSelected={() => this.props.onSongSelected(this.state.songs, index)}
+        />
+      ));
+    });
+
+    return elements;
   }
 
   async load() {
@@ -62,18 +86,11 @@ class SongLibrary extends Component {
   }
 
   render() {
-    const { onSongSelected } = this.props;
     return (
       <div className={styles.container}>
         <span className={styles.title}>Songs</span>
         {
-          this.state.songs.length > 0 ? this.state.songs.map((song, index) => (
-            <Song
-              key={song.id}
-              song={song}
-              onSelected={() => onSongSelected(this.state.songs, index)}
-            />
-          )) : <Loader />
+          this.state.songs.length > 0 ? this.getSongElements() : <Loader />
         }
       </div>
     );

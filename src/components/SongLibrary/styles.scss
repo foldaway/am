@@ -1,4 +1,5 @@
 @import '../../stylesheets/mixins.scss';
+@import '../../stylesheets/variables.scss';
 
 .container {
   display: grid;
@@ -9,5 +10,11 @@
 
   .title {
     @include large-title;
+  }
+
+  .group-title {
+    font-size: 0.8em;
+    font-weight: 700;
+    color: $lightblack;
   }
 }
