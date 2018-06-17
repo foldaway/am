@@ -1,4 +1,5 @@
 @import '../../stylesheets/variables.scss';
+@import '../../stylesheets/mixins.scss';
 
 .container {
   grid-area: player;
@@ -27,9 +28,7 @@
     :last-child { margin-bottom: 0; }
 
     .title {
-      font-size: 1.6em;
-      font-weight: 700;
-      color: $black;
+      @include large-title;
     }
 
     .active {

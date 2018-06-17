@@ -1,10 +1,11 @@
+@import '../../stylesheets/mixins.scss';
+
 .container {
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 8px;
 
   .title {
-    font-size: 30px;
-    font-weight: 700;
+    @include large-title;
   }
 }

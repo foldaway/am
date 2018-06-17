@@ -1,4 +1,5 @@
 @import '../../stylesheets/variables.scss';
+@import '../../stylesheets/mixins.scss';
 
 .container {
   display: grid;
@@ -21,9 +22,7 @@
 
   .title {
     grid-area: title;
-    font-size: 1.6em;
-    font-weight: 700;
-    color: $black;
+    @include large-title;
   }
 
   .metadata {

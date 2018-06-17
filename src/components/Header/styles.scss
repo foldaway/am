@@ -1,5 +1,11 @@
+@import '../../stylesheets/mixins.scss';
+
 .container {
   display: grid;
   align-items: center;
   justify-items: center;
+
+  span {
+    @include large-title;
+  }
 }
