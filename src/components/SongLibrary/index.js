@@ -63,6 +63,7 @@ class SongLibrary extends Component {
 
       return aa.artistName.localeCompare(ba.artistName) ||
         aan.localeCompare(ban) ||
+        aa.trackNumber - ba.trackNumber ||
         aa.name.localeCompare(ba.name);
     };
 
