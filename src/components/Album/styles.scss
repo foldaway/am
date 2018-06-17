@@ -11,6 +11,15 @@
   font-size: 0.9em;
   grid-row-gap: 3px;
 
+  &:hover {
+    cursor: pointer;
+
+    .title,
+    .artist {
+      text-decoration: underline;
+    }
+  }
+
   .art {
     width: 100%;
     // height: auto;
