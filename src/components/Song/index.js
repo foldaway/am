@@ -7,7 +7,13 @@ import trackPropType from '../../prop_types/track';
 
 const Song = ({ onSelected, song }) => (
   <div className={styles.container} onClick={() => onSelected(song)} role="presentation">
-    <img className={styles.art} src={song.attributes.artwork.url.replace('{w}', '80').replace('{h}', '80')} alt="" />
+    <img
+      className={styles.art}
+      src={('artwork' in song.attributes) ? song.attributes.artwork.url
+        .replace('{w}', '80')
+        .replace('{h}', '80') : null}
+      alt=""
+    />
     <span className={styles.title}>{song.attributes.name}</span>
     <span className={styles.artist}>{song.attributes.artistName}</span>
     <span className={styles.album}>{song.attributes.albumName}</span>
