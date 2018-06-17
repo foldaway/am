@@ -39,20 +39,21 @@ class Album extends Component {
     const { onSelected, album } = this.props;
     return (
       <div className={styles.container} onClick={this.toggleSongList} role="presentation">
-        <img className={styles.art} src={album.attributes.artwork.url.replace('{w}', '300').replace('{h}', '300')} alt="" />
+        <div
+          className={styles.art}
+          style={{
+          backgroundImage: `url(${album.attributes.artwork.url.replace('{w}', '300').replace('{h}', '300')})`,
+        }}
+        />
         <span className={styles.title}>{album.attributes.name}</span>
         <span className={styles.artist}>{album.attributes.artistName}</span>
-        {
-          this.state.isSongListVisible ? (
-            <div className={styles.songs}>
-              {
-                this.state.songs.map((song) => (
-                  <AlbumSong key={song.id} song={song} onSelected={onSelected} />
-                ))
-              }
-            </div>
-          ) : null
-        }
+        <div className={styles.songs}>
+          {
+            this.state.isSongListVisible ? this.state.songs.map((song) => (
+              <AlbumSong key={song.id} song={song} onSelected={onSelected} />
+            )) : null
+          }
+        </div>
       </div>
     );
   }
