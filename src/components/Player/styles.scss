@@ -12,12 +12,13 @@
   grid-column-gap: 10px;
   grid-row-gap: 20px;
   overflow: hidden;
+  background-color: $faintgray;
+  padding: 20px;
 
   .queue {
     grid-area: queue;
     display: flex;
     flex-direction: column;
-    margin-top: 12px;
     overflow-y: scroll;
 
     &> .title,
