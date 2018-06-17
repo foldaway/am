@@ -1,3 +1,5 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
   display: grid;
   grid-auto-flow: row;
@@ -5,22 +7,27 @@
   grid-row-gap: 10px;
   grid-template-rows: auto 1fr;
   grid-template-areas: "library" "playlists";
+  background-color: $faintgray;
+  padding: 10px 20px 10px 20px;
+  overflow-y: scroll;
 
   .section {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 
     span {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 0.9em;
-      margin-bottom: 5px;
+      font-size: 0.75em;
+      margin-bottom: 6px;
+      color: $lightblack;
 
       &.title {
         font-weight: 700;
         font-size: 0.7em;
-        color: gray;
+        color: $lightgray;
         margin-bottom: 10px;
       }
 

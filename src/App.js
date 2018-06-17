@@ -94,7 +94,9 @@ class App extends Component {
               <div className={styles.view}>
                 { this.getView() }
               </div>
-              <Player queue={this.state.queue} nowPlayingItem={this.state.nowPlayingItem} />
+              <div className={styles.player}>
+                <Player queue={this.state.queue} nowPlayingItem={this.state.nowPlayingItem} />
+              </div>
             </div>
           ) : (
             <div>
