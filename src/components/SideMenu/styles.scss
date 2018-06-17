@@ -14,14 +14,10 @@
   .section {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
 
     span {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       font-size: 0.75em;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       color: $lightblack;
 
       &.title {
