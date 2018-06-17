@@ -38,6 +38,10 @@ class App extends Component {
     player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
   }
 
+  componentWillUnmount() {
+    document.querySelector('#apple-music-player').remove();
+  }
+
   onLoginSuccess() {
     this.setState({ isLoggedIn: true });
   }
