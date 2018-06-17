@@ -44,6 +44,7 @@ class PlaylistLibrary extends Component {
       try {
         temp = await window.MusicKitInstance.api.library.request(`me/library/playlists/${this.props.playlist.id}/tracks`, {
           offset: count,
+          include: ['curator'],
         });
       } catch (e) {
         // MusicKit JS throws exception from server 404 when offset > playlist total songs
@@ -68,6 +69,7 @@ class PlaylistLibrary extends Component {
       <div className={styles.container}>
         <img className={styles.art} src={attributes.artwork.url.replace('{w}', 200).replace('{h}', 200)} alt="" />
         <span className={styles.title}>{attributes.name}</span>
+        <span className={styles.metadata}>{this.state.songs.length} songs</span>
         <p className={styles.description}>{description}</p>
         <div className={styles.songs}>
           {

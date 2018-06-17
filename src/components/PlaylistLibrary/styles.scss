@@ -1,11 +1,14 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
   display: grid;
   grid-template-areas:
     "art title"
+    "art metadata"
     "description description"
     "songs songs";
   grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto auto 1fr;
   grid-column-gap: 10px;
   overflow: hidden;
   height: 100%;
@@ -18,12 +21,22 @@
 
   .title {
     grid-area: title;
-    font-size: 30px;
-    font-weight: 600;
+    font-size: 1.6em;
+    font-weight: 700;
+    color: $black;
+  }
+
+  .metadata {
+    grid-area: metadata;
+    color: $gray;
+    font-size: 0.9em;
   }
 
   .description {
     grid-area: description;
+    color: $gray;
+    font-size: 0.8em;
+    font-weight: 300;
   }
 
   .songs {
