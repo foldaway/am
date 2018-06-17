@@ -17,7 +17,15 @@ class SongLibrary extends Component {
     };
 
     this.load = this.load.bind(this);
+  }
+
+  componentDidMount() {
+    this.mounted = true;
     this.load();
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   async load() {
@@ -39,6 +47,11 @@ class SongLibrary extends Component {
         limit: 100,
         offset: this.state.songs.length,
       });
+
+      if (!this.mounted) {
+        break;
+      }
+
       this.setState({
         songs: [...this.state.songs, ...temp].sort(sortFunc),
       });

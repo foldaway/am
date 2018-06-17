@@ -17,6 +17,10 @@ class PlaylistLibrary extends Component {
     };
 
     this.loadTracks = this.loadTracks.bind(this);
+  }
+
+  componentDidMount() {
+    this.mounted = true;
     this.loadTracks();
   }
 
@@ -24,6 +28,10 @@ class PlaylistLibrary extends Component {
     if (this.props.playlist.id !== prevProps.playlist.id) {
       this.loadTracks();
     }
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   async loadTracks() {
@@ -42,6 +50,10 @@ class PlaylistLibrary extends Component {
         temp = [];
       }
       count += temp.length;
+
+      if (!this.mounted) {
+        break;
+      }
 
       this.setState({
         songs: [...this.state.songs, ...temp],

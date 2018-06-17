@@ -17,7 +17,15 @@ class AlbumLibrary extends Component {
     };
 
     this.load = this.load.bind(this);
+  }
+
+  componentDidMount() {
+    this.mounted = true;
     this.load();
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   async load() {
@@ -27,6 +35,10 @@ class AlbumLibrary extends Component {
         limit: 100,
         offset: this.state.albums.length,
       });
+
+      if (!this.mounted) {
+        break;
+      }
 
       this.setState({
         albums: [...this.state.albums, ...temp],
