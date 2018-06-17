@@ -26,6 +26,7 @@
 
     .player {
       grid-area: player;
+      overflow: hidden;
     }
   }
 }
