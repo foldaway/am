@@ -4,3 +4,8 @@ $gray: rgb(102, 102, 102);
 $lightgray: rgb(187, 187, 187);
 $faintgray: rgb(248, 248, 250);
 $highlightgray: rgba(0, 0, 0, 0.0470588);
+$red: rgb(255, 45, 85);
+
+:export {
+  red: $red;
+}

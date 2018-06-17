@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Song from '../Song';
+import Loader from '../Loader';
 
 import playlistPropType from '../../prop_types/playlist';
 import styles from './styles.scss';
@@ -73,9 +74,9 @@ class PlaylistLibrary extends Component {
         <p className={styles.description}>{description}</p>
         <div className={styles.songs}>
           {
-            this.state.songs.map((song) => (
+            this.state.songs.length > 0 ? this.state.songs.map((song) => (
               <Song key={song.id} song={song} onSelected={() => this.props.onSongSelected(song)} />
-            ))
+            )) : <Loader />
           }
         </div>
       </div>

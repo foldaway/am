@@ -25,6 +25,7 @@
     "prop-types": "^15.6.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-player-controls": "^0.5.20"
+    "react-player-controls": "^0.5.20",
+    "react-spinners": "^0.3.2"
   }
 }

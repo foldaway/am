@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Song from '../Song';
+import Loader from '../Loader';
 import styles from './styles.scss';
 
 /* eslint-disable no-await-in-loop */
@@ -65,9 +66,9 @@ class SongLibrary extends Component {
       <div className={styles.container}>
         <span className={styles.title}>Songs</span>
         {
-          this.state.songs.map((song) => (
+          this.state.songs.length > 0 ? this.state.songs.map((song) => (
             <Song key={song.id} song={song} onSelected={() => this.props.onSongSelected(song)} />
-          ))
+          )) : <Loader />
         }
       </div>
     );

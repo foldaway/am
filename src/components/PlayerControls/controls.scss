@@ -1,3 +1,5 @@
+@import '../../stylesheets/variables.scss';
+
 $icon-size: 15px;
 
 // $color-hover: saturate(lighten($green, 10%), 20%);
@@ -9,7 +11,6 @@ $lightgray: #d3d3d3;
 $white: #fefefe;
 $blue: #0E52CE;
 $green: #72D687;
-$red: rgb(255, 45, 85);
 
 $color-hover: desaturate(darken($red, 20%), 10%);
 $color-active: fade-out($color-hover, 0.5);

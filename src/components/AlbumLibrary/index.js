@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import Album from '../Album';
+import Loader from '../Loader';
 import styles from './styles.scss';
 
 /* eslint-disable no-await-in-loop */
@@ -49,6 +50,9 @@ class AlbumLibrary extends Component {
   }
 
   render() {
+    if (this.state.albums.length === 0) {
+      return <Loader />;
+    }
     return (
       <div className={styles.container}>
         {
