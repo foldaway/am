@@ -5,9 +5,9 @@
   display: grid;
 
   grid-template-areas:
-    "queue queue"
-    "song controls";
-  grid-template-columns: auto 1fr;
+    "queue"
+    "controls";
+  grid-template-columns: 1fr;
   grid-template-rows: 3fr 1fr;
   grid-column-gap: 10px;
   grid-row-gap: 20px;
@@ -31,12 +31,10 @@
       font-weight: 700;
       color: $black;
     }
-  }
 
-  .song {
-    grid-area: song;
-    display: grid;
-    align-items: center;
+    .active {
+      background-color: $highlightgray;
+    }
   }
 
   .controls {

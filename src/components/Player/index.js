@@ -8,21 +8,22 @@ import trackPropType from '../../prop_types/track';
 
 import styles from './styles.scss';
 
-const Player = ({ queue, nowPlayingItem }) => (
+const Player = ({ queue, nowPlayingItemIndex }) => (
   <div className={styles.container}>
     <div className={styles.queue}>
       <span className={styles.title}>Queue</span>
       {
-        queue.items.map((item) => (
-          <Song key={item.id} song={item} />
+        queue.items.map((item, index) => (
+          <div
+            key={item.id}
+            className={nowPlayingItemIndex === index ? styles.active : null}
+          >
+            <Song
+              song={item}
+              onSelected={() => window.MusicKitInstance.player.changeToMediaAtIndex(index)}
+            />
+          </div>
         ))
-      }
-    </div>
-    <div className={styles.song}>
-      {
-        nowPlayingItem !== null ? (
-          <Song song={nowPlayingItem} />
-        ) : null
       }
     </div>
     <div className={styles.controls}>
@@ -42,7 +43,7 @@ const Player = ({ queue, nowPlayingItem }) => (
 );
 
 Player.defaultProps = {
-  nowPlayingItem: null,
+  nowPlayingItemIndex: 0,
 };
 
 Player.propTypes = {
@@ -50,7 +51,7 @@ Player.propTypes = {
     items: PropTypes.arrayOf(trackPropType),
     position: PropTypes.number,
   }).isRequired,
-  nowPlayingItem: trackPropType,
+  nowPlayingItemIndex: PropTypes.number,
 };
 
 export default Player;

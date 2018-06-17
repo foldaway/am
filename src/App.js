@@ -22,7 +22,6 @@ class App extends Component {
       selectedPlaylist: null,
       view: 'albums',
       queue: { items: [] },
-      nowPlayingItem: null,
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
@@ -67,7 +66,7 @@ class App extends Component {
     const { player } = window.MusicKitInstance;
     this.setState({
       queue: player.queue,
-      nowPlayingItem: player.nowPlayingItem,
+      nowPlayingItemIndex: player.nowPlayingItemIndex,
     });
   }
 
@@ -95,7 +94,10 @@ class App extends Component {
                 { this.getView() }
               </div>
               <div className={styles.player}>
-                <Player queue={this.state.queue} nowPlayingItem={this.state.nowPlayingItem} />
+                <Player
+                  queue={this.state.queue}
+                  nowPlayingItemIndex={this.state.nowPlayingItemIndex}
+                />
               </div>
             </div>
           ) : (
