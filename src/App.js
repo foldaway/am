@@ -75,6 +75,10 @@ class App extends Component {
     const { player } = window.MusicKitInstance;
     await player.queue.append({ items: [media] });
     if (!player.isPlaying) {
+      if (player.queue.length > 0) {
+        // Existing items
+        await player.changeToMediaAtIndex(player.queue.length - 1);
+      }
       await window.MusicKitInstance.play();
     }
   }
