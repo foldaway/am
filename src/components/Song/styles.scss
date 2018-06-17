@@ -1,20 +1,43 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
   display: grid;
   grid-template-areas:
-    "art title"
-    "art artist";
-  grid-template-columns: auto 1fr;
+    "art title title explicit"
+    "art artist album album";
+  grid-template-columns: auto auto auto 1fr;
   grid-column-gap: 8px;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.0470588);
+  }
 
   .art {
     grid-area: art;
     width: 40px;
     height: 40px;
+    border-radius: 3px;
+  }
+
+  .title {
+    grid-area: title;
+    font-size: 0.9em;
+    color: $black;
   }
 
   .artist {
-    font-size: 0.8em;
-    color: gray;
+    grid-area: artist;
+    font-size: 0.75em;
+    font-weight: 300;
+    color: $gray;
+  }
+
+  .album {
+    grid-area: album;
+    font-size: 0.75em;
+    font-weight: 300;
+    color: $lightgray;
   }
 }
