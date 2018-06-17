@@ -66,23 +66,28 @@ class SongLibrary extends Component {
         aa.name.localeCompare(ba.name);
     };
 
+    const songs = [];
     let temp = [];
     do {
       temp = await window.MusicKitInstance.api.library.songs(null, {
         limit: 100,
-        offset: this.state.songs.length,
+        offset: songs.length,
       });
 
       if (!this.mounted) {
         break;
       }
 
-      this.setState({
-        songs: [...this.state.songs, ...temp].sort(sortFunc),
-      });
+      songs.push(...temp);
 
-      await sleep(10);
+      await sleep(2);
     } while (temp.length > 0);
+
+    songs.sort(sortFunc);
+
+    this.setState({
+      songs,
+    });
   }
 
   render() {
