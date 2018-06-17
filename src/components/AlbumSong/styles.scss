@@ -1,14 +1,25 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
   display: grid;
   grid-auto-flow: column;
-  justify-items: center;
+  grid-template-columns: 1fr 8fr;
+  grid-column-gap: 5px;
+  font-size: 0.9em;
+  align-items: baseline;
 
   .title {
-    font-weight: 700;
-    text-align: center;
+    text-align: start;
+    color: $lightblack;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 
   .track-number {
     font-family: 'SF Mono', Consolas, monospace;
+    color: $gray;
   }
 }

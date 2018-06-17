@@ -1,14 +1,41 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
   display: grid;
-  justify-items: center;
+  grid-template-areas:
+    "art"
+    "title"
+    "artist"
+    "songs";
+  grid-template-rows: auto auto auto 1fr;
+  font-size: 0.9em;
+  grid-row-gap: 3px;
 
   .art {
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 4px;
+    border-radius: 6px;
   }
 
   .title {
-    font-weight: 700;
-    text-align: center;
+    font-weight: 400;
+    color: $black;
+  }
+
+  .artist {
+    font-weight: 400;
+    color: $gray;
+    font-size: 0.9em;
+  }
+
+  .songs {
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+
+    * { margin: 2.5px 0; }
+    :first-child { margin-top: 0; }
+    :last-child { margin-bottom: 0; }
   }
 }
