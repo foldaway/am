@@ -36,27 +36,20 @@ class App extends Component {
     player.queue.addEventListener(Events.queueItemsDidChange, this.updateState);
     player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
 
-    this.enqueueMedia = async (media) => {
-      await player.queue.append({ items: [media] });
-      if (!player.isPlaying) {
-        if (player.queue.length > 0) {
-          // Existing items
-          await player.changeToMediaAtIndex(player.queue.length - 1);
-        }
-        await window.MusicKitInstance.play();
-      }
-    };
-
     this.playQueue = async (queueObj, queueIndex) => {
+      await window.MusicKitInstance.stop();
       await window.MusicKitInstance.setQueue(queueObj);
       await player.changeToMediaAtIndex(queueIndex);
-      await window.MusicKitInstance.play();
     };
 
     this.playAlbum = async (album, queueIndex) => this.playQueue({ album: album.id }, queueIndex);
     this.playPlaylist = async (playlist, queueIndex) => this.playQueue(
       { playlist: playlist.id },
       queueIndex,
+    );
+    this.playSong = async (items, queueIndex) => this.playQueue(
+      { items: items.slice(queueIndex) },
+      0,
     );
   }
 
@@ -73,7 +66,7 @@ class App extends Component {
       case 'albums':
         return <AlbumLibrary onAlbumSelected={this.playAlbum} />;
       case 'songs':
-        return <SongLibrary onSongSelected={this.enqueueMedia} />;
+        return <SongLibrary onSongSelected={this.playSong} />;
       case 'playlist':
         return (<PlaylistLibrary
           playlist={this.state.selectedPlaylist}

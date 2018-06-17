@@ -62,12 +62,17 @@ class SongLibrary extends Component {
   }
 
   render() {
+    const { onSongSelected } = this.props;
     return (
       <div className={styles.container}>
         <span className={styles.title}>Songs</span>
         {
-          this.state.songs.length > 0 ? this.state.songs.map((song) => (
-            <Song key={song.id} song={song} onSelected={() => this.props.onSongSelected(song)} />
+          this.state.songs.length > 0 ? this.state.songs.map((song, index) => (
+            <Song
+              key={song.id}
+              song={song}
+              onSelected={() => onSongSelected(this.state.songs, index)}
+            />
           )) : <Loader />
         }
       </div>
