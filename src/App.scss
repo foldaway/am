@@ -14,10 +14,10 @@
       "side-menu view"
       "player player";
     grid-template-columns: 1fr 6fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 3fr 1fr;
     grid-column-gap: 10px;
     overflow: hidden;
-    padding: 0 20px;
+    padding: 0 20px 20px 20px;
 
     .view {
       grid-area: view;

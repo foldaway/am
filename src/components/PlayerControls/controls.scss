@@ -1,4 +1,4 @@
-$icon-size: 30px;
+$icon-size: 15px;
 
 // $color-hover: saturate(lighten($green, 10%), 20%);
 // $color-active: desaturate(darken($green, 20%), 20%);
@@ -9,8 +9,9 @@ $lightgray: #d3d3d3;
 $white: #fefefe;
 $blue: #0E52CE;
 $green: #72D687;
+$red: rgb(255, 45, 85);
 
-$color-hover: desaturate(darken($green, 20%), 10%);
+$color-hover: desaturate(darken($red, 20%), 10%);
 $color-active: fade-out($color-hover, 0.5);
 
 
@@ -24,10 +25,10 @@ $color-active: fade-out($color-hover, 0.5);
 .NextButton,
 .SoundOnButton,
 .SoundOffButton {
-  margin-right: 10px;
+  margin-right: 5px;
   padding: 8px;
   background: $white;
-  border: 2px solid $green;
+  border: 2px solid $red;
   border-radius: 100%;
   outline: none;
 
@@ -63,7 +64,7 @@ svg {
 }
 
 polygon, rect {
-  fill: $green;
+  fill: $red;
 }
 
 
@@ -92,7 +93,7 @@ polygon, rect {
     position: absolute;
     width: 16px;
     height: 16px;
-    background: $green;
+    background: $red;
     border-radius: 100%;
     transform: scale(0);
     transition: transform 0.2s;
@@ -115,7 +116,7 @@ polygon, rect {
 
     .ProgressBar-elapsed,
     .VolumeSlider-value {
-      background: $green;
+      background: $red;
     }
   }
 }

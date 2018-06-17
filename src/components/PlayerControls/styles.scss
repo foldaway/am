@@ -1,6 +1,34 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
+  height: 100%;
   display: grid;
-  grid-auto-flow: column;
   align-items: center;
+  grid-template-areas:
+    "playback-controls progress-bar time-marker bitrate";
+  grid-template-columns: auto 6fr auto auto;
+  grid-template-rows: 1fr;
   grid-column-gap: 10px;
+
+  .progress-bar {
+    grid-area: progress-bar;
+  }
+
+  .playback-controls {
+    grid-area: playback-controls;
+  }
+
+  .time-marker {
+    grid-area: time-marker;
+    color: $gray;
+    font-weight: 300;
+    font-size: 0.8em;
+  }
+
+  .bitrate {
+    grid-area: bitrate;
+    color: $lightgray;
+    font-weight: 100;
+    font-size: 0.7em;
+  }
 }

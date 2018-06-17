@@ -1,3 +1,5 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
   grid-area: player;
   display: grid;
@@ -5,13 +7,35 @@
   grid-template-areas:
     "queue queue"
     "song controls";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: 3fr 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 20px;
+  overflow: hidden;
 
   .queue {
     grid-area: queue;
+    display: flex;
+    flex-direction: column;
+    margin-top: 12px;
+    overflow-y: scroll;
+
+    &> .title,
+    &> div { margin: 2.5px 0; }
+    :first-child { margin-top: 0; }
+    :last-child { margin-bottom: 0; }
+
+    .title {
+      font-size: 1.6em;
+      font-weight: 700;
+      color: $black;
+    }
   }
 
   .song {
     grid-area: song;
+    display: grid;
+    align-items: center;
   }
 
   .controls {

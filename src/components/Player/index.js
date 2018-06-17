@@ -11,6 +11,7 @@ import styles from './styles.scss';
 const Player = ({ queue, nowPlayingItem }) => (
   <div className={styles.container}>
     <div className={styles.queue}>
+      <span className={styles.title}>Queue</span>
       {
         queue.items.map((item) => (
           <Song key={item.id} song={item} />
