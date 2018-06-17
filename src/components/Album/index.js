@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import AlbumSong from '../AlbumSong';
+import Loader from '../Loader';
 
 import styles from './styles.scss';
 
@@ -49,9 +50,14 @@ class Album extends Component {
         <span className={styles.artist}>{album.attributes.artistName}</span>
         <div className={styles.songs}>
           {
-            this.state.isSongListVisible ? this.state.songs.map((song) => (
+            this.state.isSongListVisible && this.state.songs.length > 0 ?
+            this.state.songs.map((song) => (
               <AlbumSong key={song.id} song={song} onSelected={onSelected} />
             )) : null
+          }
+          {
+            this.state.isSongListVisible && this.state.songs.length === 0 ?
+              <Loader /> : null
           }
         </div>
       </div>
