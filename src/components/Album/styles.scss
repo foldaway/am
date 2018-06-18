@@ -22,15 +22,18 @@
 
   .art {
     width: 100%;
-    // height: auto;
     margin-bottom: 4px;
     border-radius: 6px;
     align-self: center;
 
-    height: 0;
-    padding-top: 100%;
     background-position: center;
     background-size: cover;
+
+    &::before {
+      content: '';
+      display: block;
+      padding-top: 100%;
+    }
   }
 
   .title {
