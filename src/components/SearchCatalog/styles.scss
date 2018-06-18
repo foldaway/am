@@ -1,0 +1,36 @@
+@import '../../stylesheets/mixins.scss';
+
+.container {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-rows: auto 1fr;
+  grid-row-gap: 8px;
+  height: 100%;
+
+  .search {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 5fr auto;
+  }
+
+  .results {
+    display: grid;
+    grid-auto-flow: row;
+    grid-row-gap: 8px;
+    overflow-y: scroll;
+
+    .section {
+      display: grid;
+      grid-auto-flow: row;
+      grid-row-gap: 8px;
+  
+      .title {
+        @include large-title;
+      }
+  
+      .albums {
+        @include album-grid;
+      }
+    }
+  }
+}

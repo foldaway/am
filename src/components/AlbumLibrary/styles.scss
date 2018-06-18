@@ -1,6 +1,5 @@
+@import '../../stylesheets/mixins.scss';
+
 .container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  grid-column-gap: 30px;
-  grid-row-gap: 30px;
+  @include album-grid;
 }

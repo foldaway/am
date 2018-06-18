@@ -5,3 +5,10 @@
   font-weight: 700;
   color: $black;
 }
+
+@mixin album-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-column-gap: 30px;
+  grid-row-gap: 30px;
+}
