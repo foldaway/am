@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Autosuggest from 'react-autosuggest';
+import debounce from 'lodash.debounce';
 
 import Album from '../Album';
 import Song from '../Song';
@@ -17,10 +19,15 @@ class SearchCatalog extends Component {
       albums: [],
       artists: [],
       playlists: [],
+      suggestions: [],
     };
 
     this.getResultsView = this.getResultsView.bind(this);
+    this.fetchSuggestions = debounce(this.fetchSuggestions.bind(this), 300);
+    this.clearSuggestions = this.clearSuggestions.bind(this);
     this.search = this.search.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +36,16 @@ class SearchCatalog extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
+  }
+
+  onChange(event, { newValue }) {
+    this.setState({
+      term: newValue,
+    });
+  }
+
+  onSuggestionSelected(event, { suggestion }) {
+    this.setState({ term: suggestion }, () => this.search());
   }
 
   getResultsView() {
@@ -76,15 +93,31 @@ class SearchCatalog extends Component {
     );
   }
 
+  async fetchSuggestions({ value }) {
+    const hints = await window.MusicKitInstance.api.searchHints(value);
+    this.setState({ suggestions: hints.terms });
+  }
+
+  async clearSuggestions() {
+    this.setState({ suggestions: [] });
+  }
+
   async search() {
     this.setState({ isSearching: true });
-    const { songs, albums, artists, playlists } = await window.MusicKitInstance.api.search(this.state.term);
+
+    const {
+      songs,
+      albums,
+      artists,
+      playlists,
+    } = await window.MusicKitInstance.api.search(this.state.term);
+
     this.setState({
       isSearching: false,
       songs: songs.data,
       albums: albums.data,
       artists: artists.data,
-      playlists: playlists.data,
+      playlists: playlists ? playlists.data : [],
     });
   }
 
@@ -98,7 +131,19 @@ class SearchCatalog extends Component {
           this.search();
         }}
         >
-          <input type="text" onChange={(e) => this.setState({ term: e.target.value })} />
+          <Autosuggest
+            suggestions={this.state.suggestions}
+            onSuggestionsFetchRequested={this.fetchSuggestions}
+            onSuggestionsClearRequested={this.clearSuggestions}
+            onSuggestionSelected={this.onSuggestionSelected}
+            renderSuggestion={(sug) => <span>{sug}</span>}
+            getSuggestionValue={(sug) => sug}
+            inputProps={{
+              value: this.state.term,
+              onChange: this.onChange,
+            }}
+          />
+          {/* <input type="text" onChange={(e) => this.setState({ term: e.target.value })} /> */}
           <input type="submit" value="Search" />
         </form>
         { this.getResultsView() }

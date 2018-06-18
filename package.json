@@ -21,9 +21,11 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "lodash.debounce": "^4.0.8",
     "normalize.css": "^8.0.0",
     "prop-types": "^15.6.1",
     "react": "^16.4.1",
+    "react-autosuggest": "^9.3.4",
     "react-dom": "^16.4.1",
     "react-player-controls": "^0.5.20",
     "react-spinners": "^0.3.2"
