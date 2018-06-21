@@ -28,6 +28,11 @@ class SearchCatalog extends Component {
     this.search = this.search.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+
+    this.getSongsView = this.getSongsView.bind(this);
+    this.getAlbumsView = this.getAlbumsView.bind(this);
+    this.getArtistsView = this.getArtistsView.bind(this);
+    this.getPlaylistsView = this.getPlaylistsView.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +53,75 @@ class SearchCatalog extends Component {
     this.setState({ term: suggestion }, () => this.search());
   }
 
+  getSongsView() {
+    const { songs } = this.state;
+    if (songs.length === 0) {
+      return null;
+    }
+    return (
+      <div className={styles.section}>
+        <span className={styles.title}>Songs</span>
+        {
+          this.state.songs.map((song, index) => (
+            <Song
+              song={song}
+              onSelected={() => this.props.onSongSelected(this.state.songs, index)}
+            />
+          ))
+        }
+      </div>
+    );
+  }
+
+  getAlbumsView() {
+    const { albums } = this.state;
+    if (albums.length === 0) {
+      return null;
+    }
+    return (
+      <div className={styles.section}>
+        <span className={styles.title}>Albums</span>
+        <div className={styles.albums}>
+          {
+            this.state.albums.map((album) => (
+              <Album album={album} onSelected={this.props.onAlbumSelected} />
+            ))
+          }
+        </div>
+      </div>
+    );
+  }
+
+  getArtistsView() {
+    const { artists } = this.state;
+    if (artists.length === 0) {
+      return null;
+    }
+    return (
+      <div className={styles.section}>
+        <span className={styles.title}>Artists</span>
+        {
+          this.state.artists.map((artist) => <span>{artist.attributes.name}</span>)
+        }
+      </div>
+    );
+  }
+
+  getPlaylistsView() {
+    const { playlists } = this.state;
+    if (playlists.length === 0) {
+      return null;
+    }
+    return (
+      <div className={styles.section}>
+        <span className={styles.title}>Playlists</span>
+        {
+          this.state.playlists.map((playlist) => <span>{playlist.attributes.name}</span>)
+        }
+      </div>
+    );
+  }
+
   getResultsView() {
     if (this.state.isSearching) {
       return (
@@ -56,39 +130,10 @@ class SearchCatalog extends Component {
     }
     return (
       <div className={styles.results}>
-        <div className={styles.section}>
-          <span className={styles.title}>Artists</span>
-          {
-            this.state.artists.map((artist) => <span>{artist.attributes.name}</span>)
-          }
-        </div>
-        <div className={styles.section}>
-          <span className={styles.title}>Songs</span>
-          {
-            this.state.songs.map((song, index) => (
-              <Song
-                song={song}
-                onSelected={() => this.props.onSongSelected(this.state.songs, index)}
-              />
-            ))
-          }
-        </div>
-        <div className={styles.section}>
-          <span className={styles.title}>Albums</span>
-          <div className={styles.albums}>
-            {
-              this.state.albums.map((album) => (
-                <Album album={album} onSelected={this.props.onAlbumSelected} />
-              ))
-            }
-          </div>
-        </div>
-        <div className={styles.section}>
-          <span className={styles.title}>Playlists</span>
-          {
-            this.state.playlists.map((playlist) => <span>{playlist.attributes.name}</span>)
-          }
-        </div>
+        { this.getArtistsView() }
+        { this.getSongsView() }
+        { this.getAlbumsView() }
+        { this.getPlaylistsView() }
       </div>
     );
   }
@@ -143,7 +188,6 @@ class SearchCatalog extends Component {
               onChange: this.onChange,
             }}
           />
-          {/* <input type="text" onChange={(e) => this.setState({ term: e.target.value })} /> */}
           <input type="submit" value="Search" />
         </form>
         { this.getResultsView() }
