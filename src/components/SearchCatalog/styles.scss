@@ -1,4 +1,5 @@
 @import '../../stylesheets/mixins.scss';
+@import '../../stylesheets/variables.scss';
 
 .container {
   display: grid;
@@ -10,7 +11,24 @@
   .search {
     display: grid;
     grid-auto-flow: column;
+    grid-template-areas:
+      "input search"
+      "input nothing";
     grid-template-columns: 5fr auto;
+    grid-template-rows: auto 1fr;
+
+    .input {
+      grid-area: input;
+
+      input[type=text] {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+
+    input[type=submit] {
+      grid-area: search;
+    }
   }
 
   .results {
@@ -35,6 +53,26 @@
       .playlists {
         @include album-grid;
       }
+    }
+  }
+
+  .suggestions-list {
+    display: grid;
+    grid-auto-flow: row;
+    grid-row-gap: 2px;
+    padding: 2px 0 2px 0;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .suggestion {
+    color: $gray;
+    font-size: 0.9em;
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
     }
   }
 }

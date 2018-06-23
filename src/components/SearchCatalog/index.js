@@ -35,6 +35,12 @@ class SearchCatalog extends Component {
     this.getAlbumsView = this.getAlbumsView.bind(this);
     this.getArtistsView = this.getArtistsView.bind(this);
     this.getPlaylistsView = this.getPlaylistsView.bind(this);
+
+    this.getSuggestionView = (text) => (
+      <div className={styles.suggestion}>
+        <span>{text}</span>
+      </div>
+    );
   }
 
   componentDidMount() {
@@ -193,11 +199,15 @@ class SearchCatalog extends Component {
             onSuggestionsFetchRequested={this.fetchSuggestions}
             onSuggestionsClearRequested={this.clearSuggestions}
             onSuggestionSelected={this.onSuggestionSelected}
-            renderSuggestion={(sug) => <span>{sug}</span>}
+            renderSuggestion={this.getSuggestionView}
             getSuggestionValue={(sug) => sug}
             inputProps={{
               value: this.state.term,
               onChange: this.onChange,
+            }}
+            theme={{
+              container: styles.input,
+              suggestionsList: styles['suggestions-list'],
             }}
           />
           <input type="submit" value="Search" />
