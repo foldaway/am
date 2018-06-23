@@ -59,7 +59,7 @@ class Album extends Component {
           }
           {
             this.state.isSongListVisible && this.state.songs.length === 0 ?
-              <Loader /> : null
+              <div><Loader /></div> : null
           }
         </div>
       </div>
