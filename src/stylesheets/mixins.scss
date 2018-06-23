@@ -8,7 +8,7 @@
 
 @mixin album-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 200px));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 190px));
   grid-column-gap: 30px;
   grid-row-gap: 30px;
 }
