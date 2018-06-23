@@ -1,0 +1,36 @@
+@import '../../stylesheets/mixins.scss';
+
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "banner"
+    "albums";
+  grid-row-gap: 10px;
+
+  .banner {
+    grid-area: banner;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "banner";
+
+    img {
+      grid-area: banner;
+      width: 100%;
+    }
+
+    .title {
+      grid-area: banner;
+      align-self: end;
+      @include large-title;
+      margin: 0 0 10px 10px;
+    }
+  }
+
+  .albums {
+    grid-area: albums;
+    @include album-grid;
+  }
+}

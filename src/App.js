@@ -13,6 +13,7 @@ import SideMenu from './components/SideMenu';
 import SearchCatalog from './components/SearchCatalog';
 
 import styles from './App.scss';
+import ArtistPage from './components/ArtistPage';
 
 class App extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class App extends Component {
 
     this.state = {
       isLoggedIn: window.MusicKitInstance.isAuthorized,
-      selectedPlaylist: null,
+      viewArgs: null,
       view: 'albums',
       queue: { items: [] },
     };
@@ -69,19 +70,35 @@ class App extends Component {
       case 'songs':
         return <SongLibrary onSongSelected={this.playSong} />;
       case 'search':
-        return <SearchCatalog onSongSelected={this.playSong} onAlbumSelected={this.playAlbum} />;
+        return (
+          <SearchCatalog
+            onSongSelected={this.playSong}
+            onAlbumSelected={this.playAlbum}
+            onArtistSelected={this.setView}
+          />
+        );
       case 'playlist':
-        return (<PlaylistLibrary
-          playlist={this.state.selectedPlaylist}
-          onSongSelected={this.playPlaylist}
-        />);
+        return (
+          <PlaylistLibrary
+            playlist={this.state.viewArgs}
+            onSongSelected={this.playPlaylist}
+          />
+        );
+      case 'artist':
+        return (
+          <ArtistPage
+            artist={this.state.viewArgs}
+            onAlbumSelected={this.playAlbum}
+            onSongSelected={this.playSong}
+          />
+        );
       default:
         return null;
     }
   }
 
-  setView(view, selectedPlaylist) {
-    this.setState({ view, selectedPlaylist });
+  setView(view, viewArgs) {
+    this.setState({ view, viewArgs });
   }
 
   updateState() {

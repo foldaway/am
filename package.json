@@ -23,6 +23,7 @@
     "babel-preset-env": "^1.7.0",
     "lodash.debounce": "^4.0.8",
     "normalize.css": "^8.0.0",
+    "open-graph-scraper": "^3.3.0",
     "prop-types": "^15.6.1",
     "react": "^16.4.1",
     "react-autosuggest": "^9.3.4",

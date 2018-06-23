@@ -5,6 +5,7 @@ import debounce from 'lodash.debounce';
 
 import Album from '../Album';
 import Song from '../Song';
+import Artist from '../Artist';
 import Loader from '../Loader';
 import styles from './styles.scss';
 
@@ -101,7 +102,13 @@ class SearchCatalog extends Component {
       <div className={styles.section}>
         <span className={styles.title}>Artists</span>
         {
-          this.state.artists.map((artist) => <span>{artist.attributes.name}</span>)
+          this.state.artists.map((artist) => (
+            <Artist
+              key={artist.id}
+              artist={artist}
+              onSelected={() => this.props.onArtistSelected('artist', artist)}
+            />
+          ))
         }
       </div>
     );
@@ -199,6 +206,7 @@ class SearchCatalog extends Component {
 SearchCatalog.propTypes = {
   onAlbumSelected: PropTypes.func.isRequired,
   onSongSelected: PropTypes.func.isRequired,
+  onArtistSelected: PropTypes.func.isRequired,
 };
 
 export default SearchCatalog;
