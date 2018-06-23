@@ -58,6 +58,10 @@ class PlayerControls extends Component {
       onPrevious,
       onNext,
     } = this.props;
+
+    const isBuffering = this.state.playbackState === PlaybackStates.waiting ||
+    this.state.playbackState === PlaybackStates.loading;
+
     return (
       <div className={styles.container}>
         <div className={styles['progress-bar']}>
@@ -97,9 +101,12 @@ class PlayerControls extends Component {
               this.state.isPlaying ? controlsStyles.isPlaying : '',
             ].join(' ')}
             isPlaying={this.state.isPlaying}
-            isPlayable={this.state.nowPlayingItem !== null}
-            hasPrevious={this.props.hasPrevious}
-            hasNext={this.props.hasNext}
+            isPlayable={
+              !isBuffering &&
+              this.state.nowPlayingItem !== null
+            }
+            hasPrevious={!isBuffering && this.props.hasPrevious}
+            hasNext={!isBuffering && this.props.hasNext}
             onPrevious={onPrevious}
             onNext={onNext}
             onPlaybackChange={onPlaybackChange}
