@@ -1,0 +1,48 @@
+@import '../../stylesheets/mixins.scss';
+@import '../../stylesheets/variables.scss';
+
+.container {
+  display: grid;
+  grid-template-areas:
+    "artist-list indiv";
+  grid-template-columns: 1fr 2fr;
+  height: 100%;
+  overflow: hidden;
+
+  .artist-list {
+    display: grid;
+    grid-auto-flow: row;
+    grid-row-gap: 2px;
+    grid-area: artist-list;
+    overflow-y: scroll;
+  }
+
+  .indiv {
+    display: grid;
+    grid-template-areas:
+      "title"
+      "album-count"
+      "albums";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-area: indiv;
+    overflow: hidden;
+
+    .title {
+      grid-area: title;
+      @include large-title;
+    }
+
+    .album-count {
+      grid-area: album-count;
+      color: $gray;
+      font-size: 0.9em;
+    }
+
+    .albums {
+      grid-area: albums;
+      @include album-grid;
+      overflow-y: scroll;
+    }
+  }
+}

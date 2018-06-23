@@ -14,6 +14,7 @@ import SearchCatalog from './components/SearchCatalog';
 
 import styles from './App.scss';
 import ArtistPage from './components/ArtistPage';
+import ArtistLibrary from './components/ArtistLibrary';
 
 class App extends Component {
   constructor(props) {
@@ -65,6 +66,8 @@ class App extends Component {
 
   getView() {
     switch (this.state.view) {
+      case 'artists':
+        return <ArtistLibrary onAlbumSelected={this.playAlbum} />;
       case 'albums':
         return <AlbumLibrary onAlbumSelected={this.playAlbum} />;
       case 'songs':
