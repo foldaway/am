@@ -18,7 +18,6 @@ class PlayerControls extends Component {
       nowPlayingItem: null,
       playbackMillis: 0,
       currentBufferedProgress: 0,
-      playbackState: player.playbackState,
     };
 
     this.togglePlay = this.togglePlay.bind(this);
@@ -44,23 +43,34 @@ class PlayerControls extends Component {
       currentBufferedProgress: player.currentBufferedProgress,
       nowPlayingItem: player.nowPlayingItem,
       isPlaying: player.isPlaying,
-      playbackState: player.playbackState,
     });
   }
 
   render() {
-    const progressMax = this.state.nowPlayingItem !== null ?
-      this.state.nowPlayingItem.attributes.durationInMillis : 0;
+    const {
+      bitrate,
+      nowPlayingItem,
+      currentBufferedProgress,
+      playbackMillis,
+      isPlaying,
+    } = this.state;
+
+    const progressMax = nowPlayingItem !== null ?
+      nowPlayingItem.attributes.durationInMillis : 0;
+
     const { PlaybackStates } = window.MusicKit;
     const {
       onSeek,
       onPlaybackChange,
       onPrevious,
       onNext,
+      playbackState,
+      hasPrevious,
+      hasNext,
     } = this.props;
 
-    const isBuffering = this.state.playbackState === PlaybackStates.waiting ||
-    this.state.playbackState === PlaybackStates.loading;
+    const isBuffering = playbackState === PlaybackStates.waiting ||
+    playbackState === PlaybackStates.loading;
 
     return (
       <div className={styles.container}>
@@ -75,19 +85,19 @@ class PlayerControls extends Component {
               seek: controlsStyles['ProgressBar-seek'],
             }}
             extraClasses={[
-              this.state.nowPlayingItem !== null ? controlsStyles.isSeekable : '',
-              this.state.playbackState === PlaybackStates.loading ? controlsStyles.isLoading : '',
+              nowPlayingItem !== null ? controlsStyles.isSeekable : '',
+              playbackState === PlaybackStates.loading ? controlsStyles.isLoading : '',
             ].join(' ')}
-            bufferedTime={this.state.currentBufferedProgress * (this.state.playbackMillis / 1000)}
-            currentTime={this.state.playbackMillis / 1000}
+            bufferedTime={currentBufferedProgress * (playbackMillis / 1000)}
+            currentTime={playbackMillis / 1000}
             totalTime={progressMax / 1000}
-            isSeekable={this.state.nowPlayingItem !== null}
+            isSeekable={nowPlayingItem !== null}
             onSeek={onSeek}
           />
         </div>
         <div className={styles['time-marker']}>
           <TimeMarker
-            currentTime={this.state.playbackMillis / 1000}
+            currentTime={playbackMillis / 1000}
             totalTime={progressMax / 1000}
             markerSeparator="/"
           />
@@ -97,22 +107,19 @@ class PlayerControls extends Component {
             className={controlsStyles.TimeMarker}
             childClasses={controlsStyles}
             extraClasses={[
-              this.state.nowPlayingItem !== null ? controlsStyles.isPlayable : '',
-              this.state.isPlaying ? controlsStyles.isPlaying : '',
+              nowPlayingItem !== null ? controlsStyles.isPlayable : '',
+              isPlaying ? controlsStyles.isPlaying : '',
             ].join(' ')}
-            isPlaying={this.state.isPlaying}
-            isPlayable={
-              !isBuffering &&
-              this.state.nowPlayingItem !== null
-            }
-            hasPrevious={!isBuffering && this.props.hasPrevious}
-            hasNext={!isBuffering && this.props.hasNext}
+            isPlaying={isPlaying}
+            isPlayable={!isBuffering && nowPlayingItem !== null}
+            hasPrevious={!isBuffering && hasPrevious}
+            hasNext={!isBuffering && hasNext}
             onPrevious={onPrevious}
             onNext={onNext}
             onPlaybackChange={onPlaybackChange}
           />
         </div>
-        <span className={styles.bitrate}>{this.state.bitrate}kbps</span>
+        <span className={styles.bitrate}>{bitrate}kbps</span>
       </div>
     );
   }
@@ -125,6 +132,7 @@ PlayerControls.propTypes = {
   onPrevious: PropTypes.func.isRequired,
   onNext: PropTypes.func.isRequired,
   onPlaybackChange: PropTypes.func.isRequired,
+  playbackState: PropTypes.number.isRequired,
 };
 
 export default PlayerControls;

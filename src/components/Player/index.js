@@ -63,6 +63,7 @@ class Player extends Component {
               window.MusicKitInstance.player.play() :
               window.MusicKitInstance.player.pause()
             )}
+            playbackState={playbackState}
           />
         </div>
       </div>
