@@ -20,20 +20,21 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    const { Events } = window.MusicKit;
+    const { player } = window.MusicKitInstance;
+
     this.state = {
       isLoggedIn: window.MusicKitInstance.isAuthorized,
       viewArgs: null,
       view: 'albums',
       queue: { items: [] },
+      playbackState: player.playbackState,
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
     this.getView = this.getView.bind(this);
     this.setView = this.setView.bind(this);
     this.updateState = this.updateState.bind(this);
-
-    const { Events } = window.MusicKit;
-    const { player } = window.MusicKitInstance;
 
     player.addEventListener(Events.playbackStateDidChange, this.updateState);
     player.queue.addEventListener(Events.queueItemsDidChange, this.updateState);
@@ -109,6 +110,7 @@ class App extends Component {
     const { player } = window.MusicKitInstance;
     this.setState({
       queue: player.queue,
+      playbackState: player.playbackState,
       nowPlayingItemIndex: player.nowPlayingItemIndex,
     });
   }
@@ -128,6 +130,7 @@ class App extends Component {
                 <Player
                   queue={this.state.queue}
                   nowPlayingItemIndex={this.state.nowPlayingItemIndex}
+                  playbackState={this.state.playbackState}
                 />
               </div>
             </div>

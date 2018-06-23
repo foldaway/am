@@ -7,6 +7,7 @@ import PlayerControls from '../PlayerControls';
 import trackPropType from '../../prop_types/track';
 
 import styles from './styles.scss';
+import Loader from '../Loader';
 
 class Player extends Component {
   constructor(props) {
@@ -22,17 +23,22 @@ class Player extends Component {
     if (this.activeRef !== null) {
       this.activeRef.scrollIntoView({ behaviour: 'smooth' });
     }
+    console.log(window.MusicKit.PlaybackStates[this.props.playbackState]);
   }
 
   render() {
-    const { queue, nowPlayingItemIndex } = this.props;
+    const { queue, nowPlayingItemIndex, playbackState } = this.props;
+    const { PlaybackStates } = window.MusicKit;
 
     return (
       <div className={styles.container}>
         <div className={styles.queue}>
           <span className={styles.title}>Queue</span>
           {
-            queue.items.map((item, index) => (
+            playbackState === PlaybackStates.waiting ||
+            playbackState === PlaybackStates.loading ? (
+              <Loader />
+            ) : queue.items.map((item, index) => (
               <div
                 key={item.id}
                 className={nowPlayingItemIndex === index ? styles.active : null}
@@ -74,6 +80,7 @@ Player.propTypes = {
     position: PropTypes.number,
   }).isRequired,
   nowPlayingItemIndex: PropTypes.number,
+  playbackState: PropTypes.number.isRequired,
 };
 
 export default Player;
