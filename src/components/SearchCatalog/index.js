@@ -8,6 +8,7 @@ import Song from '../Song';
 import Artist from '../Artist';
 import Loader from '../Loader';
 import styles from './styles.scss';
+import Playlist from '../Playlist';
 
 class SearchCatalog extends Component {
   constructor(props) {
@@ -122,9 +123,13 @@ class SearchCatalog extends Component {
     return (
       <div className={styles.section}>
         <span className={styles.title}>Playlists</span>
-        {
-          this.state.playlists.map((playlist) => <span>{playlist.attributes.name}</span>)
-        }
+        <div className={styles.playlists}>
+          {
+            this.state.playlists.map((playlist) => (
+              <Playlist playlist={playlist} onSelected={() => this.props.onPlaylistSelected('playlist', playlist)} />
+            ))
+          }
+        </div>
       </div>
     );
   }
@@ -207,6 +212,7 @@ SearchCatalog.propTypes = {
   onAlbumSelected: PropTypes.func.isRequired,
   onSongSelected: PropTypes.func.isRequired,
   onArtistSelected: PropTypes.func.isRequired,
+  onPlaylistSelected: PropTypes.func.isRequired,
 };
 
 export default SearchCatalog;

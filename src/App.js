@@ -75,6 +75,7 @@ class App extends Component {
             onSongSelected={this.playSong}
             onAlbumSelected={this.playAlbum}
             onArtistSelected={this.setView}
+            onPlaylistSelected={this.setView}
           />
         );
       case 'playlist':

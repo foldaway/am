@@ -31,6 +31,10 @@
       .albums {
         @include album-grid;
       }
+
+      .playlists {
+        @include album-grid;
+      }
     }
   }
 }

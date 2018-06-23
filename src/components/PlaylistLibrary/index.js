@@ -41,26 +41,37 @@ class PlaylistLibrary extends Component {
 
     this.setState({ songs: [] });
 
-    do {
-      try {
-        temp = await window.MusicKitInstance.api.library.request(`me/library/playlists/${this.props.playlist.id}/tracks`, {
-          offset: count,
-          include: ['curator'],
+    const { playlist } = this.props;
+
+    const { isLibrary } = playlist.attributes.playParams;
+
+    if (isLibrary) {
+      do {
+        try {
+          temp = await window.MusicKitInstance.api.library.request(`me/library/playlists/${playlist.id}/tracks`, {
+            offset: count,
+            include: ['curator'],
+          });
+        } catch (e) {
+          // MusicKit JS throws exception from server 404 when offset > playlist total songs
+          temp = [];
+        }
+        count += temp.length;
+
+        if (!this.mounted) {
+          break;
+        }
+
+        this.setState({
+          songs: [...this.state.songs, ...temp],
         });
-      } catch (e) {
-        // MusicKit JS throws exception from server 404 when offset > playlist total songs
-        temp = [];
-      }
-      count += temp.length;
-
-      if (!this.mounted) {
-        break;
-      }
-
+      } while (temp.length > 0);
+    } else {
+      const { relationships } = await window.MusicKitInstance.api.playlist(playlist.id);
       this.setState({
-        songs: [...this.state.songs, ...temp],
+        songs: relationships.tracks.data,
       });
-    } while (temp.length > 0);
+    }
   }
 
   render() {

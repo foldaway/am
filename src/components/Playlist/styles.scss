@@ -1,0 +1,51 @@
+@import '../../stylesheets/variables.scss';
+
+.container {
+  display: grid;
+  grid-template-areas:
+    "art"
+    "title"
+    "curator";
+  grid-template-rows: auto auto 1fr;
+  font-size: 0.9em;
+  grid-row-gap: 3px;
+
+  &:hover {
+    cursor: pointer;
+
+    .title,
+    .curator {
+      text-decoration: underline;
+    }
+  }
+
+  .art {
+    width: 100%;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    align-self: center;
+
+    background-position: center;
+    background-size: cover;
+
+    &::before {
+      content: '';
+      display: block;
+      padding-top: 100%;
+    }
+  }
+
+  .title {
+    font-weight: 400;
+    color: $black;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .curator {
+    font-weight: 400;
+    color: $gray;
+    font-size: 0.9em;
+  }
+}

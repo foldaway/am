@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ogs from 'open-graph-scraper';
 
 import artistPropType from '../../prop_types/artist';
@@ -46,7 +47,7 @@ class ArtistPage extends Component {
   }
 
   render() {
-    const { artist } = this.props;
+    const { artist, onAlbumSelected, onSongSelected } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.banner}>
@@ -62,7 +63,7 @@ class ArtistPage extends Component {
         <div className={styles.albums}>
           {
             this.state.albums.map((album) => (
-              <Album album={album} />
+              <Album album={album} onSelected={onAlbumSelected} />
             ))
           }
         </div>
@@ -73,6 +74,8 @@ class ArtistPage extends Component {
 
 ArtistPage.propTypes = {
   artist: artistPropType.isRequired,
+  onAlbumSelected: PropTypes.func.isRequired,
+  onSongSelected: PropTypes.func.isRequired,
 };
 
 export default ArtistPage;
