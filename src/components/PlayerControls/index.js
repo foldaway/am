@@ -16,7 +16,8 @@ class PlayerControls extends Component {
       bitrate: 0,
       isPlaying: false,
       nowPlayingItem: null,
-      playbackMillis: 0,
+      playbackTime: 0,
+      playbackDuration: 0,
       currentBufferedProgress: 0,
       volume: 1,
     };
@@ -63,7 +64,8 @@ class PlayerControls extends Component {
     const { player } = window.MusicKitInstance;
     this.setState({
       bitrate: player.bitrate,
-      playbackMillis: player.currentPlaybackTime * 1000,
+      playbackTime: player.currentPlaybackTime,
+      playbackDuration: player.currentPlaybackDuration,
       currentBufferedProgress: player.currentBufferedProgress,
       nowPlayingItem: player.nowPlayingItem,
       isPlaying: player.isPlaying,
@@ -76,7 +78,8 @@ class PlayerControls extends Component {
       bitrate,
       nowPlayingItem,
       currentBufferedProgress,
-      playbackMillis,
+      playbackTime,
+      playbackDuration,
       isPlaying,
     } = this.state;
 
@@ -113,8 +116,8 @@ class PlayerControls extends Component {
               nowPlayingItem !== null ? controlsStyles.isSeekable : '',
               playbackState === PlaybackStates.loading ? controlsStyles.isLoading : '',
             ].join(' ')}
-            bufferedTime={currentBufferedProgress * (playbackMillis / 1000)}
-            currentTime={playbackMillis / 1000}
+            bufferedTime={(currentBufferedProgress / 100) * playbackDuration}
+            currentTime={playbackTime}
             totalTime={progressMax / 1000}
             isSeekable={nowPlayingItem !== null}
             onSeek={onSeek}
@@ -122,7 +125,7 @@ class PlayerControls extends Component {
         </div>
         <div className={styles['time-marker']}>
           <TimeMarker
-            currentTime={playbackMillis / 1000}
+            currentTime={playbackTime}
             totalTime={progressMax / 1000}
             markerSeparator="/"
           />
