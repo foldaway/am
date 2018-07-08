@@ -42,9 +42,12 @@ class PlayerControls extends Component {
   }
 
   handleKeypress(e) {
-    e.preventDefault();
+    if (document.activeElement.nodeName === 'INPUT') {
+      return;
+    }
     switch (e.key) {
       case ' ':
+        e.preventDefault();
         this.togglePlay();
         break;
       default:
