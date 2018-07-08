@@ -28,17 +28,13 @@ class Player extends Component {
 
   render() {
     const { queue, nowPlayingItemIndex, playbackState } = this.props;
-    const { PlaybackStates } = window.MusicKit;
 
     return (
       <div className={styles.container}>
         <div className={styles.queue}>
           <span className={styles.title}>Queue</span>
           {
-            playbackState === PlaybackStates.waiting ||
-            playbackState === PlaybackStates.loading ? (
-              <Loader />
-            ) : queue.items.map((item, index) => (
+            queue.items.map((item, index) => (
               <div
                 key={item.id}
                 className={nowPlayingItemIndex === index ? styles.active : null}
