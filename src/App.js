@@ -20,7 +20,7 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    const { Events } = window.MusicKit;
+    const { Events, PlaybackStates } = window.MusicKit;
     const { player } = window.MusicKitInstance;
 
     this.state = {
@@ -41,6 +41,9 @@ class App extends Component {
     player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
 
     this.playQueue = async (queueObj, queueIndex) => {
+      if (this.state.playbackState === PlaybackStates.playing) {
+        await player.stop();
+      }
       await window.MusicKitInstance.setQueue(queueObj);
       await player.changeToMediaAtIndex(queueIndex);
       await player.play();

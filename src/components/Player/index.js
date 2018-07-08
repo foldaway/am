@@ -7,7 +7,6 @@ import PlayerControls from '../PlayerControls';
 import trackPropType from '../../prop_types/track';
 
 import styles from './styles.scss';
-import Loader from '../Loader';
 
 class Player extends Component {
   constructor(props) {
