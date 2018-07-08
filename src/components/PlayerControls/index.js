@@ -22,9 +22,29 @@ class PlayerControls extends Component {
 
     this.togglePlay = this.togglePlay.bind(this);
     this.updateState = this.updateState.bind(this);
+    this.handleKeypress = this.handleKeypress.bind(this);
 
     player.addEventListener(Events.playbackStateDidChange, this.updateState);
     player.addEventListener(Events.playbackProgressDidChange, this.updateState);
+  }
+
+  componentDidMount() {
+    document.addEventListener('keypress', this.handleKeypress);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keypress', this.handleKeypress);
+  }
+
+  handleKeypress(e) {
+    e.preventDefault();
+    switch (e.key) {
+      case ' ':
+        this.togglePlay();
+        break;
+      default:
+        break;
+    }
   }
 
   togglePlay() {
