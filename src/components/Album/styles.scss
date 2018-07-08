@@ -28,6 +28,7 @@
 
     background-position: center;
     background-size: cover;
+    border: 1px solid $faintgray;
 
     &::before {
       content: '';
