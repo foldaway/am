@@ -41,9 +41,9 @@ class App extends Component {
     player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
 
     this.playQueue = async (queueObj, queueIndex) => {
-      await window.MusicKitInstance.stop();
       await window.MusicKitInstance.setQueue(queueObj);
       await player.changeToMediaAtIndex(queueIndex);
+      await player.play();
     };
 
     this.playAlbum = async (album, queueIndex) => this.playQueue({ album: album.id }, queueIndex);
