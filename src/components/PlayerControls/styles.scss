@@ -5,8 +5,8 @@
   display: grid;
   align-items: center;
   grid-template-areas:
-    "playback-controls progress-bar time-marker bitrate";
-  grid-template-columns: auto 6fr auto auto;
+    "playback-controls volume progress-bar time-marker bitrate";
+  grid-template-columns: auto auto 6fr auto auto;
   grid-template-rows: 1fr;
   grid-column-gap: 10px;
 
@@ -30,5 +30,9 @@
     color: $lightgray;
     font-weight: 100;
     font-size: 0.7em;
+  }
+
+  .volume {
+    grid-area: volume;
   }
 }

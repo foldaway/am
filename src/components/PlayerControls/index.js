@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { PlaybackControls, TimeMarker, ProgressBar } from 'react-player-controls';
+import { PlaybackControls, TimeMarker, ProgressBar, VolumeSlider, ControlDirection } from 'react-player-controls';
 import PropTypes from 'prop-types';
 
 import styles from './styles.scss';
@@ -18,14 +18,18 @@ class PlayerControls extends Component {
       nowPlayingItem: null,
       playbackMillis: 0,
       currentBufferedProgress: 0,
+      volume: 1,
     };
 
     this.togglePlay = this.togglePlay.bind(this);
     this.updateState = this.updateState.bind(this);
     this.handleKeypress = this.handleKeypress.bind(this);
 
+    player.addEventListener(Events.playbackStateWillChange, this.updateState);
     player.addEventListener(Events.playbackStateDidChange, this.updateState);
     player.addEventListener(Events.playbackProgressDidChange, this.updateState);
+    player.addEventListener(Events.playbackVolumeDidChange, this.updateState);
+    player.addEventListener(Events.mediaCanPlay, this.updateState);
   }
 
   componentDidMount() {
@@ -63,6 +67,7 @@ class PlayerControls extends Component {
       currentBufferedProgress: player.currentBufferedProgress,
       nowPlayingItem: player.nowPlayingItem,
       isPlaying: player.isPlaying,
+      volume: player.volume,
     });
   }
 
@@ -139,6 +144,25 @@ class PlayerControls extends Component {
             onPlaybackChange={onPlaybackChange}
           />
         </div>
+        <div className={styles.volume}>
+          <VolumeSlider
+            className={controlsStyles.VolumeSlider}
+            childClasses={{
+              value: controlsStyles['VolumeSlider-value'],
+              intent: controlsStyles['VolumeSlider-intent'],
+              handle: controlsStyles['VolumeSlider-handle'],
+              seek: controlsStyles['VolumeSlider-seek'],
+            }}
+            extraClasses={[
+              controlsStyles.isEnabled,
+              controlsStyles.isHorizontal,
+            ].join(' ')}
+            direction={ControlDirection.HORIZONTAL}
+            volume={this.state.volume}
+            isEnabled={!isBuffering && nowPlayingItem !== null}
+            onVolumeChange={this.props.onVolumeChange}
+          />
+        </div>
         <span className={styles.bitrate}>{bitrate}kbps</span>
       </div>
     );
@@ -152,6 +176,7 @@ PlayerControls.propTypes = {
   onPrevious: PropTypes.func.isRequired,
   onNext: PropTypes.func.isRequired,
   onPlaybackChange: PropTypes.func.isRequired,
+  onVolumeChange: PropTypes.func.isRequired,
   playbackState: PropTypes.number.isRequired,
 };
 
