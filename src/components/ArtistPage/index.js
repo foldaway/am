@@ -33,8 +33,14 @@ class ArtistPage extends Component {
       return;
     }
 
+    if (data.ogImage instanceof Array) {
+      // Probably no large image
+      const [firstImage] = data.ogImage;
+      data.ogImage = firstImage;
+    }
+
     this.setState({
-      bannerURL: data.ogImage.url,
+      bannerURL: data.ogImage.url.replace('cw.jpg', 'cc.jpg').replace(/\d+?x\d+/, '300x300'),
     });
   }
 
@@ -53,7 +59,9 @@ class ArtistPage extends Component {
         <div className={styles.banner}>
           {
             this.state.bannerURL !== null ? (
-              <img src={this.state.bannerURL} alt="" />
+              <div className={styles['image-container']}>
+                <img src={this.state.bannerURL} alt="" />
+              </div>
             ) : <Loader />
           }
           <span className={styles.title}>
