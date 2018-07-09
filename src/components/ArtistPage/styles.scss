@@ -46,3 +46,21 @@
     @include album-grid;
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .banner {
+      .image-container {
+        background-color: $darkgray;
+
+        img {
+          filter: brightness(90%);
+        }
+      }
+
+      .title {
+        color: $dullwhite;
+      }
+    }
+  }
+}

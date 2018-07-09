@@ -23,3 +23,15 @@
     color: $gray;
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .title {
+      color: $lightgray;
+    }
+
+    .track-number {
+      color: $dullwhite;
+    }
+  }
+}

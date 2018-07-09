@@ -76,3 +76,13 @@
     }
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .results {
+      .title {
+        color: $dullwhite;
+      }
+    }
+  }
+}

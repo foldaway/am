@@ -61,3 +61,15 @@
     :last-child { margin-bottom: 0; }
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .art {
+      filter: brightness(90%);
+    }
+
+    .title {
+      color: $dullwhite;
+    }
+  }
+}

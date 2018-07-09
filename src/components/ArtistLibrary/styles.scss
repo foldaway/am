@@ -46,3 +46,13 @@
     }
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .indiv {
+      .title {
+        color: $dullwhite;
+      }
+    }
+  }
+}

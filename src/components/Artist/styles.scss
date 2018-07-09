@@ -1,6 +1,14 @@
+@import '../../stylesheets/variables.scss';
+
 .container {
   &:hover {
     text-decoration: underline;
     cursor: pointer;
+  }
+}
+
+:global(.dark-theme) {
+  .container {
+    color: $dullwhite;
   }
 }

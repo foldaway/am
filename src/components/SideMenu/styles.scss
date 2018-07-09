@@ -41,3 +41,19 @@
     }
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    background-color: $lightblack;
+
+    .section {
+      span {
+        color: $dullwhite;
+
+        &.title {
+          color: $gray;
+        }
+      }
+    }
+  }
+}

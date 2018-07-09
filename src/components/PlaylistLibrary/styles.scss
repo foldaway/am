@@ -47,3 +47,15 @@
     align-items: self-start;
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .art {
+      filter: brightness(90%);
+    }
+    
+    .title {
+      color: $dullwhite;
+    }
+  }
+}

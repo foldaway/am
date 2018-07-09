@@ -39,3 +39,13 @@
     }
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .recommendation {
+      .title {
+        color: $dullwhite;
+      }
+    }
+  }
+}

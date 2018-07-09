@@ -41,3 +41,19 @@
     color: $lightgray;
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    &:hover {
+      background-color: $darkgray;
+    }
+
+    .art {
+      filter: brightness(90%);
+    }
+
+    .title {
+      color: $dullwhite;
+    }
+  }
+}

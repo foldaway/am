@@ -50,3 +50,15 @@
     font-size: 0.9em;
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .art {
+      filter: brightness(90%);
+    }
+    
+    .title {
+      color: $dullwhite;
+    }
+  }
+}

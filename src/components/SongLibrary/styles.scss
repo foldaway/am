@@ -18,3 +18,15 @@
     color: $lightblack;
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    .title {
+      color: $dullwhite;
+    }
+
+    .group-title {
+      color: $lightgray;
+    }
+  }
+}

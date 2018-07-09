@@ -42,3 +42,19 @@
     grid-area: controls;
   }
 }
+
+:global(.dark-theme) {
+  .container {
+    background-color: $lightblack;
+
+    .queue {
+      .title {
+        color: $dullwhite;
+      }
+
+      .active {
+        background-color: $darkgray;
+      }
+    }
+  }
+}
