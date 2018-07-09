@@ -84,7 +84,7 @@ class ForYouPage extends Component {
   }
 
   async fetch() {
-    const recommendations = await window.MusicKitInstance.api.library.request('me/recommendations');
+    const recommendations = await window.MusicKitInstance.api.collection('me', 'recommendations');
     this.setState({
       recommendations,
     });
