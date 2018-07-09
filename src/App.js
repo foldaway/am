@@ -15,6 +15,7 @@ import SearchCatalog from './components/SearchCatalog';
 import styles from './App.scss';
 import ArtistPage from './components/ArtistPage';
 import ArtistLibrary from './components/ArtistLibrary';
+import ForYouPage from './components/ForYouPage';
 
 class App extends Component {
   constructor(props) {
@@ -85,6 +86,11 @@ class App extends Component {
             onPlaylistSelected={this.setView}
           />
         );
+      case 'foryou':
+        return (<ForYouPage
+          onAlbumSelected={this.playAlbum}
+          onPlaylistSelected={this.setView}
+        />);
       case 'playlist':
         return (
           <PlaylistLibrary

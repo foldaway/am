@@ -43,6 +43,7 @@ class SideMenu extends Component {
         <div className={styles.section}>
           <span className={styles.title}>Catalog</span>
           <span onClick={() => this.props.onSelected('search')}>Search</span>
+          <span onClick={() => this.props.onSelected('foryou')}>For You</span>
         </div>
         <div className={styles.section}>
           <span className={styles.title}>Playlists</span>
