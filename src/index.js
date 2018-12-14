@@ -6,7 +6,7 @@ import App from './App';
 import './index.scss';
 
 window.MusicKitInstance = window.MusicKit.configure({
-  developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ilc3RkFOTDlGNzUifQ.eyJpc3MiOiJFWjQ5NTMyMjM2IiwiZXhwIjoxNjA3ODI5MTcwLCJpYXQiOjE1NDQ3NTcxNzB9.rXB9tl1mXfqoGmlbXLDUxDRIODUihAtKntelY4OWOmwtULr5AkX4P1nfEgXsweAgA8Qmz2UhJG0VFcQEG7OHww',
+  developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ilc3RkFOTDlGNzUifQ.eyJpYXQiOjE1NDQ3NjAwNDAsImV4cCI6MTU1MjUzNjA0MCwiaXNzIjoiRVo0OTUzMjIzNiJ9.66rrfAZHJcehndvp_yHVbYg3UAy_pTyfmMFCyPhXBbC4SurfH7-5fEnAKvmVjtvcwicnEb1BDgNe8GO74niQtQ',
 });
 
 const rootElem = document.getElementById('root');
