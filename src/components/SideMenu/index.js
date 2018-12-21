@@ -47,7 +47,7 @@ class SideMenu extends Component {
           <span role="presentation" className={currentView === 'search' ? styles.current : ''} onClick={() => this.props.onSelected('search')}>Search</span>
           <span role="presentation" className={currentView === 'foryou' ? styles.current : ''} onClick={() => this.props.onSelected('foryou')}>For You</span>
         </div>
-        <div className={styles.section}>
+        <div className={[styles.section, styles.playlists].join(' ')}>
           <span className={styles.title}>Playlists</span>
           {
             this.state.playlists.map((playlist) => (

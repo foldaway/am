@@ -10,7 +10,6 @@
   grid-template-areas: "library" "playlists";
   background-color: $faintgray;
   padding: 10px 20px 10px 20px;
-  overflow-y: scroll;
 
   .section {
     display: flex;
@@ -26,6 +25,11 @@
         font-size: 0.7em;
         color: $lightgray;
         margin-bottom: 10px;
+
+        &:hover {
+          cursor: default;
+          text-decoration: none;
+        }
       }
 
       &.current {
@@ -43,6 +47,10 @@
       display: block;
       border: none;
       padding: 0;
+    }
+
+    &.playlists {
+      overflow-y: scroll;
     }
   }
 }
