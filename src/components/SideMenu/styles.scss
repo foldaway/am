@@ -27,6 +27,10 @@
         margin-bottom: 10px;
       }
 
+      &.current {
+        font-weight: 700;
+      }
+
       &:hover {
         cursor: pointer;
         text-decoration: underline;

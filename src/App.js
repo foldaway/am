@@ -139,7 +139,7 @@ class App extends Component {
         {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
-              <SideMenu onSelected={this.setView} />
+              <SideMenu onSelected={this.setView} currentView={this.state.view} />
               <div className={styles.view}>
                 { this.getView() }
               </div>
