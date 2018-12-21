@@ -16,6 +16,7 @@ import styles from './App.scss';
 import ArtistPage from './components/ArtistPage';
 import ArtistLibrary from './components/ArtistLibrary';
 import ForYouPage from './components/ForYouPage';
+import RecentlyAddedLibrary from './components/RecentlyAddedLibrary';
 
 class App extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class App extends Component {
     this.state = {
       isLoggedIn: window.MusicKitInstance.isAuthorized,
       viewArgs: null,
-      view: 'albums',
+      view: 'recently-added',
       queue: { items: [] },
       playbackState: player.playbackState,
     };
@@ -106,6 +107,13 @@ class App extends Component {
             onSongSelected={this.playSong}
           />
         );
+      case 'recently-added':
+        return (
+          <RecentlyAddedLibrary
+            onAlbumSelected={this.playAlbum}
+            onPlaylistSelected={this.setView}
+          />
+        );
       default:
         return null;
     }
@@ -131,7 +139,7 @@ class App extends Component {
         {
           this.state.isLoggedIn ? (
             <div className={styles['main-content']}>
-              <SideMenu onSelected={this.setView} />
+              <SideMenu onSelected={this.setView} currentView={this.state.view} />
               <div className={styles.view}>
                 { this.getView() }
               </div>

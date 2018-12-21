@@ -32,26 +32,30 @@ class SideMenu extends Component {
   }
 
   render() {
+    const { currentView } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.section}>
           <span className={styles.title}>Library</span>
-          <span onClick={() => this.props.onSelected('artists')}>Artists</span>
-          <span onClick={() => this.props.onSelected('albums')}>Albums</span>
-          <span onClick={() => this.props.onSelected('songs')}>Songs</span>
+          <span role="presentation" className={currentView === 'recently-added' ? styles.current : ''} onClick={() => this.props.onSelected('recently-added')}>Recently Added</span>
+          <span role="presentation" className={currentView === 'artists' ? styles.current : ''} onClick={() => this.props.onSelected('artists')}>Artists</span>
+          <span role="presentation" className={currentView === 'albums' ? styles.current : ''} onClick={() => this.props.onSelected('albums')}>Albums</span>
+          <span role="presentation" className={currentView === 'songs' ? styles.current : ''} onClick={() => this.props.onSelected('songs')}>Songs</span>
         </div>
         <div className={styles.section}>
           <span className={styles.title}>Catalog</span>
-          <span onClick={() => this.props.onSelected('search')}>Search</span>
-          <span onClick={() => this.props.onSelected('foryou')}>For You</span>
+          <span role="presentation" className={currentView === 'search' ? styles.current : ''} onClick={() => this.props.onSelected('search')}>Search</span>
+          <span role="presentation" className={currentView === 'foryou' ? styles.current : ''} onClick={() => this.props.onSelected('foryou')}>For You</span>
         </div>
         <div className={styles.section}>
           <span className={styles.title}>Playlists</span>
           {
             this.state.playlists.map((playlist) => (
               <span
+                role="presentation"
                 key={playlist.id}
-                onClick={() => this.props.onSelected('playlist', playlist)}>
+                onClick={() => this.props.onSelected('playlist', playlist)}
+              >
                 {playlist.attributes.name}
               </span>
             ))
@@ -64,6 +68,7 @@ class SideMenu extends Component {
 
 SideMenu.propTypes = {
   onSelected: PropTypes.func.isRequired,
+  currentView: PropTypes.string.isRequired,
 };
 
 export default SideMenu;
