@@ -12,8 +12,8 @@
     display: grid;
     grid-template-areas:
       "side-menu view"
-      "player player";
-    grid-template-columns: 1fr 4fr;
+      "side-menu player";
+    grid-template-columns: 1fr 5fr;
     grid-template-rows: 3fr 1fr;
     grid-column-gap: 10px;
     overflow: hidden;

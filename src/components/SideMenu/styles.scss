@@ -1,6 +1,7 @@
 @import '../../stylesheets/variables.scss';
 
 .container {
+  grid-area: side-menu;
   display: grid;
   grid-auto-flow: row;
   overflow-y: scroll;
