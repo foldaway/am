@@ -2,6 +2,7 @@ import 'normalize.css';
 import 'babel-polyfill';
 
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
@@ -136,27 +137,33 @@ class App extends Component {
     return (
       <div className={styles.container}>
         <Header />
-        {
-          this.state.isLoggedIn ? (
-            <div className={styles['main-content']}>
-              <SideMenu onSelected={this.setView} currentView={this.state.view} />
-              <div className={styles.view}>
-                { this.getView() }
-              </div>
-              <div className={styles.player}>
-                <Player
-                  queue={this.state.queue}
-                  nowPlayingItemIndex={this.state.nowPlayingItemIndex}
-                  playbackState={this.state.playbackState}
-                />
-              </div>
-            </div>
-          ) : (
-            <div>
-              <LoginContainer onLoginSuccess={this.onLoginSuccess} />
-            </div>
-          )
-        }
+        <Router>
+          <div className={styles['route-container']}>
+            <Route exact path="/" render={() => <LoginContainer onLoginSuccess={this.onLoginSuccess} />} />
+            <Route
+              exact
+              path="/player"
+              render={() => (
+                <div className={styles['main-content']}>
+                  <SideMenu onSelected={this.setView} currentView={this.state.view} />
+                  <div className={styles.view}>
+                    { this.getView() }
+                  </div>
+                  <div className={styles.player}>
+                    <Player
+                      queue={this.state.queue}
+                      nowPlayingItemIndex={this.state.nowPlayingItemIndex}
+                      playbackState={this.state.playbackState}
+                    />
+                  </div>
+                </div>
+              )}
+            />
+            {
+              this.state.isLoggedIn ? <Redirect to="/player" /> : <Redirect to="/" />
+            }
+          </div>
+        </Router>
       </div>
     );
   }
