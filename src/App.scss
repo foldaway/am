@@ -2,37 +2,31 @@
   display: grid;
   grid-template-areas:
     "header"
-    "route-container";
+    "main-content";
   grid-auto-flow: row;
   grid-template-rows: auto 1fr;
   height: 100%;
 
-  .route-container {
-    grid-area: route-container;
-    display: flex;
-    flex-direction: column;
+  .main-content {
+    grid-area: main-content;
+    display: grid;
+    grid-template-areas:
+      "side-menu view"
+      "side-menu player";
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 3fr 1fr;
+    grid-column-gap: 10px;
     overflow: hidden;
 
-    .main-content {
-      display: grid;
-      grid-template-areas:
-        "side-menu view"
-        "side-menu player";
-      grid-template-columns: 1fr 5fr;
-      grid-template-rows: 3fr 1fr;
-      grid-column-gap: 10px;
+    .view {
+      grid-area: view;
+      padding-right: 20px;
+      overflow-y: scroll;
+    }
+
+    .player {
+      grid-area: player;
       overflow: hidden;
-
-      .view {
-        grid-area: view;
-        padding-right: 20px;
-        overflow-y: scroll;
-      }
-
-      .player {
-        grid-area: player;
-        overflow: hidden;
-      }
     }
   }
 }

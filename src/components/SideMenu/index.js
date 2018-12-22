@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+
+import { NavLink, Link } from 'react-router-dom';
 
 import styles from './styles.scss';
 
@@ -32,32 +33,27 @@ class SideMenu extends Component {
   }
 
   render() {
-    const { currentView } = this.props;
     return (
       <div className={styles.container}>
         <div className={styles.section}>
           <span className={styles.title}>Library</span>
-          <span role="presentation" className={currentView === 'recently-added' ? styles.current : ''} onClick={() => this.props.onSelected('recently-added')}>Recently Added</span>
-          <span role="presentation" className={currentView === 'artists' ? styles.current : ''} onClick={() => this.props.onSelected('artists')}>Artists</span>
-          <span role="presentation" className={currentView === 'albums' ? styles.current : ''} onClick={() => this.props.onSelected('albums')}>Albums</span>
-          <span role="presentation" className={currentView === 'songs' ? styles.current : ''} onClick={() => this.props.onSelected('songs')}>Songs</span>
+          <NavLink activeClassName={styles.current} to="/library/recently-added">Recently Added</NavLink>
+          <NavLink activeClassName={styles.current} to="/library/artists">Artists</NavLink>
+          <NavLink activeClassName={styles.current} to="/library/albums">Albums</NavLink>
+          <NavLink activeClassName={styles.current} to="/library/songs">Songs</NavLink>
         </div>
         <div className={styles.section}>
           <span className={styles.title}>Catalog</span>
-          <span role="presentation" className={currentView === 'search' ? styles.current : ''} onClick={() => this.props.onSelected('search')}>Search</span>
-          <span role="presentation" className={currentView === 'foryou' ? styles.current : ''} onClick={() => this.props.onSelected('foryou')}>For You</span>
+          <NavLink activeClassName={styles.current} to="/search">Search</NavLink>
+          <NavLink activeClassName={styles.current} to="/for-you">For You</NavLink>
         </div>
         <div className={[styles.section, styles.playlists].join(' ')}>
           <span className={styles.title}>Playlists</span>
           {
             this.state.playlists.map((playlist) => (
-              <span
-                role="presentation"
-                key={playlist.id}
-                onClick={() => this.props.onSelected('playlist', playlist)}
-              >
+              <Link key={playlist.id} href="#" to={`/playlist/${playlist.id}`} >
                 {playlist.attributes.name}
-              </span>
+              </Link>
             ))
           }
         </div>
@@ -65,10 +61,5 @@ class SideMenu extends Component {
     );
   }
 }
-
-SideMenu.propTypes = {
-  onSelected: PropTypes.func.isRequired,
-  currentView: PropTypes.string.isRequired,
-};
 
 export default SideMenu;

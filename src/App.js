@@ -29,14 +29,11 @@ class App extends Component {
     this.state = {
       isLoggedIn: window.MusicKitInstance.isAuthorized,
       viewArgs: null,
-      view: 'recently-added',
       queue: { items: [] },
       playbackState: player.playbackState,
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
-    this.getView = this.getView.bind(this);
-    this.setView = this.setView.bind(this);
     this.updateState = this.updateState.bind(this);
 
     player.addEventListener(Events.playbackStateDidChange, this.updateState);
@@ -71,59 +68,6 @@ class App extends Component {
     this.setState({ isLoggedIn: true });
   }
 
-  getView() {
-    switch (this.state.view) {
-      case 'artists':
-        return <ArtistLibrary onAlbumSelected={this.playAlbum} />;
-      case 'albums':
-        return <AlbumLibrary onAlbumSelected={this.playAlbum} />;
-      case 'songs':
-        return <SongLibrary onSongSelected={this.playSong} />;
-      case 'search':
-        return (
-          <SearchCatalog
-            onSongSelected={this.playSong}
-            onAlbumSelected={this.playAlbum}
-            onArtistSelected={this.setView}
-            onPlaylistSelected={this.setView}
-          />
-        );
-      case 'foryou':
-        return (<ForYouPage
-          onAlbumSelected={this.playAlbum}
-          onPlaylistSelected={this.setView}
-        />);
-      case 'playlist':
-        return (
-          <PlaylistLibrary
-            playlist={this.state.viewArgs}
-            onSongSelected={this.playPlaylist}
-          />
-        );
-      case 'artist':
-        return (
-          <ArtistPage
-            artist={this.state.viewArgs}
-            onAlbumSelected={this.playAlbum}
-            onSongSelected={this.playSong}
-          />
-        );
-      case 'recently-added':
-        return (
-          <RecentlyAddedLibrary
-            onAlbumSelected={this.playAlbum}
-            onPlaylistSelected={this.setView}
-          />
-        );
-      default:
-        return null;
-    }
-  }
-
-  setView(view, viewArgs) {
-    this.setState({ view, viewArgs });
-  }
-
   updateState() {
     const { player } = window.MusicKitInstance;
     this.setState({
@@ -138,30 +82,55 @@ class App extends Component {
       <div className={styles.container}>
         <Header />
         <Router>
-          <div className={styles['route-container']}>
+          <div className={styles['main-content']}>
+            <SideMenu />
+            <div className={styles.player}>
+              <Player
+                queue={this.state.queue}
+                nowPlayingItemIndex={this.state.nowPlayingItemIndex}
+                playbackState={this.state.playbackState}
+              />
+            </div>
+            <div className={styles.view}>
+              <Route
+                exact
+                path="/library/recently-added"
+                render={() => (
+                  <RecentlyAddedLibrary
+                    onAlbumSelected={this.playAlbum}
+                    onPlaylistSelected={this.setView}
+                  />
+                )}
+              />
+              <Route exact path="/library/artists" render={() => <ArtistLibrary onAlbumSelected={this.playAlbum} />} />
+              <Route exact path="/library/albums" render={() => <AlbumLibrary onAlbumSelected={this.playAlbum} />} />
+              <Route exact path="/library/songs" render={() => <SongLibrary onSongSelected={this.playSong} />} />
+              <Route exact path="/library/playlists" render={() => <PlaylistLibrary playlist={this.state.viewArgs} onSongSelected={this.playPlaylist} />} />
+              <Route
+                exact
+                path="/search"
+                render={() => (
+                  <SearchCatalog
+                    onSongSelected={this.playSong}
+                    onAlbumSelected={this.playAlbum}
+                    onArtistSelected={this.setView}
+                    onPlaylistSelected={console.log}
+                  />
+                )}
+              />
+              <Route exact path="/for-you" render={() => <ForYouPage onAlbumSelected={this.playAlbum} onPlaylistSelected={console.log} />} />
+              <Route
+                path="/artist/id"
+                render={() => (<ArtistPage
+                  artist={this.state.viewArgs}
+                  onAlbumSelected={this.playAlbum}
+                  onSongSelected={this.playSong}
+                />)}
+              />
+            </div>
             <Route exact path="/" render={() => <LoginContainer onLoginSuccess={this.onLoginSuccess} />} />
-            <Route
-              exact
-              path="/player"
-              render={() => (
-                <div className={styles['main-content']}>
-                  <SideMenu onSelected={this.setView} currentView={this.state.view} />
-                  <div className={styles.view}>
-                    { this.getView() }
-                  </div>
-                  <div className={styles.player}>
-                    <Player
-                      queue={this.state.queue}
-                      nowPlayingItemIndex={this.state.nowPlayingItemIndex}
-                      playbackState={this.state.playbackState}
-                    />
-                  </div>
-                </div>
-              )}
-            />
-            {
-              this.state.isLoggedIn ? <Redirect to="/player" /> : <Redirect to="/" />
-            }
+
+            { this.state.isLoggedIn ? <Redirect to="/library/recently-added" /> : <Redirect to="/" /> }
           </div>
         </Router>
       </div>
