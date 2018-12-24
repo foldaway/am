@@ -83,14 +83,18 @@ class App extends Component {
         <Header />
         <Router>
           <div className={styles['main-content']}>
-            <SideMenu />
-            <div className={styles.player}>
-              <Player
-                queue={this.state.queue}
-                nowPlayingItemIndex={this.state.nowPlayingItemIndex}
-                playbackState={this.state.playbackState}
-              />
-            </div>
+            { this.state.isLoggedIn ? <SideMenu /> : null }
+            {
+              this.state.isLoggedIn ? (
+                <div className={styles.player}>
+                  <Player
+                    queue={this.state.queue}
+                    nowPlayingItemIndex={this.state.nowPlayingItemIndex}
+                    playbackState={this.state.playbackState}
+                  />
+                </div>
+              ) : null
+            }
             <div className={styles.view}>
               <Route
                 exact
@@ -130,9 +134,9 @@ class App extends Component {
                 />)}
               />
             </div>
-            <Route exact path="/" render={(props) => <LoginContainer onLoginSuccess={this.onLoginSuccess} {...props} />} />
+            <Route exact path="/login" render={(props) => <LoginContainer onLoginSuccess={this.onLoginSuccess} {...props} />} />
 
-            { this.state.isLoggedIn ? <Redirect to="/library/recently-added" /> : <Redirect to="/" /> }
+            { this.state.isLoggedIn ? null : <Redirect to="/login" /> }
           </div>
         </Router>
       </div>
