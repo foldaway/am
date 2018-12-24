@@ -111,11 +111,13 @@ class SearchCatalog extends Component {
         <span className={styles.title}>Artists</span>
         {
           this.state.artists.map((artist) => (
-            <Artist
-              key={artist.id}
-              artist={artist}
-              onSelected={() => this.props.onArtistSelected('artist', artist)}
-            />
+            <Link href={`/artist/${artist.id}`} to={`/artist/${artist.id}`}>
+              <Artist
+                key={artist.id}
+                artist={artist}
+                onSelected={() => this.props.onArtistSelected('artist', artist)}
+              />
+            </Link>
           ))
         }
       </div>
