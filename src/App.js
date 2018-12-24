@@ -18,6 +18,7 @@ import ArtistPage from './components/ArtistPage';
 import ArtistLibrary from './components/ArtistLibrary';
 import ForYouPage from './components/ForYouPage';
 import RecentlyAddedLibrary from './components/RecentlyAddedLibrary';
+import Modal from './components/Modal';
 
 class App extends Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class App extends Component {
       viewArgs: null,
       queue: { items: [] },
       playbackState: player.playbackState,
+      error: null,
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
@@ -41,12 +43,16 @@ class App extends Component {
     player.queue.addEventListener(Events.queuePositionDidChange, this.updateState);
 
     this.playQueue = async (queueObj, queueIndex) => {
-      if (this.state.playbackState === PlaybackStates.playing) {
-        await player.stop();
+      try {
+        if (this.state.playbackState === PlaybackStates.playing) {
+          await player.stop();
+        }
+        await window.MusicKitInstance.setQueue(queueObj);
+        await player.changeToMediaAtIndex(queueIndex);
+        await player.play();
+      } catch (e) {
+        this.setState({ error: e.message });
       }
-      await window.MusicKitInstance.setQueue(queueObj);
-      await player.changeToMediaAtIndex(queueIndex);
-      await player.play();
     };
 
     this.playAlbum = async (album, queueIndex) => this.playQueue({ album: album.id }, queueIndex);
@@ -78,11 +84,17 @@ class App extends Component {
   }
 
   render() {
+    const { error } = this.state;
     return (
       <div className={styles.container}>
         <Header />
         <Router>
           <div className={styles['main-content']}>
+            { error !== null ? (
+              <Modal onClose={() => this.setState({ error: null })}>
+                <span>{error}</span>
+              </Modal>
+            ) : null}
             { this.state.isLoggedIn ? <SideMenu /> : null }
             {
               this.state.isLoggedIn ? (
