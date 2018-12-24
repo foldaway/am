@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Song from '../Song';
 import Loader from '../Loader';
 
-import playlistPropType from '../../prop_types/playlist';
 import styles from './styles.scss';
 
 /* eslint-disable no-await-in-loop */
@@ -15,18 +14,22 @@ class PlaylistLibrary extends Component {
 
     this.state = {
       songs: [],
+      playlist: null,
     };
 
+    this.loadPlaylistMetadata = this.loadPlaylistMetadata.bind(this);
     this.loadTracks = this.loadTracks.bind(this);
   }
 
   componentDidMount() {
     this.mounted = true;
+    this.loadPlaylistMetadata();
     this.loadTracks();
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.playlist.id !== prevProps.playlist.id) {
+    if (this.props.match.params.playlistID !== prevProps.match.params.playlistID) {
+      this.loadPlaylistMetadata();
       this.loadTracks();
     }
   }
@@ -35,20 +38,29 @@ class PlaylistLibrary extends Component {
     this.mounted = false;
   }
 
+  async loadPlaylistMetadata() {
+    this.setState({ playlist: null });
+    const { isLibrary } = this.props;
+    const { playlistID } = this.props.match.params;
+    const requestAPI = isLibrary ? window.MusicKitInstance.api.library : window.MusicKitInstance.api;
+    const playlist = await requestAPI.playlist(playlistID);
+
+    this.setState({ playlist });
+  }
+
   async loadTracks() {
     let temp = [];
     let count = 0;
 
     this.setState({ songs: [] });
 
-    const { playlist } = this.props;
-
-    const { isLibrary } = playlist.attributes.playParams;
+    const { isLibrary } = this.props;
+    const { playlistID } = this.props.match.params;
 
     if (isLibrary) {
       do {
         try {
-          temp = await window.MusicKitInstance.api.library.request(`me/library/playlists/${playlist.id}/tracks`, {
+          temp = await window.MusicKitInstance.api.library.request(`me/library/playlists/${playlistID}/tracks`, {
             offset: count,
             include: ['curator'],
           });
@@ -67,7 +79,7 @@ class PlaylistLibrary extends Component {
         });
       } while (temp.length > 0);
     } else {
-      const { relationships } = await window.MusicKitInstance.api.playlist(playlist.id);
+      const { relationships } = await window.MusicKitInstance.api.playlist(playlistID);
       this.setState({
         songs: relationships.tracks.data,
       });
@@ -75,7 +87,10 @@ class PlaylistLibrary extends Component {
   }
 
   render() {
-    const { playlist } = this.props;
+    const { playlist } = this.state;
+    if (playlist === null) {
+      return <Loader />;
+    }
     const { attributes } = playlist;
     const description = ('description' in attributes) ? attributes.description.standard : '';
     return (
@@ -97,7 +112,8 @@ class PlaylistLibrary extends Component {
 }
 
 PlaylistLibrary.propTypes = {
-  playlist: playlistPropType.isRequired,
+  isLibrary: PropTypes.bool.isRequired,
+  match: PropTypes.object.isRequired,
   onSongSelected: PropTypes.func.isRequired,
 };
 

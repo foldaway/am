@@ -95,40 +95,44 @@ class App extends Component {
               <Route
                 exact
                 path="/library/recently-added"
-                render={() => (
+                render={(props) => (
                   <RecentlyAddedLibrary
                     onAlbumSelected={this.playAlbum}
                     onPlaylistSelected={this.setView}
+                    {...props}
                   />
                 )}
               />
-              <Route exact path="/library/artists" render={() => <ArtistLibrary onAlbumSelected={this.playAlbum} />} />
-              <Route exact path="/library/albums" render={() => <AlbumLibrary onAlbumSelected={this.playAlbum} />} />
-              <Route exact path="/library/songs" render={() => <SongLibrary onSongSelected={this.playSong} />} />
-              <Route exact path="/library/playlists" render={() => <PlaylistLibrary playlist={this.state.viewArgs} onSongSelected={this.playPlaylist} />} />
+              <Route exact path="/library/artists" render={(props) => <ArtistLibrary onAlbumSelected={this.playAlbum} {...props} />} />
+              <Route exact path="/library/albums" render={(props) => <AlbumLibrary onAlbumSelected={this.playAlbum} {...props} />} />
+              <Route exact path="/library/songs" render={(props) => <SongLibrary onSongSelected={this.playSong} {...props} />} />
+              <Route path="/library/playlist/:playlistID" render={(props) => <PlaylistLibrary isLibrary onSongSelected={this.playPlaylist} {...props} />} />
+              <Route path="/playlist/:playlistID" render={(props) => <PlaylistLibrary isLibrary={false} onSongSelected={this.playPlaylist} {...props} />} />
               <Route
                 exact
                 path="/search"
-                render={() => (
+                render={(props) => (
                   <SearchCatalog
                     onSongSelected={this.playSong}
                     onAlbumSelected={this.playAlbum}
                     onArtistSelected={this.setView}
                     onPlaylistSelected={console.log}
+                    {...props}
                   />
                 )}
               />
               <Route exact path="/for-you" render={() => <ForYouPage onAlbumSelected={this.playAlbum} onPlaylistSelected={console.log} />} />
               <Route
                 path="/artist/id"
-                render={() => (<ArtistPage
+                render={(props) => (<ArtistPage
                   artist={this.state.viewArgs}
                   onAlbumSelected={this.playAlbum}
                   onSongSelected={this.playSong}
+                  {...props}
                 />)}
               />
             </div>
-            <Route exact path="/" render={() => <LoginContainer onLoginSuccess={this.onLoginSuccess} />} />
+            <Route exact path="/" render={(props) => <LoginContainer onLoginSuccess={this.onLoginSuccess} {...props} />} />
 
             { this.state.isLoggedIn ? <Redirect to="/library/recently-added" /> : <Redirect to="/" /> }
           </div>
