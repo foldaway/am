@@ -43,7 +43,6 @@ class Album extends Component {
   render() {
     const { onSelected, album } = this.props;
     const { url } = album.attributes.artwork;
-    console.log(album.attributes)
     return (
       <div className={styles.container} onClick={this.toggleSongList} role="presentation">
         <img className={styles.art} src={imgURLGen(url, { w: 75 })} srcSet={srcSetGen(url)} alt="album artwork" />

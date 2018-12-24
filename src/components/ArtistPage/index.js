@@ -44,7 +44,7 @@ class ArtistPage extends Component {
   }
 
   async fetchArtistData() {
-    const { artistID } = this.props.match.params;
+    const artistID = Buffer.from(this.props.match.params.artistID, 'base64').toString('ascii');
     const artist = await window.MusicKitInstance.api.artist(artistID);
     this.setState({ artist });
     const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/albums`);

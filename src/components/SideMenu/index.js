@@ -51,7 +51,7 @@ class SideMenu extends Component {
           <span className={styles.title}>Playlists</span>
           {
             this.state.playlists.map((playlist) => (
-              <NavLink key={playlist.id} activeClassName={styles.current} to={`/library/playlist/${playlist.id}`} >
+              <NavLink key={playlist.id} activeClassName={styles.current} to={`/library/playlist/${Buffer.from(playlist.id).toString('base64')}`} >
                 {playlist.attributes.name}
               </NavLink>
             ))

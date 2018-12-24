@@ -23,7 +23,7 @@ const Recommendation = (props) => {
   switch (data[0].type) {
     case 'playlists':
       views = data.map((p) => (
-        <Link key={p.id} href={`/playlist/${p.id}`} to={`/playlist/${p.id}`}>
+        <Link key={p.id} href={`/playlist/${Buffer.from(p.id).toString('base64')}`} to={`/playlist/${Buffer.from(p.id).toString('base64')}`}>
           <Playlist playlist={p} />
         </Link>
       ));

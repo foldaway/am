@@ -43,7 +43,7 @@ class PlaylistLibrary extends Component {
   async loadPlaylistMetadata() {
     this.setState({ playlist: null });
     const { isLibrary } = this.props;
-    const { playlistID } = this.props.match.params;
+    const playlistID = Buffer.from(this.props.match.params.playlistID, 'base64').toString('ascii');
     const requestAPI = isLibrary ? window.MusicKitInstance.api.library : window.MusicKitInstance.api;
     const playlist = await requestAPI.playlist(playlistID);
 
@@ -57,7 +57,7 @@ class PlaylistLibrary extends Component {
     this.setState({ songs: [] });
 
     const { isLibrary } = this.props;
-    const { playlistID } = this.props.match.params;
+    const playlistID = Buffer.from(this.props.match.params.playlistID, 'base64').toString('ascii');
 
     if (isLibrary) {
       do {
