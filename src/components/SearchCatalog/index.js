@@ -67,7 +67,7 @@ class SearchCatalog extends Component {
   }
 
   onSuggestionSelected(event, { suggestion }) {
-    this.setState({ term: suggestion }, () => this.search());
+    this.setState({ redirectTerm: suggestion, term: suggestion }, () => this.search());
   }
 
   getSongsView() {
