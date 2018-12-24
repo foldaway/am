@@ -94,7 +94,7 @@ class App extends Component {
             <div className={styles.view}>
               <Route
                 exact
-                path="/library/recently-added"
+                path="/"
                 render={(props) => (
                   <RecentlyAddedLibrary
                     onAlbumSelected={this.playAlbum}
@@ -132,9 +132,9 @@ class App extends Component {
                 />)}
               />
             </div>
-            <Route exact path="/" render={(props) => <LoginContainer onLoginSuccess={this.onLoginSuccess} {...props} />} />
+            <Route exact path="/login" render={(props) => <LoginContainer onLoginSuccess={this.onLoginSuccess} {...props} />} />
 
-            { this.state.isLoggedIn ? <Redirect to="/library/recently-added" /> : <Redirect to="/" /> }
+            { this.state.isLoggedIn ? null : <Redirect to="/login" /> }
           </div>
         </Router>
       </div>
