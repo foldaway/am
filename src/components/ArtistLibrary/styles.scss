@@ -5,7 +5,7 @@
   display: grid;
   grid-template-areas:
     "artist-list indiv";
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 3fr;
   height: 100%;
   overflow: hidden;
 
@@ -15,6 +15,11 @@
     grid-row-gap: 2px;
     grid-area: artist-list;
     overflow-y: scroll;
+
+    .artist-container {
+      padding: 8px;
+      border-bottom: 1px solid $lightgray;
+    }
   }
 
   .indiv {
@@ -26,6 +31,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr;
     grid-area: indiv;
+    margin-left: 10px;
     overflow: hidden;
 
     .title {
