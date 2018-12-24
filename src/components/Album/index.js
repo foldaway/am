@@ -27,6 +27,7 @@ class Album extends Component {
     this.setState({
       songs: relationships.tracks.data,
     });
+    window.scrollBy(0, 20);
   }
 
   toggleSongList() {

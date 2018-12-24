@@ -135,7 +135,7 @@ class App extends Component {
                   />
                 )}
               />
-              <Route exact path="/for-you" render={() => <ForYouPage onAlbumSelected={this.playAlbum} onPlaylistSelected={console.log} />} />
+              <Route exact path="/for-you" render={() => <ForYouPage onAlbumSelected={this.playAlbum} />} />
               <Route
                 path="/artist/id"
                 render={(props) => (<ArtistPage

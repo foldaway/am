@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { Link } from 'react-router-dom';
+
 import recPropType from '../../prop_types/recommendation';
 
 import styles from './styles.scss';
@@ -12,7 +14,6 @@ const Recommendation = (props) => {
   const {
     rec: { attributes, id, relationships },
     onAlbumSelected,
-    onPlaylistSelected,
   } = props;
   const { title, reason } = attributes;
   const { data } = (relationships.recommendations || relationships.contents);
@@ -21,14 +22,17 @@ const Recommendation = (props) => {
 
   switch (data[0].type) {
     case 'playlists':
-      views = data.map((p) => <Playlist key={p.id} playlist={p} onSelected={() => onPlaylistSelected('playlist', p)} />);
+      views = data.map((p) => (
+        <Link key={p.id} href={`/playlist/${p.id}`} to={`/playlist/${p.id}`}>
+          <Playlist playlist={p} />
+        </Link>
+      ));
       break;
     case 'personal-recommendation':
       views = data.map((rec) => (<Recommendation
         key={rec.id}
         rec={rec}
         onAlbumSelected={onAlbumSelected}
-        onPlaylistSelected={onPlaylistSelected}
       />));
       extraClass = styles['two-grid'];
       break;
@@ -65,7 +69,6 @@ const Recommendation = (props) => {
 Recommendation.propTypes = {
   rec: recPropType.isRequired,
   onAlbumSelected: PropTypes.func.isRequired,
-  onPlaylistSelected: PropTypes.func.isRequired,
 };
 
 class ForYouPage extends Component {
@@ -91,7 +94,7 @@ class ForYouPage extends Component {
   }
 
   render() {
-    const { onAlbumSelected, onPlaylistSelected } = this.props;
+    const { onAlbumSelected } = this.props;
     const { recommendations } = this.state;
     return (
       <div className={styles.container}>
@@ -102,7 +105,6 @@ class ForYouPage extends Component {
               rec={rec}
               key={rec.id}
               onAlbumSelected={onAlbumSelected}
-              onPlaylistSelected={onPlaylistSelected}
             />
           )) : <Loader />
         }
@@ -113,7 +115,6 @@ class ForYouPage extends Component {
 
 ForYouPage.propTypes = {
   onAlbumSelected: PropTypes.func.isRequired,
-  onPlaylistSelected: PropTypes.func.isRequired,
 };
 
 export default ForYouPage;
