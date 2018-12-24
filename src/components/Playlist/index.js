@@ -1,15 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import playlistPropType from '../../prop_types/playlist';
 import styles from './styles.scss';
 
-const Playlist = ({ playlist }) => (
+const Playlist = ({ playlist, playlist: { attributes } }) => (
   <div className={styles.container}>
     <div
       className={styles.art}
       style={{
-      backgroundImage: `url(${playlist.attributes.artwork.url.replace('{w}', '300').replace('{h}', '300')})`,
+      backgroundImage: `url(${attributes.artwork ? attributes.artwork.url.replace('{w}', '300').replace('{h}', '300') : null})`,
     }}
     />
     <span className={styles.title}>{playlist.attributes.name}</span>
