@@ -1,0 +1,13 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  &__footer {
+    margin-top: 8px;
+
+    &__close {
+      width: 100%;
+    }
+  }
+}

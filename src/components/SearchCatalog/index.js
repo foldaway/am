@@ -67,7 +67,7 @@ class SearchCatalog extends Component {
   }
 
   onSuggestionSelected(event, { suggestion }) {
-    this.setState({ term: suggestion }, () => this.search());
+    this.setState({ redirectTerm: suggestion, term: suggestion }, () => this.search());
   }
 
   getSongsView() {
@@ -119,7 +119,7 @@ class SearchCatalog extends Component {
         <span className={styles.title}>Artists</span>
         {
           this.state.artists.map((artist) => (
-            <Link href={`/artist/${artist.id}`} to={`/artist/${artist.id}`}>
+            <Link href={`/artist/${Buffer.from(artist.id).toString('base64')}`} to={`/artist/${Buffer.from(artist.id).toString('base64')}`}>
               <Artist key={artist.id} artist={artist} />
             </Link>
           ))
@@ -139,7 +139,7 @@ class SearchCatalog extends Component {
         <div className={styles.playlists}>
           {
             this.state.playlists.map((playlist) => (
-              <Link href={`/playlist/${playlist.id}`} to={`/playlist/${playlist.id}`}>
+              <Link href={`/playlist/${Buffer.from(playlist.id).toString('base64')}`} to={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}>
                 <Playlist playlist={playlist} />
               </Link>
             ))

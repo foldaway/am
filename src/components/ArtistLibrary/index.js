@@ -16,11 +16,13 @@ class ArtistLibrary extends Component {
       artists: [],
       currentArtist: null,
       indivAlbums: [],
+      isLoading: false,
     };
 
     this.load = this.load.bind(this);
     this.loadIndiv = this.loadIndiv.bind(this);
     this.setArtist = this.setArtist.bind(this);
+    this.getIndivView = this.getIndivView.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +36,7 @@ class ArtistLibrary extends Component {
 
   setArtist(artist) {
     this.setState({
+      isLoading: true,
       currentArtist: artist,
     }, () => {
       this.loadIndiv();
@@ -64,44 +67,59 @@ class ArtistLibrary extends Component {
       include: ['albums'],
     });
     this.setState({
+      isLoading: false,
       indivAlbums: relationships.albums.data,
     });
   }
 
-  render() {
+  getIndivView() {
     const { onAlbumSelected } = this.props;
-    const { artists, currentArtist, indivAlbums } = this.state;
+    const { currentArtist, indivAlbums } = this.state;
+
+    const { isLoading } = this.state;
+    if (isLoading) {
+      return <Loader />;
+    }
+    return (
+      <div className={styles.indiv}>
+        <span className={styles.title}>
+          {
+            currentArtist !== null ? currentArtist.attributes.name : ''
+          }
+        </span>
+        <span className={styles['album-count']}>
+          {
+            indivAlbums.length > 0 ? `${indivAlbums.length} albums` : null
+          }
+        </span>
+        <div className={styles.albums}>
+          {
+            indivAlbums.length > 0 ? indivAlbums.map((album) => (
+              <Album key={album.id} album={album} onSelected={onAlbumSelected} />
+            )) : null
+          }
+          {
+            currentArtist !== null && indivAlbums.length === 0 ? <Loader /> : null
+          }
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    const { artists } = this.state;
     return (
       <div className={styles.container}>
         <div className={styles['artist-list']}>
           {
             artists.length > 0 ? artists.map((artist) => (
-              <Artist artist={artist} onSelected={() => this.setArtist(artist)} />
+              <div className={styles['artist-container']} onClick={() => this.setArtist(artist)} role="presentation">
+                <Artist artist={artist} />
+              </div>
             )) : <Loader />
           }
         </div>
-        <div className={styles.indiv}>
-          <span className={styles.title}>
-            {
-              currentArtist !== null ? currentArtist.attributes.name : ''
-            }
-          </span>
-          <span className={styles['album-count']}>
-            {
-              indivAlbums.length > 0 ? `${indivAlbums.length} albums` : null
-            }
-          </span>
-          <div className={styles.albums}>
-            {
-              indivAlbums.length > 0 ? indivAlbums.map((album) => (
-                <Album key={album.id} album={album} onSelected={onAlbumSelected} />
-              )) : null
-            }
-            {
-              currentArtist !== null && indivAlbums.length === 0 ? <Loader /> : null
-            }
-          </div>
-        </div>
+        { this.getIndivView() }
       </div>
     );
   }

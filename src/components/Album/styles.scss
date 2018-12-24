@@ -26,8 +26,7 @@
     border-radius: 6px;
     align-self: center;
 
-    background-position: center;
-    background-size: cover;
+    object-fit: cover;
     border: 1px solid $faintgray;
 
     &::before {

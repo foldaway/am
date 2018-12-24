@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { imgURLGen, srcSetGen } from '../../util/img';
+
 import Song from '../Song';
 import Loader from '../Loader';
 
@@ -41,7 +43,7 @@ class PlaylistLibrary extends Component {
   async loadPlaylistMetadata() {
     this.setState({ playlist: null });
     const { isLibrary } = this.props;
-    const { playlistID } = this.props.match.params;
+    const playlistID = Buffer.from(this.props.match.params.playlistID, 'base64').toString('ascii');
     const requestAPI = isLibrary ? window.MusicKitInstance.api.library : window.MusicKitInstance.api;
     const playlist = await requestAPI.playlist(playlistID);
 
@@ -55,7 +57,7 @@ class PlaylistLibrary extends Component {
     this.setState({ songs: [] });
 
     const { isLibrary } = this.props;
-    const { playlistID } = this.props.match.params;
+    const playlistID = Buffer.from(this.props.match.params.playlistID, 'base64').toString('ascii');
 
     if (isLibrary) {
       do {
@@ -92,10 +94,11 @@ class PlaylistLibrary extends Component {
       return <Loader />;
     }
     const { attributes } = playlist;
+    const artworkURL = attributes.artwork ? attributes.artwork.url : '';
     const description = ('description' in attributes) ? attributes.description.standard : '';
     return (
       <div className={styles.container}>
-        <img className={styles.art} src={attributes.artwork.url.replace('{w}', 200).replace('{h}', 200)} alt="" />
+        <img className={styles.art} src={imgURLGen(artworkURL, { w: 75 })} srcSet={srcSetGen(artworkURL)} alt="Playlist artwork" />
         <span className={styles.title}>{attributes.name}</span>
         <span className={styles.metadata}>{this.state.songs.length} songs</span>
         <p className={styles.description}>{description}</p>
