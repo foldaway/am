@@ -115,8 +115,6 @@ class App extends Component {
                   <SearchCatalog
                     onSongSelected={this.playSong}
                     onAlbumSelected={this.playAlbum}
-                    onArtistSelected={console.log}
-                    onPlaylistSelected={console.log}
                     {...props}
                   />
                 )}

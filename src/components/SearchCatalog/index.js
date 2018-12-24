@@ -112,11 +112,7 @@ class SearchCatalog extends Component {
         {
           this.state.artists.map((artist) => (
             <Link href={`/artist/${artist.id}`} to={`/artist/${artist.id}`}>
-              <Artist
-                key={artist.id}
-                artist={artist}
-                onSelected={() => this.props.onArtistSelected('artist', artist)}
-              />
+              <Artist key={artist.id} artist={artist} />
             </Link>
           ))
         }
@@ -226,8 +222,6 @@ class SearchCatalog extends Component {
 SearchCatalog.propTypes = {
   onAlbumSelected: PropTypes.func.isRequired,
   onSongSelected: PropTypes.func.isRequired,
-  onArtistSelected: PropTypes.func.isRequired,
-  onPlaylistSelected: PropTypes.func.isRequired,
 };
 
 export default SearchCatalog;
