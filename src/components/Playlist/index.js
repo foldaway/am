@@ -1,15 +1,17 @@
 import React from 'react';
 
+import { imgURLGen, srcSetGen } from '../../util/img';
+
 import playlistPropType from '../../prop_types/playlist';
 import styles from './styles.scss';
 
 const Playlist = ({ playlist, playlist: { attributes } }) => (
   <div className={styles.container}>
-    <div
+    <img
       className={styles.art}
-      style={{
-      backgroundImage: `url(${attributes.artwork ? attributes.artwork.url.replace('{w}', '300').replace('{h}', '300') : null})`,
-    }}
+      src={attributes.artwork ? imgURLGen(attributes.artwork.url, { w: 75 }) : null}
+      srcSet={attributes.artwork ? srcSetGen(attributes.artwork.url) : null}
+      alt="Playlist artwork"
     />
     <span className={styles.title}>{playlist.attributes.name}</span>
     <span className={styles.curator}>{playlist.attributes.curatorName}</span>

@@ -6,6 +6,7 @@ import Loader from '../Loader';
 
 import styles from './styles.scss';
 
+import { imgURLGen, srcSetGen } from '../../util/img';
 import albumPropType from '../../prop_types/album';
 
 class Album extends Component {
@@ -41,14 +42,11 @@ class Album extends Component {
 
   render() {
     const { onSelected, album } = this.props;
+    const { url } = album.attributes.artwork;
+    console.log(album.attributes)
     return (
       <div className={styles.container} onClick={this.toggleSongList} role="presentation">
-        <div
-          className={styles.art}
-          style={{
-          backgroundImage: `url(${album.attributes.artwork.url.replace('{w}', '300').replace('{h}', '300')})`,
-        }}
-        />
+        <img className={styles.art} src={imgURLGen(url, { w: 75 })} srcSet={srcSetGen(url)} alt="album artwork" />
         <span className={styles.title}>{album.attributes.name}</span>
         <span className={styles.artist}>{album.attributes.artistName}</span>
         <div className={styles.songs}>
