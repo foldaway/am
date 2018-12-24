@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import playlistPropType from '../../prop_types/playlist';
 import styles from './styles.scss';
 
-const Playlist = ({ playlist, onSelected }) => (
-  <div className={styles.container} onClick={onSelected} role="presentation">
+const Playlist = ({ playlist }) => (
+  <div className={styles.container}>
     <div
       className={styles.art}
       style={{
@@ -19,7 +19,6 @@ const Playlist = ({ playlist, onSelected }) => (
 
 Playlist.propTypes = {
   playlist: playlistPropType.isRequired,
-  onSelected: PropTypes.func.isRequired,
 };
 
 export default Playlist;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash.debounce';
 
@@ -132,7 +133,9 @@ class SearchCatalog extends Component {
         <div className={styles.playlists}>
           {
             this.state.playlists.map((playlist) => (
-              <Playlist playlist={playlist} onSelected={() => this.props.onPlaylistSelected('playlist', playlist)} />
+              <Link href={`/playlist/${playlist.id}`} to={`/playlist/${playlist.id}`}>
+                <Playlist playlist={playlist} />
+              </Link>
             ))
           }
         </div>
