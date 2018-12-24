@@ -98,7 +98,7 @@ class App extends Component {
                 render={(props) => (
                   <RecentlyAddedLibrary
                     onAlbumSelected={this.playAlbum}
-                    onPlaylistSelected={this.setView}
+                    onPlaylistSelected={console.log}
                     {...props}
                   />
                 )}

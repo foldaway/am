@@ -37,7 +37,7 @@ class SideMenu extends Component {
       <div className={styles.container}>
         <div className={styles.section}>
           <span className={styles.title}>Library</span>
-          <NavLink activeClassName={styles.current} to="/library/recently-added">Recently Added</NavLink>
+          <NavLink activeClassName={styles.current} to="/">Recently Added</NavLink>
           <NavLink activeClassName={styles.current} to="/library/artists">Artists</NavLink>
           <NavLink activeClassName={styles.current} to="/library/albums">Albums</NavLink>
           <NavLink activeClassName={styles.current} to="/library/songs">Songs</NavLink>
