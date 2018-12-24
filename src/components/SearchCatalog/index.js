@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Redirect, Link } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash.debounce';
 
@@ -14,14 +15,18 @@ class SearchCatalog extends Component {
   constructor(props) {
     super(props);
 
+    const query = new URLSearchParams(props.location.search);
+    const term = query.get('term');
+
     this.state = {
-      term: '',
-      isSearching: false,
+      term: term || '',
+      isSearching: term !== null,
       songs: [],
       albums: [],
       artists: [],
       playlists: [],
       suggestions: [],
+      redirectTerm: null,
     };
 
     this.getResultsView = this.getResultsView.bind(this);
@@ -41,6 +46,10 @@ class SearchCatalog extends Component {
         <span>{text}</span>
       </div>
     );
+
+    if (term !== null) {
+      this.search();
+    }
   }
 
   componentDidMount() {
@@ -110,11 +119,9 @@ class SearchCatalog extends Component {
         <span className={styles.title}>Artists</span>
         {
           this.state.artists.map((artist) => (
-            <Artist
-              key={artist.id}
-              artist={artist}
-              onSelected={() => this.props.onArtistSelected('artist', artist)}
-            />
+            <Link href={`/artist/${artist.id}`} to={`/artist/${artist.id}`}>
+              <Artist key={artist.id} artist={artist} />
+            </Link>
           ))
         }
       </div>
@@ -132,7 +139,9 @@ class SearchCatalog extends Component {
         <div className={styles.playlists}>
           {
             this.state.playlists.map((playlist) => (
-              <Playlist playlist={playlist} onSelected={() => this.props.onPlaylistSelected('playlist', playlist)} />
+              <Link href={`/playlist/${playlist.id}`} to={`/playlist/${playlist.id}`}>
+                <Playlist playlist={playlist} />
+              </Link>
             ))
           }
         </div>
@@ -185,12 +194,17 @@ class SearchCatalog extends Component {
   }
 
   render() {
+    const { redirectTerm } = this.state;
     return (
       <div className={styles.container}>
+        {
+          redirectTerm ? <Redirect to={`/search?term=${redirectTerm}`} /> : null
+        }
         <form
           className={styles.search}
           onSubmit={(e) => {
           e.preventDefault();
+          this.setState({ redirectTerm: this.state.term });
           this.search();
         }}
         >
@@ -219,10 +233,9 @@ class SearchCatalog extends Component {
 }
 
 SearchCatalog.propTypes = {
+  location: PropTypes.object.isRequired,
   onAlbumSelected: PropTypes.func.isRequired,
   onSongSelected: PropTypes.func.isRequired,
-  onArtistSelected: PropTypes.func.isRequired,
-  onPlaylistSelected: PropTypes.func.isRequired,
 };
 
 export default SearchCatalog;

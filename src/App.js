@@ -2,6 +2,7 @@ import 'normalize.css';
 import 'babel-polyfill';
 
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
@@ -28,14 +29,11 @@ class App extends Component {
     this.state = {
       isLoggedIn: window.MusicKitInstance.isAuthorized,
       viewArgs: null,
-      view: 'recently-added',
       queue: { items: [] },
       playbackState: player.playbackState,
     };
 
     this.onLoginSuccess = this.onLoginSuccess.bind(this);
-    this.getView = this.getView.bind(this);
-    this.setView = this.setView.bind(this);
     this.updateState = this.updateState.bind(this);
 
     player.addEventListener(Events.playbackStateDidChange, this.updateState);
@@ -70,59 +68,6 @@ class App extends Component {
     this.setState({ isLoggedIn: true });
   }
 
-  getView() {
-    switch (this.state.view) {
-      case 'artists':
-        return <ArtistLibrary onAlbumSelected={this.playAlbum} />;
-      case 'albums':
-        return <AlbumLibrary onAlbumSelected={this.playAlbum} />;
-      case 'songs':
-        return <SongLibrary onSongSelected={this.playSong} />;
-      case 'search':
-        return (
-          <SearchCatalog
-            onSongSelected={this.playSong}
-            onAlbumSelected={this.playAlbum}
-            onArtistSelected={this.setView}
-            onPlaylistSelected={this.setView}
-          />
-        );
-      case 'foryou':
-        return (<ForYouPage
-          onAlbumSelected={this.playAlbum}
-          onPlaylistSelected={this.setView}
-        />);
-      case 'playlist':
-        return (
-          <PlaylistLibrary
-            playlist={this.state.viewArgs}
-            onSongSelected={this.playPlaylist}
-          />
-        );
-      case 'artist':
-        return (
-          <ArtistPage
-            artist={this.state.viewArgs}
-            onAlbumSelected={this.playAlbum}
-            onSongSelected={this.playSong}
-          />
-        );
-      case 'recently-added':
-        return (
-          <RecentlyAddedLibrary
-            onAlbumSelected={this.playAlbum}
-            onPlaylistSelected={this.setView}
-          />
-        );
-      default:
-        return null;
-    }
-  }
-
-  setView(view, viewArgs) {
-    this.setState({ view, viewArgs });
-  }
-
   updateState() {
     const { player } = window.MusicKitInstance;
     this.setState({
@@ -136,27 +81,64 @@ class App extends Component {
     return (
       <div className={styles.container}>
         <Header />
-        {
-          this.state.isLoggedIn ? (
-            <div className={styles['main-content']}>
-              <SideMenu onSelected={this.setView} currentView={this.state.view} />
-              <div className={styles.view}>
-                { this.getView() }
-              </div>
-              <div className={styles.player}>
-                <Player
-                  queue={this.state.queue}
-                  nowPlayingItemIndex={this.state.nowPlayingItemIndex}
-                  playbackState={this.state.playbackState}
-                />
-              </div>
+        <Router>
+          <div className={styles['main-content']}>
+            { this.state.isLoggedIn ? <SideMenu /> : null }
+            {
+              this.state.isLoggedIn ? (
+                <div className={styles.player}>
+                  <Player
+                    queue={this.state.queue}
+                    nowPlayingItemIndex={this.state.nowPlayingItemIndex}
+                    playbackState={this.state.playbackState}
+                  />
+                </div>
+              ) : null
+            }
+            <div className={styles.view}>
+              <Route
+                exact
+                path="/library/recently-added"
+                render={(props) => (
+                  <RecentlyAddedLibrary
+                    onAlbumSelected={this.playAlbum}
+                    onPlaylistSelected={console.log}
+                    {...props}
+                  />
+                )}
+              />
+              <Route exact path="/library/artists" render={(props) => <ArtistLibrary onAlbumSelected={this.playAlbum} {...props} />} />
+              <Route exact path="/library/albums" render={(props) => <AlbumLibrary onAlbumSelected={this.playAlbum} {...props} />} />
+              <Route exact path="/library/songs" render={(props) => <SongLibrary onSongSelected={this.playSong} {...props} />} />
+              <Route path="/library/playlist/:playlistID" render={(props) => <PlaylistLibrary isLibrary onSongSelected={this.playPlaylist} {...props} />} />
+              <Route path="/playlist/:playlistID" render={(props) => <PlaylistLibrary isLibrary={false} onSongSelected={this.playPlaylist} {...props} />} />
+              <Route path="/artist/:artistID" render={(props) => <ArtistPage onSongSelected={this.playPlaylist} {...props} />} />
+              <Route
+                path="/search"
+                render={(props) => (
+                  <SearchCatalog
+                    onSongSelected={this.playSong}
+                    onAlbumSelected={this.playAlbum}
+                    {...props}
+                  />
+                )}
+              />
+              <Route exact path="/for-you" render={() => <ForYouPage onAlbumSelected={this.playAlbum} onPlaylistSelected={console.log} />} />
+              <Route
+                path="/artist/id"
+                render={(props) => (<ArtistPage
+                  artist={this.state.viewArgs}
+                  onAlbumSelected={this.playAlbum}
+                  onSongSelected={this.playSong}
+                  {...props}
+                />)}
+              />
             </div>
-          ) : (
-            <div>
-              <LoginContainer onLoginSuccess={this.onLoginSuccess} />
-            </div>
-          )
-        }
+            <Route exact path="/login" render={(props) => <LoginContainer onLoginSuccess={this.onLoginSuccess} {...props} />} />
+
+            { this.state.isLoggedIn ? null : <Redirect to="/login" /> }
+          </div>
+        </Router>
       </div>
     );
   }

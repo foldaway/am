@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ogs from 'open-graph-scraper';
 
-import artistPropType from '../../prop_types/artist';
 import styles from './styles.scss';
 import Album from '../Album';
 import Loader from '../Loader';
@@ -12,6 +11,7 @@ class ArtistPage extends Component {
     super(props);
 
     this.state = {
+      artist: null,
       albums: [],
       bannerURL: null,
     };
@@ -21,12 +21,11 @@ class ArtistPage extends Component {
   }
 
   componentDidMount() {
-    this.fetchBanner();
     this.fetchArtistData();
   }
 
   async fetchBanner() {
-    const { url } = this.props.artist.attributes;
+    const { url } = this.state.artist.attributes;
     const { success, data } = await ogs({ url });
 
     if (!success) {
@@ -45,15 +44,22 @@ class ArtistPage extends Component {
   }
 
   async fetchArtistData() {
-    const { id } = this.props.artist;
-    const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${id}/albums`);
+    const { artistID } = this.props.match.params;
+    const artist = await window.MusicKitInstance.api.artist(artistID);
+    this.setState({ artist });
+    const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/albums`);
     this.setState({
       albums,
     });
+    this.fetchBanner();
   }
 
   render() {
-    const { artist, onAlbumSelected, onSongSelected } = this.props;
+    const { onAlbumSelected, onSongSelected } = this.props;
+    const { artist } = this.state;
+    if (artist === null) {
+      return <Loader />;
+    }
     return (
       <div className={styles.container}>
         <div className={styles.banner}>
@@ -71,7 +77,7 @@ class ArtistPage extends Component {
         <div className={styles.albums}>
           {
             this.state.albums.map((album) => (
-              <Album album={album} onSelected={onAlbumSelected} />
+              <Album key={album.id} album={album} onSelected={onAlbumSelected} />
             ))
           }
         </div>
@@ -81,7 +87,7 @@ class ArtistPage extends Component {
 }
 
 ArtistPage.propTypes = {
-  artist: artistPropType.isRequired,
+  match: PropTypes.object.isRequired,
   onAlbumSelected: PropTypes.func.isRequired,
   onSongSelected: PropTypes.func.isRequired,
 };

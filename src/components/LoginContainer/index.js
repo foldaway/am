@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { Redirect } from 'react-router-dom';
+
+import styles from './styles.scss';
+
 class LoginContainer extends Component {
   constructor(props) {
     super(props);
@@ -19,8 +23,14 @@ class LoginContainer extends Component {
   }
 
   render() {
+    if (window.MusicKitInstance.isAuthorized) {
+      return <Redirect to="/library/recently-added" />;
+    }
     return (
-      <button onClick={this.onLoginButtonClicked}>Log in</button>
+      <div className={styles.container}>
+        <span>Welcome to AM.</span>
+        <button onClick={this.onLoginButtonClicked}>Log in</button>
+      </div>
     );
   }
 }
