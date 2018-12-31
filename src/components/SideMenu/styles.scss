@@ -19,6 +19,7 @@
       font-size: 0.75em;
       margin-bottom: 8px;
       color: $lightblack;
+      text-decoration: none;
 
       &.title {
         font-weight: 700;
@@ -60,7 +61,7 @@
     background-color: $lightblack;
 
     .section {
-      span {
+      > * {
         color: $dullwhite;
 
         &.title {
