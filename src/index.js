@@ -11,7 +11,8 @@ window.MusicKitInstance = window.MusicKit.configure({
 });
 
 const rootElem = document.getElementById('root');
-if (new Date().getHours() >= 19) {
+const now = new Date();
+if (now.getHours() >= 19 || now.getHours() <= 7) {
   rootElem.classList.add('dark-theme');
 }
 
