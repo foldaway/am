@@ -39,7 +39,7 @@ class ArtistPage extends Component {
     }
 
     this.setState({
-      bannerURL: data.ogImage.url.replace('cw.jpg', 'cc.jpg').replace(/\d+?x\d+/, '300x300'),
+      bannerURL: data.ogImage.url.replace('cw.jpg', 'cc.jpg').replace('cw.png', 'cc.png').replace(/\d+?x\d+/, '300x300'),
     });
   }
 
