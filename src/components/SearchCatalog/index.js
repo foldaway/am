@@ -120,7 +120,7 @@ class SearchCatalog extends Component {
         {
           this.state.artists.map((artist) => (
             <Link href={`/artist/${Buffer.from(artist.id).toString('base64')}`} to={`/artist/${Buffer.from(artist.id).toString('base64')}`}>
-              <Artist key={artist.id} artist={artist} />
+              <Artist key={artist.id} artist={artist} artwork />
             </Link>
           ))
         }

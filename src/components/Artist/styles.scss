@@ -1,14 +1,28 @@
 @import '../../stylesheets/variables.scss';
 
 .container {
+  display: flex;
+  align-items: center;
+
   &:hover {
-    text-decoration: underline;
     cursor: pointer;
+  }
+
+  .art {
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+
+  .name {
+    color: $lightblack;
   }
 }
 
 :global(.dark-theme) {
   .container {
-    color: $dullwhite;
+    .name {
+      color: $dullwhite;
+    }
   }
 }
