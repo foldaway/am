@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ogs from 'open-graph-scraper';
 
 import styles from './styles.scss';
 import Album from '../Album';
 import Loader from '../Loader';
+
+import { imgURLGen, srcSetGen } from '../../util/img';
+import fetchArtistImage from '../../util/fetch-artist-img';
 
 class ArtistPage extends Component {
   constructor(props) {
@@ -26,20 +28,10 @@ class ArtistPage extends Component {
 
   async fetchBanner() {
     const { url } = this.state.artist.attributes;
-    const { success, data } = await ogs({ url });
-
-    if (!success) {
-      return;
-    }
-
-    if (data.ogImage instanceof Array) {
-      // Probably no large image
-      const [firstImage] = data.ogImage;
-      data.ogImage = firstImage;
-    }
+    const bannerURL = await fetchArtistImage(url);
 
     this.setState({
-      bannerURL: data.ogImage.url.replace('cw.jpg', 'cc.jpg').replace('cw.png', 'cc.png').replace(/\d+?x\d+/, '300x300'),
+      bannerURL,
     });
   }
 
@@ -56,7 +48,7 @@ class ArtistPage extends Component {
 
   render() {
     const { onAlbumSelected, onSongSelected } = this.props;
-    const { artist } = this.state;
+    const { artist, bannerURL } = this.state;
     if (artist === null) {
       return <Loader />;
     }
@@ -66,7 +58,7 @@ class ArtistPage extends Component {
           {
             this.state.bannerURL !== null ? (
               <div className={styles['image-container']}>
-                <img src={this.state.bannerURL} alt="" />
+                <img className={styles.art} src={imgURLGen(bannerURL, { w: 75 })} srcSet={srcSetGen(bannerURL)} alt="artist artwork" />
               </div>
             ) : <Loader />
           }
