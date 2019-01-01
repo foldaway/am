@@ -50,6 +50,15 @@
         @include album-grid;
       }
 
+      .artists {
+        display: grid;
+        grid-auto-flow: column;
+        grid-column-gap: 8px;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+
       .playlists {
         @include album-grid;
       }

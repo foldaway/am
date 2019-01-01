@@ -117,13 +117,15 @@ class SearchCatalog extends Component {
     return (
       <div className={styles.section}>
         <span className={styles.title}>Artists</span>
-        {
-          this.state.artists.map((artist) => (
-            <Link href={`/artist/${Buffer.from(artist.id).toString('base64')}`} to={`/artist/${Buffer.from(artist.id).toString('base64')}`}>
-              <Artist key={artist.id} artist={artist} artwork />
-            </Link>
-          ))
-        }
+        <div className={styles.artists}>
+          {
+            this.state.artists.map((artist) => (
+              <Link href={`/artist/${Buffer.from(artist.id).toString('base64')}`} to={`/artist/${Buffer.from(artist.id).toString('base64')}`}>
+                <Artist key={artist.id} artist={artist} artwork />
+              </Link>
+            ))
+          }
+        </div>
       </div>
     );
   }
