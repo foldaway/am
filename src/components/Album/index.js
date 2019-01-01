@@ -45,7 +45,10 @@ class Album extends Component {
     const { url } = album.attributes.artwork;
     return (
       <div className={styles.container} onClick={this.toggleSongList} role="presentation">
-        <img className={styles.art} src={imgURLGen(url, { w: 75 })} srcSet={srcSetGen(url)} alt="album artwork" />
+        <div className={styles['art-container']}>
+          <svg className={styles.spacer} viewBox="0 0 1 1" />
+          <img className={styles.art} src={imgURLGen(url, { w: 75 })} srcSet={srcSetGen(url)} alt="album artwork" />
+        </div>
         <span className={styles.title}>{album.attributes.name}</span>
         <span className={styles.artist}>{album.attributes.artistName}</span>
         <div className={styles.songs}>
