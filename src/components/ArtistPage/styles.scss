@@ -3,11 +3,14 @@
 
 .container {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto auto auto auto auto;
   grid-template-areas:
-    "banner"
-    "albums";
+    "banner banner"
+    "latest-release top-songs"
+    "albums albums"
+    "music-videos music-videos"
+    "playlists playlists";
   grid-row-gap: 10px;
 
   .banner {
@@ -41,9 +44,85 @@
     }
   }
 
-  .albums {
+  .title {
+    @include large-title;
+    font-size: 1em;
+  }
+
+  .latest-release-container {
+    grid-area: latest-release;
+    
+    .latest-release {
+      @include album-grid;
+    }
+  }
+
+  .top-songs-container {
+    grid-area: top-songs;
+    overflow: hidden;
+
+    .songs {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: auto auto auto;
+      grid-template-columns: repeat(500, 400px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      grid-row-gap: 8px;
+      grid-column-gap: 5px;
+    }
+  }
+
+  .albums-container {
     grid-area: albums;
-    @include album-grid;
+    .albums {
+      grid-area: albums;
+      @include album-grid;
+    }
+  }
+
+  .music-videos-container {
+    grid-area: music-videos;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    .music-videos {
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 8px;
+      grid-template-columns: repeat(200, minmax(300px, 400px));
+    }
+  }
+
+  .playlists-container {
+    grid-area: playlists;
+
+    .playlists {
+      @include album-grid;
+    }
+  }
+
+  .current-music-video {
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "metadata video";
+    grid-template-columns: 1fr 4fr;
+    grid-column-gap: 10px;
+
+    .title {
+      grid-area: title;
+    }
+
+    video {
+      grid-area: video;
+      justify-self: stretch;
+      background-color: black;
+    }
+
+    .metadata {
+      grid-area: metadata;
+    }
   }
 }
 
@@ -61,6 +140,10 @@
       .title {
         color: $dullwhite;
       }
+    }
+
+    .title {
+      color: $dullwhite;
     }
   }
 }

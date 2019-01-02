@@ -90,11 +90,6 @@ class App extends Component {
         <Header />
         <Router>
           <div className={styles['main-content']}>
-            { error !== null ? (
-              <Modal onClose={() => this.setState({ error: null })}>
-                <span>{error}</span>
-              </Modal>
-            ) : null}
             { this.state.isLoggedIn ? <SideMenu /> : null }
             {
               this.state.isLoggedIn ? (
@@ -124,7 +119,7 @@ class App extends Component {
               <Route exact path="/library/songs" render={(props) => <SongLibrary onSongSelected={this.playSong} {...props} />} />
               <Route path="/library/playlist/:playlistID" render={(props) => <PlaylistLibrary isLibrary onSongSelected={this.playPlaylist} {...props} />} />
               <Route path="/playlist/:playlistID" render={(props) => <PlaylistLibrary isLibrary={false} onSongSelected={this.playPlaylist} {...props} />} />
-              <Route path="/artist/:artistID" render={(props) => <ArtistPage onSongSelected={this.playPlaylist} {...props} />} />
+              <Route path="/artist/:artistID" render={(props) => <ArtistPage onSongSelected={this.playSong} onAlbumSelected={this.playAlbum} {...props} />} />
               <Route
                 path="/search"
                 render={(props) => (
@@ -149,6 +144,11 @@ class App extends Component {
             <Route exact path="/login" render={(props) => <LoginContainer onLoginSuccess={this.onLoginSuccess} {...props} />} />
 
             { this.state.isLoggedIn ? null : <Redirect to="/login" /> }
+            { error !== null ? (
+              <Modal onClose={() => this.setState({ error: null })}>
+                <span>{error}</span>
+              </Modal>
+            ) : null}
           </div>
         </Router>
       </div>

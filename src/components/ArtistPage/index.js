@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import styles from './styles.scss';
 import Album from '../Album';
 import Loader from '../Loader';
+import Song from '../Song';
+import Modal from '../Modal';
+import Playlist from '../Playlist';
 
 import { imgURLGen, srcSetGen } from '../../util/img';
 import fetchArtistImage from '../../util/fetch-artist-img';
+import MusicVideo from '../MusicVideo';
 
 class ArtistPage extends Component {
   constructor(props) {
@@ -15,6 +20,10 @@ class ArtistPage extends Component {
     this.state = {
       artist: null,
       albums: [],
+      songs: [],
+      musicVideos: [],
+      playlists: [],
+      currentMusicVideo: null,
       bannerURL: null,
     };
 
@@ -24,6 +33,10 @@ class ArtistPage extends Component {
 
   componentDidMount() {
     this.fetchArtistData();
+  }
+
+  getLatestRelease() {
+    return this.state.albums[0];
   }
 
   async fetchBanner() {
@@ -40,15 +53,37 @@ class ArtistPage extends Component {
     const artist = await window.MusicKitInstance.api.artist(artistID);
     this.setState({ artist });
     const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/albums`);
+    const songs = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/songs`);
+    const musicVideos = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/music-videos`);
+    const playlists = [];
+    try {
+      playlists.push(...await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/playlists`));
+    } catch (e) {
+      console.log(e);
+      // No playlists
+    }
+    // Sort albums by latest first
+    albums.sort((a, b) => new Date(b.attributes.releaseDate) - new Date(a.attributes.releaseDate));
     this.setState({
       albums,
+      songs,
+      musicVideos,
+      playlists,
     });
     this.fetchBanner();
   }
 
   render() {
     const { onAlbumSelected, onSongSelected } = this.props;
-    const { artist, bannerURL } = this.state;
+    const {
+      artist,
+      albums,
+      bannerURL,
+      songs,
+      musicVideos,
+      currentMusicVideo,
+      playlists,
+    } = this.state;
     if (artist === null) {
       return <Loader />;
     }
@@ -66,13 +101,84 @@ class ArtistPage extends Component {
             {artist.attributes.name}
           </span>
         </div>
-        <div className={styles.albums}>
+        <div className={styles['latest-release-container']}>
+          <span className={styles.title}>Latest Release</span>
           {
-            this.state.albums.map((album) => (
-              <Album key={album.id} album={album} onSelected={onAlbumSelected} />
-            ))
+            albums && albums.length > 0 ? (
+              <div className={styles['latest-release']}>
+                <Album album={albums[0]} onSelected={onAlbumSelected} />
+              </div>
+            ) : null
           }
         </div>
+        <div className={styles['top-songs-container']}>
+          <span className={styles.title}>Top Songs</span>
+          <div className={styles.songs}>
+            {
+              songs.map((song, index) => (
+                <Song key={song.id} song={song} onSelected={() => onSongSelected(songs, index)} />
+              ))
+            }
+          </div>
+        </div>
+        <div className={styles['albums-container']}>
+          <span className={styles.title}>Albums</span>
+          <div className={styles.albums}>
+            {
+              albums.slice(1).map((album) => (
+                <Album key={album.id} album={album} onSelected={onAlbumSelected} />
+              ))
+            }
+          </div>
+        </div>
+        <div className={styles['music-videos-container']}>
+          <span className={styles.title}>Music Videos</span>
+          <div className={styles['music-videos']}>
+            {
+              musicVideos.map((musicVideo) => (
+                <MusicVideo
+                  musicVideo={musicVideo}
+                  onSelected={() => this.setState({ currentMusicVideo: musicVideo })}
+                />
+              ))
+            }
+          </div>
+        </div>
+        <div className={styles['playlists-container']}>
+          <span className={styles.title}>Playlists</span>
+          <div className={styles.playlists}>
+            {
+              playlists.map((playlist) => (
+                <Link href={`/playlist/${Buffer.from(playlist.id).toString('base64')}`} to={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}>
+                  <Playlist playlist={playlist} />
+                </Link>
+              ))
+            }
+          </div>
+        </div>
+        {
+          currentMusicVideo ? (
+            <Modal onClose={() => this.setState({ currentMusicVideo: null })}>
+              <div className={styles['current-music-video']}>
+                <span className={styles.title}>Music Video Preview</span>
+                <video controls autoPlay>
+                  <source src={currentMusicVideo.attributes.previews[0].hlsUrl} />
+                  <source src={currentMusicVideo.attributes.previews[0].url} />
+                  Your browser cannot play this video
+                </video>
+                <a
+                  className={styles.metadata}
+                  href={currentMusicVideo.attributes.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MusicVideo musicVideo={currentMusicVideo} />
+                </a>
+              </div>
+              
+            </Modal>
+          ) : null
+        }
       </div>
     );
   }
