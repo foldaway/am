@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import styles from './styles.scss';
@@ -6,6 +7,7 @@ import Album from '../Album';
 import Loader from '../Loader';
 import Song from '../Song';
 import Modal from '../Modal';
+import Playlist from '../Playlist';
 
 import { imgURLGen, srcSetGen } from '../../util/img';
 import fetchArtistImage from '../../util/fetch-artist-img';
@@ -53,12 +55,20 @@ class ArtistPage extends Component {
     const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/albums`);
     const songs = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/songs`);
     const musicVideos = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/music-videos`);
+    const playlists = [];
+    try {
+      playlists.push(...await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/playlists`));
+    } catch (e) {
+      console.log(e);
+      // No playlists
+    }
     // Sort albums by latest first
     albums.sort((a, b) => new Date(b.attributes.releaseDate) - new Date(a.attributes.releaseDate));
     this.setState({
       albums,
       songs,
       musicVideos,
+      playlists,
     });
     this.fetchBanner();
   }
@@ -72,6 +82,7 @@ class ArtistPage extends Component {
       songs,
       musicVideos,
       currentMusicVideo,
+      playlists,
     } = this.state;
     if (artist === null) {
       return <Loader />;
@@ -129,6 +140,18 @@ class ArtistPage extends Component {
                   musicVideo={musicVideo}
                   onSelected={() => this.setState({ currentMusicVideo: musicVideo })}
                 />
+              ))
+            }
+          </div>
+        </div>
+        <div className={styles['playlists-container']}>
+          <span className={styles.title}>Playlists</span>
+          <div className={styles.playlists}>
+            {
+              playlists.map((playlist) => (
+                <Link href={`/playlist/${Buffer.from(playlist.id).toString('base64')}`} to={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}>
+                  <Playlist playlist={playlist} />
+                </Link>
               ))
             }
           </div>
