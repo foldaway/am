@@ -49,6 +49,10 @@
 
   .latest-release-container {
     grid-area: latest-release;
+    
+    .latest-release {
+      @include album-grid;
+    }
   }
 
   .top-songs-container {

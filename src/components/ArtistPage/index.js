@@ -30,6 +30,10 @@ class ArtistPage extends Component {
     this.fetchArtistData();
   }
 
+  getLatestRelease() {
+    return this.state.albums[0];
+  }
+
   async fetchBanner() {
     const { url } = this.state.artist.attributes;
     const bannerURL = await fetchArtistImage(url);
@@ -45,6 +49,8 @@ class ArtistPage extends Component {
     this.setState({ artist });
     const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/albums`);
     const songs = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/songs`);
+    // Sort albums by latest first
+    albums.sort((a, b) => new Date(b.attributes.releaseDate) - new Date(a.attributes.releaseDate));
     this.setState({
       albums,
       songs,
@@ -79,6 +85,13 @@ class ArtistPage extends Component {
         </div>
         <div className={styles['latest-release-container']}>
           <span className={styles.title}>Latest Release</span>
+          {
+            albums && albums.length > 0 ? (
+              <div className={styles['latest-release']}>
+                <Album album={albums[0]} onSelected={onAlbumSelected} />
+              </div>
+            ) : null
+          }
         </div>
         <div className={styles['top-songs-container']}>
           <span className={styles.title}>Top Songs</span>
@@ -94,7 +107,7 @@ class ArtistPage extends Component {
           <span className={styles.title}>Albums</span>
           <div className={styles.albums}>
             {
-              albums.map((album) => (
+              albums.slice(1).map((album) => (
                 <Album key={album.id} album={album} onSelected={onAlbumSelected} />
               ))
             }
