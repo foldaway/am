@@ -5,9 +5,11 @@ import styles from './styles.scss';
 import Album from '../Album';
 import Loader from '../Loader';
 import Song from '../Song';
+import Modal from '../Modal';
 
 import { imgURLGen, srcSetGen } from '../../util/img';
 import fetchArtistImage from '../../util/fetch-artist-img';
+import MusicVideo from '../MusicVideo';
 
 class ArtistPage extends Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class ArtistPage extends Component {
       songs: [],
       musicVideos: [],
       playlists: [],
+      currentMusicVideo: null,
       bannerURL: null,
     };
 
@@ -49,11 +52,13 @@ class ArtistPage extends Component {
     this.setState({ artist });
     const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/albums`);
     const songs = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/songs`);
+    const musicVideos = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/music-videos`);
     // Sort albums by latest first
     albums.sort((a, b) => new Date(b.attributes.releaseDate) - new Date(a.attributes.releaseDate));
     this.setState({
       albums,
       songs,
+      musicVideos,
     });
     this.fetchBanner();
   }
@@ -65,6 +70,8 @@ class ArtistPage extends Component {
       albums,
       bannerURL,
       songs,
+      musicVideos,
+      currentMusicVideo,
     } = this.state;
     if (artist === null) {
       return <Loader />;
@@ -113,6 +120,42 @@ class ArtistPage extends Component {
             }
           </div>
         </div>
+        <div className={styles['music-videos-container']}>
+          <span className={styles.title}>Music Videos</span>
+          <div className={styles['music-videos']}>
+            {
+              musicVideos.map((musicVideo) => (
+                <MusicVideo
+                  musicVideo={musicVideo}
+                  onSelected={() => this.setState({ currentMusicVideo: musicVideo })}
+                />
+              ))
+            }
+          </div>
+        </div>
+        {
+          currentMusicVideo ? (
+            <Modal onClose={() => this.setState({ currentMusicVideo: null })}>
+              <div className={styles['current-music-video']}>
+                <span className={styles.title}>Music Video Preview</span>
+                <video controls autoPlay>
+                  <source src={currentMusicVideo.attributes.previews[0].hlsUrl} />
+                  <source src={currentMusicVideo.attributes.previews[0].url} />
+                  Your browser cannot play this video
+                </video>
+                <a
+                  className={styles.metadata}
+                  href={currentMusicVideo.attributes.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MusicVideo musicVideo={currentMusicVideo} />
+                </a>
+              </div>
+              
+            </Modal>
+          ) : null
+        }
       </div>
     );
   }

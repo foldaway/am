@@ -4,11 +4,12 @@
 .container {
   display: grid;
   grid-template-columns: 1fr 3fr;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto auto auto;
   grid-template-areas:
     "banner banner"
     "latest-release top-songs"
-    "albums albums";
+    "albums albums"
+    "music-videos music-videos";
   grid-row-gap: 10px;
 
   .banner {
@@ -76,6 +77,42 @@
     .albums {
       grid-area: albums;
       @include album-grid;
+    }
+  }
+
+  .music-videos-container {
+    grid-area: music-videos;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    .music-videos {
+      display: grid;
+      grid-auto-flow: column;
+      grid-column-gap: 8px;
+      grid-template-columns: repeat(200, minmax(300px, 400px));
+    }
+  }
+
+  .current-music-video {
+    display: grid;
+    grid-template-areas:
+      "title title"
+      "metadata video";
+    grid-template-columns: 1fr 4fr;
+    grid-column-gap: 10px;
+
+    .title {
+      grid-area: title;
+    }
+
+    video {
+      grid-area: video;
+      justify-self: stretch;
+      background-color: black;
+    }
+
+    .metadata {
+      grid-area: metadata;
     }
   }
 }
