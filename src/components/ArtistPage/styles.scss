@@ -3,11 +3,12 @@
 
 .container {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto auto 1fr;
   grid-template-areas:
-    "banner"
-    "albums";
+    "banner banner"
+    "latest-release top-songs"
+    "albums albums";
   grid-row-gap: 10px;
 
   .banner {
@@ -41,9 +42,37 @@
     }
   }
 
-  .albums {
+  .title {
+    @include large-title;
+    font-size: 1em;
+  }
+
+  .latest-release-container {
+    grid-area: latest-release;
+  }
+
+  .top-songs-container {
+    grid-area: top-songs;
+    overflow: hidden;
+
+    .songs {
+      display: grid;
+      grid-auto-flow: column;
+      grid-template-rows: auto auto auto;
+      grid-template-columns: repeat(500, 400px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      grid-row-gap: 8px;
+      grid-column-gap: 5px;
+    }
+  }
+
+  .albums-container {
     grid-area: albums;
-    @include album-grid;
+    .albums {
+      grid-area: albums;
+      @include album-grid;
+    }
   }
 }
 
@@ -61,6 +90,10 @@
       .title {
         color: $dullwhite;
       }
+    }
+
+    .title {
+      color: $dullwhite;
     }
   }
 }

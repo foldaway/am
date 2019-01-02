@@ -39,6 +39,8 @@
     font-size: 0.75em;
     font-weight: 300;
     color: $lightgray;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 

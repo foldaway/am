@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './styles.scss';
 import Album from '../Album';
 import Loader from '../Loader';
+import Song from '../Song';
 
 import { imgURLGen, srcSetGen } from '../../util/img';
 import fetchArtistImage from '../../util/fetch-artist-img';
@@ -15,6 +16,9 @@ class ArtistPage extends Component {
     this.state = {
       artist: null,
       albums: [],
+      songs: [],
+      musicVideos: [],
+      playlists: [],
       bannerURL: null,
     };
 
@@ -40,15 +44,22 @@ class ArtistPage extends Component {
     const artist = await window.MusicKitInstance.api.artist(artistID);
     this.setState({ artist });
     const albums = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/albums`);
+    const songs = await window.MusicKitInstance.api.collection('catalog', `artists/${artistID}/songs`);
     this.setState({
       albums,
+      songs,
     });
     this.fetchBanner();
   }
 
   render() {
     const { onAlbumSelected, onSongSelected } = this.props;
-    const { artist, bannerURL } = this.state;
+    const {
+      artist,
+      albums,
+      bannerURL,
+      songs,
+    } = this.state;
     if (artist === null) {
       return <Loader />;
     }
@@ -66,12 +77,28 @@ class ArtistPage extends Component {
             {artist.attributes.name}
           </span>
         </div>
-        <div className={styles.albums}>
-          {
-            this.state.albums.map((album) => (
-              <Album key={album.id} album={album} onSelected={onAlbumSelected} />
-            ))
-          }
+        <div className={styles['latest-release-container']}>
+          <span className={styles.title}>Latest Release</span>
+        </div>
+        <div className={styles['top-songs-container']}>
+          <span className={styles.title}>Top Songs</span>
+          <div className={styles.songs}>
+            {
+              songs.map((song, index) => (
+                <Song key={song.id} song={song} onSelected={() => onSongSelected(songs, index)} />
+              ))
+            }
+          </div>
+        </div>
+        <div className={styles['albums-container']}>
+          <span className={styles.title}>Albums</span>
+          <div className={styles.albums}>
+            {
+              albums.map((album) => (
+                <Album key={album.id} album={album} onSelected={onAlbumSelected} />
+              ))
+            }
+          </div>
         </div>
       </div>
     );
