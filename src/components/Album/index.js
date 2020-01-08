@@ -42,7 +42,7 @@ class Album extends Component {
 
   render() {
     const { onSelected, album } = this.props;
-    const { url } = album.attributes.artwork;
+    const { url } = album.attributes.artwork || { url: '' };
     return (
       <div className={styles.container} onClick={this.toggleSongList} role="presentation">
         <div className={styles['art-container']}>
