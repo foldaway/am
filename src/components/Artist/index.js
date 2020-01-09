@@ -1,48 +1,53 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import styled from 'styled-components';
 import { imgURLGen, srcSetGen } from '../../util/img';
 import fetchArtistImage from '../../util/fetch-artist-img';
 import artistPropType from '../../prop_types/artist';
-import styles from './styles.scss';
 
-class Artist extends Component {
-  constructor(props) {
-    super(props);
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
 
-    this.state = {
-      imageURL: null,
-    };
-    this.fetchImage = this.fetchImage.bind(this);
+  &:hover {
+    cursor: pointer;
   }
+`;
 
-  componentDidMount() {
-    if (this.props.artwork) {
-      this.fetchImage();
+const Art = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 5px;
+`;
+
+const Title = styled.span``;
+
+function Artist({ artist, artwork }) {
+  const [imageURL, setImageURL] = useState(null);
+
+  const { url } = artist.attributes;
+
+  useEffect(() => {
+    async function fetchData() {
+      setImageURL(await fetchArtistImage(url));
     }
-  }
 
-  async fetchImage() {
-    const { url } = this.props.artist.attributes;
-    const imageURL = await fetchArtistImage(url);
+    fetchData();
+  }, [url]);
 
-    this.setState({
-      imageURL,
-    });
-  }
+  const isArtworkReady = artwork && imageURL;
 
-  render() {
-    const { artist, artwork } = this.props;
-    const { imageURL } = this.state;
-    return (
-      <div className={styles.container}>
-        { artwork && imageURL ? (
-          <img className={styles.art} src={imgURLGen(imageURL, { w: 75 })} srcSet={srcSetGen(imageURL)} alt="artist artwork" />
-        ) : null }
-        <span className={styles.name}>{artist.attributes.name}</span>
-      </div>
-    );
-  }
+  const src = isArtworkReady ? imgURLGen(imageURL, { w: 75 }) : null;
+  const srcSet = isArtworkReady ? srcSetGen(imageURL) : null;
+
+  return (
+    <Wrapper>
+      <Art src={src} srcSet={srcSet} alt="artist" />
+      <Title>{artist.attributes.name}</Title>
+    </Wrapper>
+  );
 }
 
 Artist.defaultProps = {
