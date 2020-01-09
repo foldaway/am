@@ -1,68 +1,43 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Album from '../Album';
 import Loader from '../Loader';
-import styles from './styles.scss';
+import AlbumGrid from '../album-grid';
 
 /* eslint-disable no-await-in-loop */
 
 const sleep = async (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
-class AlbumLibrary extends Component {
-  constructor(props) {
-    super(props);
+function AlbumLibrary({ onAlbumSelected }) {
+  const [albums, setAlbums] = useState([]);
 
-    this.state = {
-      albums: [],
-    };
+  useEffect(() => {
+    async function fetchData() {
+      let temp = [];
+      do {
+        temp = await window.MusicKitInstance.api.library.albums(null, {
+          limit: 100,
+          offset: albums.length,
+        });
 
-    this.load = this.load.bind(this);
-  }
-
-  componentDidMount() {
-    this.mounted = true;
-    this.load();
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-  }
-
-  async load() {
-    let temp = [];
-    do {
-      temp = await window.MusicKitInstance.api.library.albums(null, {
-        limit: 100,
-        offset: this.state.albums.length,
-      });
-
-      if (!this.mounted) {
-        break;
-      }
-
-      this.setState({
-        albums: [...this.state.albums, ...temp],
-      });
-
-      await sleep(10);
-    } while (temp.length > 0);
-  }
-
-  render() {
-    if (this.state.albums.length === 0) {
-      return <Loader />;
+        setAlbums(albums.concat(temp));
+        await sleep(10);
+      } while (temp.length > 0);
     }
-    return (
-      <div className={styles.container}>
-        {
-          this.state.albums.map((album) => (
-            <Album key={album.id} album={album} onSelected={this.props.onAlbumSelected} />
-          ))
-        }
-      </div>
-    );
+    fetchData();
+  }, []);
+
+  if (albums.length === 0) {
+    return <Loader />;
   }
+  return (
+    <AlbumGrid>
+      {albums.map((album) => (
+        <Album key={album.id} album={album} onSelected={onAlbumSelected} />
+      ))}
+    </AlbumGrid>
+  );
 }
 
 AlbumLibrary.propTypes = {
