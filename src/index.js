@@ -10,6 +10,10 @@ window.MusicKitInstance = window.MusicKit.configure({
   developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ilc3RkFOTDlGNzUifQ.eyJpYXQiOjE1Nzg0OTYwNjAsImV4cCI6MTU4NjI3MjA2MCwiaXNzIjoiRVo0OTUzMjIzNiJ9.NWqW4XX3isOrXYW8QdExyn1ksigc4NzfT3T6fIXsv6VAJiMKtYotDxzzc2neDvU9x7wAjfzyU0iLh6fAAkar2A',
 });
 
+if (module.hot) {
+  module.hot.accept();
+}
+
 const rootElem = document.getElementById('root');
 const now = new Date();
 if (now.getHours() >= 19 || now.getHours() <= 7) {
