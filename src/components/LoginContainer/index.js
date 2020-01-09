@@ -1,38 +1,42 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Redirect } from 'react-router-dom';
 
-import styles from './styles.scss';
+import styled from 'styled-components';
 
-class LoginContainer extends Component {
-  constructor(props) {
-    super(props);
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+`;
 
-    this.onLoginButtonClicked = this.onLoginButtonClicked.bind(this);
-  }
+const WelcomeMessage = styled.span`
+  color: ${(props) => props.theme.text.primary};
+`;
 
-  async onLoginButtonClicked() {
+function LoginContainer({ onLoginSuccess }) {
+  async function onLoginButtonClicked() {
     try {
       const musicUserToken = await window.MusicKitInstance.authorize();
       window.localStorage.setItem('musicUserToken', musicUserToken);
-      this.props.onLoginSuccess();
+      onLoginSuccess();
     } catch (e) {
       console.error(e);
     }
   }
-
-  render() {
-    if (window.MusicKitInstance.isAuthorized) {
-      return <Redirect to="/library/recently-added" />;
-    }
-    return (
-      <div className={styles.container}>
-        <span>Welcome to AM.</span>
-        <button onClick={this.onLoginButtonClicked}>Log in</button>
-      </div>
-    );
+  if (window.MusicKitInstance.isAuthorized) {
+    return <Redirect to="/library/recently-added" />;
   }
+  return (
+    <Wrapper>
+      <WelcomeMessage>Welcome to AM.</WelcomeMessage>
+      <button type="button" onClick={onLoginButtonClicked}>
+        Log in
+      </button>
+    </Wrapper>
+  );
 }
 
 LoginContainer.propTypes = {
