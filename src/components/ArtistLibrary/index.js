@@ -1,12 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './styles.scss';
+import styled from 'styled-components';
 import Loader from '../Loader';
 import Artist from '../Artist';
 import Album from '../Album';
+import AlbumGrid from '../album-grid';
+import LargeTitle from '../large-title';
 
 /* eslint-disable no-await-in-loop */
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-areas: "artist-list indiv";
+  grid-template-columns: 1fr 3fr;
+  height: 100%;
+  overflow: hidden;
+`;
+
+const ArtistList = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 2px;
+  grid-area: artist-list;
+  overflow-y: scroll;
+`;
+
+const IndivWrapper = styled.div`
+  display: grid;
+  grid-template-areas:
+    "title"
+    "album-count"
+    "albums";
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 1fr;
+  grid-area: indiv;
+  margin-left: 10px;
+  overflow: hidden;
+`;
+
+const AlbumCount = styled.span`
+  color: ${(props) => props.theme.text.secondary};
+`;
 
 function ArtistLibrary({ onAlbumSelected }) {
   const [artists, setArtists] = useState([]);
@@ -53,54 +88,50 @@ function ArtistLibrary({ onAlbumSelected }) {
   }, [currentArtist]);
 
   function getIndivView() {
+    if (currentArtist === null) {
+      return null;
+    }
     if (isLoading) {
       return <Loader />;
     }
     return (
-      <div className={styles.indiv}>
-        <span className={styles.title}>
-          {currentArtist !== null ? currentArtist.attributes.name : ''}
-        </span>
-        <span className={styles['album-count']}>
-          {indivAlbums.length > 0 ? `${indivAlbums.length} albums` : null}
-        </span>
-        <div className={styles.albums}>
-          {indivAlbums.length > 0
-            ? indivAlbums.map((album) => (
+      <IndivWrapper>
+        <LargeTitle>{currentArtist.attributes.name}</LargeTitle>
+        <AlbumCount>
+          {indivAlbums.length}
+          {' '}
+albums
+        </AlbumCount>
+        <AlbumGrid>
+          {indivAlbums.length > 0 ? (
+            indivAlbums.map((album) => (
               <Album
                 key={album.id}
                 album={album}
                 onSelected={onAlbumSelected}
               />
             ))
-            : null}
-          {currentArtist !== null && indivAlbums.length === 0 ? (
+          ) : (
             <Loader />
-          ) : null}
-        </div>
-      </div>
+          )}
+        </AlbumGrid>
+      </IndivWrapper>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles['artist-list']}>
+    <Wrapper>
+      <ArtistList>
         {artists.length > 0 ? (
           artists.map((artist) => (
-            <div
-              className={styles['artist-container']}
-              onClick={() => setCurrentArtist(artist)}
-              role="presentation"
-            >
-              <Artist artist={artist} />
-            </div>
+            <Artist onClick={() => setCurrentArtist(artist)} artist={artist} />
           ))
         ) : (
           <Loader />
         )}
-      </div>
+      </ArtistList>
       {getIndivView()}
-    </div>
+    </Wrapper>
   );
 }
 

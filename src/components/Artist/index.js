@@ -24,7 +24,7 @@ const Art = styled.img`
 
 const Title = styled.span``;
 
-function Artist({ artist, artwork }) {
+function Artist({ artist, artwork, onClick }) {
   const [imageURL, setImageURL] = useState(null);
 
   const { url } = artist.attributes;
@@ -43,7 +43,7 @@ function Artist({ artist, artwork }) {
   const srcSet = isArtworkReady ? srcSetGen(imageURL) : null;
 
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       <Art src={src} srcSet={srcSet} alt="artist" />
       <Title>{artist.attributes.name}</Title>
     </Wrapper>
@@ -52,11 +52,13 @@ function Artist({ artist, artwork }) {
 
 Artist.defaultProps = {
   artwork: false,
+  onClick: () => {},
 };
 
 Artist.propTypes = {
   artist: artistPropType.isRequired,
   artwork: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Artist;
