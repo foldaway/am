@@ -64,10 +64,8 @@ const Playlist = ({ playlist, playlist: { attributes } }) => (
       srcSet={attributes.artwork ? srcSetGen(attributes.artwork.url) : null}
       alt="Playlist artwork"
     />
-    <Title className={styles.title}>{playlist.attributes.name}</Title>
-    <Curator className={styles.curator}>
-      {playlist.attributes.curatorName}
-    </Curator>
+    <Title>{playlist.attributes.name}</Title>
+    <Curator>{playlist.attributes.curatorName}</Curator>
   </Wrapper>
 );
 
