@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import styled from 'styled-components';
 import Song from '../Song';
 import Loader from '../Loader';
-import styles from './styles.scss';
+import LargeTitle from '../large-title';
 
 /* eslint-disable no-await-in-loop */
 
 const sleep = async (msec) => new Promise((resolve) => setTimeout(resolve, msec));
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-rows: auto 1fr;
+  grid-row-gap: 8px;
+  height: 100%;
+`;
+
+const GroupTitle = styled.span`
+  font-size: 0.8em;
+  font-weight: 700;
+  color: ${(props) => props.theme.text.tertiary};
+`;
 
 function SongLibrary({ onSongSelected }) {
   const [songs, setSongs] = useState([]);
@@ -19,11 +34,7 @@ function SongLibrary({ onSongSelected }) {
     songs.forEach((song, index) => {
       const firstArtistNameLetter = song.attributes.artistName[0];
       if (temp !== firstArtistNameLetter) {
-        elements.push(
-          <span key={firstArtistNameLetter} className={styles['group-title']}>
-            {firstArtistNameLetter}
-          </span>,
-        );
+        elements.push(<GroupTitle>{firstArtistNameLetter}</GroupTitle>);
       }
       temp = firstArtistNameLetter;
 
@@ -74,10 +85,10 @@ function SongLibrary({ onSongSelected }) {
     load();
   }, []);
   return (
-    <div className={styles.container}>
-      <span className={styles.title}>Songs</span>
+    <Wrapper>
+      <LargeTitle>Songs</LargeTitle>
       {songs.length > 0 ? getSongElements() : <Loader />}
-    </div>
+    </Wrapper>
   );
 }
 
