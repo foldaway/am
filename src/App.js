@@ -31,6 +31,9 @@ const theme = useDarkTheme
       secondary: 'hsl(207, 12%, 43%)',
       tertiary: 'rgb(248, 248, 250)',
     },
+    background: {
+      primary: 'rgb(51, 51, 51)',
+    },
 
     black: 'rgb(17, 17, 17)',
     lightblack: 'rgb(51, 51, 51)',
@@ -47,6 +50,9 @@ const theme = useDarkTheme
       primary: 'hsl(209, 15%, 28%)',
       secondary: 'hsl(208, 12%, 63%)',
       tertiary: 'rgb(187, 187, 187)',
+    },
+    background: {
+      primary: 'rgb(248, 248, 250)',
     },
   };
 

@@ -2,9 +2,58 @@ import React, { useEffect, useState } from 'react';
 
 import { NavLink } from 'react-router-dom';
 
-import styles from './styles.scss';
+import styled from 'styled-components';
 
 /* eslint-disable no-await-in-loop */
+
+const Wrapper = styled.div`
+  grid-area: side-menu;
+  display: grid;
+  grid-auto-flow: row;
+  overflow-y: scroll;
+  grid-row-gap: 10px;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas: "library" "playlists";
+  background-color: ${(props) => props.theme.background.primary};
+  padding: 10px 20px 10px 20px;
+`;
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    font-size: 0.75em;
+    margin-bottom: 8px;
+    color: ${(props) => props.theme.text.tertiary};
+    text-decoration: none;
+
+    &.current {
+      font-weight: 700;
+    }
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+
+  &.playlists {
+    overflow-y: scroll;
+  }
+`;
+
+const SectionTitle = styled.span`
+  font-weight: 700;
+  font-size: 0.7em;
+  color: $lightgray;
+  margin-bottom: 10px;
+
+  &:hover {
+    cursor: default;
+    text-decoration: none;
+  }
+`;
 
 function SideMenu() {
   const [playlists, setPlaylists] = useState([]);
@@ -25,37 +74,37 @@ function SideMenu() {
     loadPlaylists();
   }, []);
   return (
-    <div className={styles.container}>
-      <div className={styles.section}>
-        <span className={styles.title}>Library</span>
-        <NavLink activeClassName={styles.current} to="/library/recently-added">
+    <Wrapper>
+      <Section>
+        <SectionTitle>Library</SectionTitle>
+        <NavLink activeClassName="current" to="/library/recently-added">
           Recently Added
         </NavLink>
-        <NavLink activeClassName={styles.current} to="/library/artists">
+        <NavLink activeClassName="current" to="/library/artists">
           Artists
         </NavLink>
-        <NavLink activeClassName={styles.current} to="/library/albums">
+        <NavLink activeClassName="current" to="/library/albums">
           Albums
         </NavLink>
-        <NavLink activeClassName={styles.current} to="/library/songs">
+        <NavLink activeClassName="current" to="/library/songs">
           Songs
         </NavLink>
-      </div>
-      <div className={styles.section}>
-        <span className={styles.title}>Catalog</span>
-        <NavLink activeClassName={styles.current} to="/search">
+      </Section>
+      <Section>
+        <SectionTitle>Catalog</SectionTitle>
+        <NavLink activeClassName="current" to="/search">
           Search
         </NavLink>
-        <NavLink activeClassName={styles.current} to="/for-you">
+        <NavLink activeClassName="current" to="/for-you">
           For You
         </NavLink>
-      </div>
-      <div className={[styles.section, styles.playlists].join(' ')}>
-        <span className={styles.title}>Playlists</span>
+      </Section>
+      <Section>
+        <SectionTitle>Playlists</SectionTitle>
         {playlists.map((playlist) => (
           <NavLink
             key={playlist.id}
-            activeClassName={styles.current}
+            activeClassName="current"
             to={`/library/playlist/${Buffer.from(playlist.id).toString(
               'base64',
             )}`}
@@ -63,8 +112,8 @@ function SideMenu() {
             {playlist.attributes.name}
           </NavLink>
         ))}
-      </div>
-    </div>
+      </Section>
+    </Wrapper>
   );
 }
 
