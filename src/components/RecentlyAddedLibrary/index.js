@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import Album from '../Album';
@@ -10,70 +10,55 @@ import Playlist from '../Playlist';
 
 const sleep = async (msec) => new Promise((resolve) => setTimeout(resolve, msec));
 
-class RecentlyAddedLibrary extends Component {
-  constructor(props) {
-    super(props);
+function RecentlyAddedLibrary({ onAlbumSelected, onPlaylistSelected }) {
+  const [media, setMedia] = useState([]);
 
-    this.state = {
-      media: [],
-    };
+  useEffect(() => {
+    async function load() {
+      let prevLength = 0;
+      let offset = 0;
+      do {
+        const temp = await window.MusicKitInstance.api.library.request(
+          'me/library/recently-added',
+          {
+            limit: 10,
+            offset,
+          },
+        );
 
-    this.load = this.load.bind(this);
-    this.generateMediaView = this.generateMediaView.bind(this);
-  }
+        prevLength = temp.length;
+        offset += temp.length;
 
-  componentDidMount() {
-    this.mounted = true;
-    this.load();
-  }
+        setMedia((prevState) => [...prevState, ...temp]);
 
-  componentWillUnmount() {
-    this.mounted = false;
-  }
+        await sleep(50);
+      } while (prevLength > 0);
+    }
+    load();
+  }, []);
 
-  async load() {
-    let temp = [];
-    do {
-      temp = await window.MusicKitInstance.api.library.request('me/library/recently-added', {
-        limit: 10,
-        offset: this.state.media.length,
-      });
-
-      if (!this.mounted) {
-        break;
-      }
-
-      this.setState({
-        media: [...this.state.media, ...temp],
-      });
-
-      await sleep(50);
-    } while (temp.length > 0);
-  }
-
-  generateMediaView(media) {
-    switch (media.type) {
+  function generateMediaView(m) {
+    switch (m.type) {
       case 'library-albums':
-        return <Album key={media.id} album={media} onSelected={this.props.onAlbumSelected} />;
-      // case 'library-playlists':
-      // return <Playlist key={media.id} playlist={media} onSelected={() => this.props.onPlaylistSelected('playlist', media)} />;
+        return <Album key={m.id} album={m} onSelected={onAlbumSelected} />;
       // Hide playlists for now.
-      default: return null;
+      // case 'library-playlists':
+      //   return (
+      //     <Playlist
+      //       key={m.id}
+      //       playlist={m}
+      //       onSelected={() => onPlaylistSelected('playlist', m)}
+      //     />
+      //   );
+      default:
+        return null;
     }
   }
 
-  render() {
-    if (this.state.media.length === 0) {
-      return <Loader />;
-    }
-    return (
-      <div className={styles.container}>
-        {
-          this.state.media.map(this.generateMediaView)
-        }
-      </div>
-    );
+  if (media.length === 0) {
+    return <Loader />;
   }
+  return <div className={styles.container}>{media.map(generateMediaView)}</div>;
 }
 
 RecentlyAddedLibrary.propTypes = {
