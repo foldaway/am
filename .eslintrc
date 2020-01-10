@@ -9,6 +9,7 @@
   "rules": {
     "react/forbid-prop-types": "off",
     "arrow-parens": ["error", "always"],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/jsx-fragments": "off"
   }
 }
