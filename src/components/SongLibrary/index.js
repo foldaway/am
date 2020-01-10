@@ -34,7 +34,11 @@ function SongLibrary({ onSongSelected }) {
     songs.forEach((song, index) => {
       const firstArtistNameLetter = song.attributes.artistName[0];
       if (temp !== firstArtistNameLetter) {
-        elements.push(<GroupTitle>{firstArtistNameLetter}</GroupTitle>);
+        elements.push(
+          <GroupTitle key={firstArtistNameLetter}>
+            {firstArtistNameLetter}
+          </GroupTitle>,
+        );
       }
       temp = firstArtistNameLetter;
 
