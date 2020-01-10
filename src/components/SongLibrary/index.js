@@ -66,21 +66,21 @@ function SongLibrary({ onSongSelected }) {
         );
       };
 
-      const results = [];
-      let temp = [];
+      let prevLength = 0;
+      let offset = 0;
       do {
-        temp = await window.MusicKitInstance.api.library.songs(null, {
+        const temp = await window.MusicKitInstance.api.library.songs(null, {
           limit: 100,
-          offset: results.length,
+          offset,
         });
 
-        results.push(...temp);
+        prevLength = temp.length;
+        offset += temp.length;
+
+        setSongs((prevState) => [...prevState, ...temp].sort(sortFunc));
 
         await sleep(2);
-      } while (temp.length > 0);
-
-      songs.sort(sortFunc);
-      setSongs(results);
+      } while (prevLength > 0);
     }
     load();
   }, []);

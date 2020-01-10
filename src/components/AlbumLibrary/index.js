@@ -14,16 +14,21 @@ function AlbumLibrary({ onAlbumSelected }) {
 
   useEffect(() => {
     async function fetchData() {
-      let temp = [];
+      let prevLength = 0;
+      let offset = 0;
+
       do {
-        temp = await window.MusicKitInstance.api.library.albums(null, {
+        const temp = await window.MusicKitInstance.api.library.albums(null, {
           limit: 100,
-          offset: albums.length,
+          offset,
         });
 
-        setAlbums(albums.concat(temp));
+        prevLength = temp.length;
+        offset += temp.length;
+
+        setAlbums((prevState) => [...prevState, ...temp]);
         await sleep(10);
-      } while (temp.length > 0);
+      } while (prevLength > 0);
     }
     fetchData();
   }, []);

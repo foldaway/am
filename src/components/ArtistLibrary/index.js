@@ -51,17 +51,20 @@ function ArtistLibrary({ onAlbumSelected }) {
 
   useEffect(() => {
     async function load() {
-      let temp = [];
-      let results = [];
-      do {
-        results = await window.MusicKitInstance.api.library.artists(null, {
-          limit: 100,
-          offset: temp.length,
-        });
-        temp = temp.concat(results);
-      } while (results.length > 0);
+      let prevLength = 0;
+      let offset = 0;
 
-      setArtists(temp);
+      do {
+        const temp = await window.MusicKitInstance.api.library.artists(null, {
+          limit: 100,
+          offset,
+        });
+
+        prevLength = temp.length;
+        offset += temp.length;
+
+        setArtists((prevState) => [...prevState, ...temp]);
+      } while (prevLength > 0);
     }
 
     load();
