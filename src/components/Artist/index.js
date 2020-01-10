@@ -22,7 +22,9 @@ const Art = styled.img`
   margin-right: 5px;
 `;
 
-const Title = styled.span``;
+const Title = styled.span`
+  color: ${(props) => props.theme.text.primary};
+`;
 
 function Artist({ artist, artwork, onClick }) {
   const [imageURL, setImageURL] = useState(null);

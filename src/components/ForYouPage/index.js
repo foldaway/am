@@ -1,14 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
+import styled from 'styled-components';
 import recPropType from '../../prop_types/recommendation';
 
-import styles from './styles.scss';
 import Album from '../Album';
 import Playlist from '../Playlist';
 import Loader from '../Loader';
+import LargeTitle from '../large-title';
+import AlbumGrid from '../album-grid';
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 10px;
+  align-items: center;
+`;
+
+const RecommendationWrapper = styled.div`
+  display: grid;
+  grid-row-gap: 5px;
+  grid-template-rows: auto auto 1fr;
+`;
+
+const Line = styled.div`
+  align-self: stretch;
+  height: 1px;
+  background-color: lightgray;
+`;
+
+const Reason = styled.span`
+  color: $lightgray;
+  font-size: 0.9em;
+  font-weight: 300;
+`;
 
 const Recommendation = (props) => {
   const {
@@ -18,7 +45,6 @@ const Recommendation = (props) => {
   const { title, reason } = attributes;
   const { data } = relationships.recommendations || relationships.contents;
   let views = null;
-  let extraClass = '';
 
   switch (data[0].type) {
     case 'playlists':
@@ -40,7 +66,6 @@ const Recommendation = (props) => {
           onAlbumSelected={onAlbumSelected}
         />
       ));
-      extraClass = styles['two-grid'];
       break;
     case 'albums':
       views = data.map((album) => (
@@ -53,16 +78,12 @@ const Recommendation = (props) => {
   }
 
   return (
-    <div className={[styles.recommendation, extraClass].join(' ')} key={id}>
-      {title ? <div className={styles.line} /> : null}
-      {title ? (
-        <span className={styles.title}>{title.stringForDisplay}</span>
-      ) : null}
-      {reason ? (
-        <span className={styles.reason}>{reason.stringForDisplay}</span>
-      ) : null}
-      <div className={styles.content}>{views}</div>
-    </div>
+    <RecommendationWrapper key={id}>
+      {title && <Line />}
+      {title && <LargeTitle>{title.stringForDisplay}</LargeTitle>}
+      {reason && <Reason>{reason.stringForDisplay}</Reason>}
+      <AlbumGrid>{views}</AlbumGrid>
+    </RecommendationWrapper>
   );
 };
 
@@ -83,21 +104,28 @@ function ForYouPage({ onAlbumSelected }) {
     fetch();
   }, []);
 
-  return (
-    <div className={styles.container}>
-      <span className={styles.title}>For You</span>
-      {recommendations.length > 0 ? (
-        recommendations.map((rec) => (
+  function renderRecs() {
+    if (recommendations.length === 0) {
+      return <Loader />;
+    }
+    return (
+      <Fragment>
+        {recommendations.map((rec) => (
           <Recommendation
             rec={rec}
             key={rec.id}
             onAlbumSelected={onAlbumSelected}
           />
-        ))
-      ) : (
-        <Loader />
-      )}
-    </div>
+        ))}
+      </Fragment>
+    );
+  }
+
+  return (
+    <Wrapper>
+      <LargeTitle>For You</LargeTitle>
+      {renderRecs()}
+    </Wrapper>
   );
 }
 
