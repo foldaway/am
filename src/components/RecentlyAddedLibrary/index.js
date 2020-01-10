@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import Album from '../Album';
 import Loader from '../Loader';
-import styles from './styles.scss';
 import Playlist from '../Playlist';
+import AlbumGrid from '../album-grid';
 
 /* eslint-disable no-await-in-loop */
 
@@ -58,7 +58,7 @@ function RecentlyAddedLibrary({ onAlbumSelected, onPlaylistSelected }) {
   if (media.length === 0) {
     return <Loader />;
   }
-  return <div className={styles.container}>{media.map(generateMediaView)}</div>;
+  return <AlbumGrid>{media.map(generateMediaView)}</AlbumGrid>;
 }
 
 RecentlyAddedLibrary.propTypes = {
