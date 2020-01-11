@@ -34,6 +34,7 @@ const theme = useDarkTheme
     background: {
       primary: 'rgb(51, 51, 51)',
     },
+    branding: 'rgb(255, 45, 85)',
 
     black: 'rgb(17, 17, 17)',
     lightblack: 'rgb(51, 51, 51)',
@@ -43,7 +44,6 @@ const theme = useDarkTheme
     faintgray: 'rgb(248, 248, 250)',
     dullwhite: 'rgb(230, 230, 230)',
     highlightgray: 'rgba(0, 0, 0, 0.0470588)',
-    red: 'rgb(255, 45, 85)',
   }
   : {
     text: {
@@ -54,6 +54,7 @@ const theme = useDarkTheme
     background: {
       primary: 'rgb(248, 248, 250)',
     },
+    branding: 'rgb(255, 45, 85)',
   };
 
 class App extends Component {
