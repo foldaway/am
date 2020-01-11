@@ -268,6 +268,7 @@ function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
           renderSuggestionsContainer={({ containerProps, children }) => (
             <SuggestionsList {...containerProps}>{children}</SuggestionsList>
           )}
+          theme={{}}
         />
         <SearchSubmit type="submit" value="Search" />
       </SearchContainer>
