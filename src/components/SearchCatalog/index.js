@@ -3,24 +3,105 @@ import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import Autosuggest from 'react-autosuggest';
 import { debounce, get } from 'lodash';
+import styled, { css } from 'styled-components';
 import Album from '../Album';
 import Song from '../Song';
 import Artist from '../Artist';
 import Loader from '../Loader';
-import styles from './styles.scss';
 import Playlist from '../Playlist';
 import albumPropType from '../../prop_types/album';
 import trackPropType from '../../prop_types/track';
 import playlistPropType from '../../prop_types/playlist';
 import artistPropType from '../../prop_types/artist';
+import LargeTitle from '../large-title';
+import AlbumGrid from '../album-grid';
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-rows: auto 1fr;
+  grid-row-gap: 8px;
+  height: 100%;
+`;
+
+const Section = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 8px;
+`;
+
+const ResultsWrapper = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 8px;
+  overflow-y: scroll;
+`;
+
+const ArtistsList = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+`;
+
+const SuggestionsList = styled.div`
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 2px;
+  padding: 2px 0 2px 0;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const Suggestion = styled.span`
+  color: ${(props) => props.theme.text.secondary};
+  font-size: 0.9em;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  ${(props) => (props.isHighlighted
+    ? css`
+          background: ${props.theme.background.primary};
+        `
+    : null)}
+`;
+
+const SearchContainer = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-areas:
+    "input search"
+    "input nothing";
+  grid-template-columns: 5fr auto;
+  grid-template-rows: auto 1fr;
+`;
+
+const SearchInput = styled.input`
+  grid-area: input;
+
+  input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+`;
+
+const SearchSubmit = styled.input`
+  grid-area: search;
+`;
 
 function SongsView({ songs, onSongSelected }) {
   if (songs.length === 0) {
     return null;
   }
   return (
-    <div className={styles.section}>
-      <span className={styles.title}>Songs</span>
+    <Section>
+      <LargeTitle> Songs</LargeTitle>
       {songs.map((song, index) => (
         <Song
           key={song.id}
@@ -28,7 +109,7 @@ function SongsView({ songs, onSongSelected }) {
           onSelected={() => onSongSelected(songs, index)}
         />
       ))}
-    </div>
+    </Section>
   );
 }
 
@@ -42,14 +123,14 @@ function AlbumsView({ albums, onAlbumSelected }) {
     return null;
   }
   return (
-    <div className={styles.section}>
-      <span className={styles.title}>Albums</span>
-      <div className={styles.albums}>
+    <Section>
+      <LargeTitle>Albums</LargeTitle>
+      <AlbumGrid>
         {albums.map((album) => (
           <Album key={album.id} album={album} onSelected={onAlbumSelected} />
         ))}
-      </div>
-    </div>
+      </AlbumGrid>
+    </Section>
   );
 }
 
@@ -63,9 +144,9 @@ function PlaylistsView({ playlists }) {
     return null;
   }
   return (
-    <div className={styles.section}>
-      <span className={styles.title}>Playlists</span>
-      <div className={styles.playlists}>
+    <Section>
+      <LargeTitle>Playlists</LargeTitle>
+      <AlbumGrid>
         {playlists.map((playlist) => (
           <Link
             key={playlist.id}
@@ -75,8 +156,8 @@ function PlaylistsView({ playlists }) {
             <Playlist playlist={playlist} />
           </Link>
         ))}
-      </div>
-    </div>
+      </AlbumGrid>
+    </Section>
   );
 }
 
@@ -89,19 +170,20 @@ function ArtistsView({ artists }) {
     return null;
   }
   return (
-    <div className={styles.section}>
-      <span className={styles.title}>Artists</span>
-      <div className={styles.artists}>
+    <Section>
+      <LargeTitle>Artists</LargeTitle>
+      <ArtistsList>
         {artists.map((artist) => (
           <Link
+            key={artist.id}
             href={`/artist/${Buffer.from(artist.id).toString('base64')}`}
             to={`/artist/${Buffer.from(artist.id).toString('base64')}`}
           >
-            <Artist key={artist.id} artist={artist} artwork />
+            <Artist artist={artist} artwork />
           </Link>
         ))}
-      </div>
-    </div>
+      </ArtistsList>
+    </Section>
   );
 }
 
@@ -120,12 +202,6 @@ function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
   const [artists, setArtists] = useState([]);
   const [playlists, setPlaylists] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-  const [redirectTerm, setRedirectTerm] = useState(null);
-
-  function onSuggestionSelected(event, { suggestion }) {
-    setRedirectTerm(suggestion);
-    setTerm(suggestion);
-  }
 
   useEffect(
     debounce(() => {
@@ -159,47 +235,52 @@ function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
   }, [term]);
 
   return (
-    <div className={styles.container}>
-      {redirectTerm ? <Redirect to={`/search?term=${redirectTerm}`} /> : null}
-      <form
-        className={styles.search}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setRedirectTerm(term);
-        }}
-      >
+    <Wrapper>
+      <Redirect to={`/search?term=${term}`} />
+      <SearchContainer>
         <Autosuggest
           suggestions={suggestions}
           onSuggestionsFetchRequested={() => {}}
           onSuggestionsClearRequested={() => setSuggestions([])}
-          onSuggestionSelected={onSuggestionSelected}
-          renderSuggestion={(text) => (
-            <div className={styles.suggestion}>
-              <span>{text}</span>
-            </div>
-          )}
+          onSuggestionSelected={(_, { suggestion }) => setTerm(suggestion)}
           getSuggestionValue={(sug) => sug}
           inputProps={{
             value: input,
             onChange: (_, { newValue }) => setInput(newValue),
           }}
-          theme={{
-            container: styles.input,
-            suggestionsList: styles['suggestions-list'],
-          }}
+          renderSuggestion={(suggestion, { isHighlighted }) => (
+            <Suggestion isHighlighted={isHighlighted}>{suggestion}</Suggestion>
+          )}
+          renderInputComponent={(props) => (
+            <SearchInput
+              {...props}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setTerm(input);
+                  setSuggestions([]);
+                } else {
+                  // Propagate the event to react-autosuggest
+                  props.onKeyDown(e);
+                }
+              }}
+            />
+          )}
+          renderSuggestionsContainer={({ containerProps, children }) => (
+            <SuggestionsList {...containerProps}>{children}</SuggestionsList>
+          )}
         />
-        <input type="submit" value="Search" />
-      </form>
+        <SearchSubmit type="submit" value="Search" />
+      </SearchContainer>
       {isSearching && <Loader />}
       {!isSearching && (
-        <div className={styles.results}>
+        <ResultsWrapper>
           <ArtistsView artists={artists} />
           <SongsView songs={songs} onSongSelected={onSongSelected} />
           <AlbumsView albums={albums} onAlbumSelected={onAlbumSelected} />
           <PlaylistsView playlists={playlists} />
-        </div>
+        </ResultsWrapper>
       )}
-    </div>
+    </Wrapper>
   );
 }
 
