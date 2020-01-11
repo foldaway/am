@@ -9,6 +9,10 @@ import Artist from '../Artist';
 import Loader from '../Loader';
 import styles from './styles.scss';
 import Playlist from '../Playlist';
+import albumPropType from '../../prop_types/album';
+import trackPropType from '../../prop_types/track';
+import playlistPropType from '../../prop_types/playlist';
+import artistPropType from '../../prop_types/artist';
 
 function SongsView({ songs, onSongSelected }) {
   if (songs.length === 0) {
@@ -28,6 +32,11 @@ function SongsView({ songs, onSongSelected }) {
   );
 }
 
+SongsView.propTypes = {
+  songs: PropTypes.arrayOf(trackPropType).isRequired,
+  onSongSelected: PropTypes.func.isRequired,
+};
+
 function AlbumsView({ albums, onAlbumSelected }) {
   if (albums.length === 0) {
     return null;
@@ -44,6 +53,11 @@ function AlbumsView({ albums, onAlbumSelected }) {
   );
 }
 
+AlbumsView.propTypes = {
+  albums: PropTypes.arrayOf(albumPropType).isRequired,
+  onAlbumSelected: PropTypes.func.isRequired,
+};
+
 function PlaylistsView({ playlists }) {
   if (playlists.length === 0) {
     return null;
@@ -54,16 +68,21 @@ function PlaylistsView({ playlists }) {
       <div className={styles.playlists}>
         {playlists.map((playlist) => (
           <Link
+            key={playlist.id}
             href={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}
             to={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}
           >
-            <Playlist key={playlist.id} playlist={playlist} />
+            <Playlist playlist={playlist} />
           </Link>
         ))}
       </div>
     </div>
   );
 }
+
+PlaylistsView.propTypes = {
+  playlists: PropTypes.arrayOf(playlistPropType).isRequired,
+};
 
 function ArtistsView({ artists }) {
   if (artists.length === 0) {
@@ -85,6 +104,10 @@ function ArtistsView({ artists }) {
     </div>
   );
 }
+
+ArtistsView.propTypes = {
+  artists: PropTypes.arrayOf(artistPropType).isRequired,
+};
 
 function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
   const query = new URLSearchParams(location.search);
@@ -130,7 +153,7 @@ function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
       setSongs(get(s, 'data', []));
       setAlbums(get(ab, 'data', []));
       setArtists(get(at, 'data', []));
-      setPlaylists(get(playlists, 'data', []));
+      setPlaylists(get(p, 'data', []));
     }
     search();
   }, [term]);
