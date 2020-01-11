@@ -194,8 +194,8 @@ ArtistsView.propTypes = {
 function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
   const query = new URLSearchParams(location.search);
 
-  const [input, setInput] = useState('');
   const [term, setTerm] = useState(query.get('term') || '');
+  const [input, setInput] = useState(term);
   const [isSearching, setIsSearching] = useState(term !== null);
   const [songs, setSongs] = useState([]);
   const [albums, setAlbums] = useState([]);
