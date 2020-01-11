@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import styles from './styles.scss';
+import styled from 'styled-components';
 import Album from '../Album';
 import Loader from '../Loader';
 import Song from '../Song';
@@ -12,6 +12,118 @@ import Playlist from '../Playlist';
 import { imgURLGen, srcSetGen } from '../../util/img';
 import fetchArtistImage from '../../util/fetch-artist-img';
 import MusicVideo from '../MusicVideo';
+import LargeTitle from '../large-title';
+import AlbumGrid from '../album-grid';
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto auto auto auto auto;
+  grid-template-areas:
+    "banner banner"
+    "latest-release top-songs"
+    "albums albums"
+    "music-videos music-videos"
+    "playlists playlists";
+  grid-row-gap: 10px;
+
+  ${LargeTitle} {
+    font-size: 1em;
+  }
+`;
+
+const Banner = styled.div`
+  grid-area: banner;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "banner";
+  height: 20%;
+
+  ${LargeTitle} {
+    grid-area: banner;
+    align-self: end;
+    margin: 0 0 10px 10px;
+  }
+`;
+
+const ImageContainer = styled.div`
+  grid-area: banner;
+  width: 100%;
+  background-color: ${(props) => props.theme.background.primary};
+  padding: 20px 0;
+`;
+
+const ArtistProfileImage = styled.img`
+  display: block;
+  margin: auto;
+  height: 200px;
+  width: 200px;
+  border-radius: 50%;
+`;
+
+const LatestReleaseContainer = styled.div`
+  grid-area: latest-release;
+`;
+
+const TopSongsContainer = styled.div`
+  grid-area: top-songs;
+  overflow: hidden;
+`;
+
+const Songs = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto auto;
+  grid-template-columns: repeat(500, 400px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  grid-row-gap: 8px;
+  grid-column-gap: 5px;
+`;
+
+const MusicVideosContainer = styled.div`
+  grid-area: music-videos;
+  overflow-x: scroll;
+  overflow-y: hidden;
+`;
+
+const MusicVideoGrid = styled.div`
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 8px;
+  grid-template-columns: repeat(200, minmax(300px, 400px));
+`;
+
+const AlbumsContainer = styled.div`
+  grid-area: albums;
+`;
+
+const PlaylistContainer = styled.div`
+  grid-area: playlists;
+`;
+
+const CurrentMusicVideo = styled.div`
+  display: grid;
+  grid-template-areas:
+    "title title"
+    "metadata video";
+  grid-template-columns: 1fr 4fr;
+  grid-column-gap: 10px;
+
+  ${LargeTitle} {
+    grid-area: title;
+  }
+
+  video {
+    grid-area: video;
+    justify-self: stretch;
+    background-color: black;
+  }
+`;
+
+const MetadataLink = styled.a`
+  grid-area: metadata;
+`;
 
 function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
   const [artist, setArtist] = useState(null);
@@ -79,33 +191,32 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.banner}>
+    <Wrapper>
+      <Banner>
         {bannerURL !== null ? (
-          <div className={styles['image-container']}>
-            <img
-              className={styles.art}
+          <ImageContainer>
+            <ArtistProfileImage
               src={imgURLGen(bannerURL, { w: 75 })}
               srcSet={srcSetGen(bannerURL)}
               alt="artist artwork"
             />
-          </div>
+          </ImageContainer>
         ) : (
           <Loader />
         )}
-        <span className={styles.title}>{artist.attributes.name}</span>
-      </div>
-      <div className={styles['latest-release-container']}>
-        <span className={styles.title}>Latest Release</span>
+        <LargeTitle>{artist.attributes.name}</LargeTitle>
+      </Banner>
+      <LatestReleaseContainer>
+        <LargeTitle>Latest Release</LargeTitle>
         {albums && albums.length > 0 ? (
-          <div className={styles['latest-release']}>
+          <AlbumGrid>
             <Album album={albums[0]} onSelected={onAlbumSelected} />
-          </div>
+          </AlbumGrid>
         ) : null}
-      </div>
-      <div className={styles['top-songs-container']}>
-        <span className={styles.title}>Top Songs</span>
-        <div className={styles.songs}>
+      </LatestReleaseContainer>
+      <TopSongsContainer>
+        <LargeTitle>Top Songs</LargeTitle>
+        <Songs>
           {songs.map((song, index) => (
             <Song
               key={song.id}
@@ -113,30 +224,30 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
               onSelected={() => onSongSelected(songs, index)}
             />
           ))}
-        </div>
-      </div>
-      <div className={styles['albums-container']}>
-        <span className={styles.title}>Albums</span>
-        <div className={styles.albums}>
+        </Songs>
+      </TopSongsContainer>
+      <AlbumsContainer>
+        <LargeTitle>Albums</LargeTitle>
+        <AlbumGrid>
           {albums.slice(1).map((album) => (
             <Album key={album.id} album={album} onSelected={onAlbumSelected} />
           ))}
-        </div>
-      </div>
-      <div className={styles['music-videos-container']}>
-        <span className={styles.title}>Music Videos</span>
-        <div className={styles['music-videos']}>
+        </AlbumGrid>
+      </AlbumsContainer>
+      <MusicVideosContainer>
+        <LargeTitle>Music Videos</LargeTitle>
+        <MusicVideoGrid>
           {musicVideos.map((musicVideo) => (
             <MusicVideo
               musicVideo={musicVideo}
               onSelected={() => setCurrentMusicVideo(musicVideo)}
             />
           ))}
-        </div>
-      </div>
-      <div className={styles['playlists-container']}>
-        <span className={styles.title}>Playlists</span>
-        <div className={styles.playlists}>
+        </MusicVideoGrid>
+      </MusicVideosContainer>
+      <PlaylistContainer>
+        <LargeTitle>Playlists</LargeTitle>
+        <AlbumGrid>
           {playlists.map((playlist) => (
             <Link
               href={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}
@@ -145,29 +256,28 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
               <Playlist playlist={playlist} />
             </Link>
           ))}
-        </div>
-      </div>
+        </AlbumGrid>
+      </PlaylistContainer>
       {currentMusicVideo ? (
         <Modal onClose={() => setCurrentMusicVideo(null)}>
-          <div className={styles['current-music-video']}>
-            <span className={styles.title}>Music Video Preview</span>
+          <CurrentMusicVideo>
+            <LargeTitle>Music Video Preview</LargeTitle>
             <video controls autoPlay>
               <source src={currentMusicVideo.attributes.previews[0].hlsUrl} />
               <source src={currentMusicVideo.attributes.previews[0].url} />
               Your browser cannot play this video
             </video>
-            <a
-              className={styles.metadata}
+            <MetadataLink
               href={currentMusicVideo.attributes.url}
               target="_blank"
               rel="noopener noreferrer"
             >
               <MusicVideo musicVideo={currentMusicVideo} />
-            </a>
-          </div>
+            </MetadataLink>
+          </CurrentMusicVideo>
         </Modal>
       ) : null}
-    </div>
+    </Wrapper>
   );
 }
 
