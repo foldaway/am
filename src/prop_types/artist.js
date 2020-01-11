@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default PropTypes.shape({
+const artistPropType = PropTypes.shape({
   id: PropTypes.string,
   attributes: PropTypes.shape({
     url: PropTypes.string,
@@ -8,3 +8,5 @@ export default PropTypes.shape({
     genreNames: PropTypes.arrayOf(PropTypes.string),
   }),
 });
+
+export default artistPropType;

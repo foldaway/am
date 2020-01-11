@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default PropTypes.shape({
+const recommendationPropType = PropTypes.shape({
   attributes: PropTypes.shape({
     id: PropTypes.string,
     isGroupRecommendation: PropTypes.bool,
@@ -16,3 +16,4 @@ export default PropTypes.shape({
     }),
   }),
 });
+export default recommendationPropType;

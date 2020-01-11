@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default PropTypes.shape({
+const playlistPropType = PropTypes.shape({
   attributes: PropTypes.shape({
     id: PropTypes.string,
     albumName: PropTypes.string,
@@ -16,3 +16,4 @@ export default PropTypes.shape({
     name: PropTypes.string,
   }),
 });
+export default playlistPropType;

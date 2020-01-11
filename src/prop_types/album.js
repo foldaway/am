@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default PropTypes.shape({
+const albumPropType = PropTypes.shape({
   id: PropTypes.string,
   attributes: PropTypes.shape({
     artistName: PropTypes.string,
@@ -13,3 +13,5 @@ export default PropTypes.shape({
     trackCount: PropTypes.number,
   }),
 });
+
+export default albumPropType;

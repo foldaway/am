@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default PropTypes.shape({
+const trackPropType = PropTypes.shape({
   attributes: PropTypes.shape({
     id: PropTypes.string,
     albumName: PropTypes.string,
@@ -14,3 +14,4 @@ export default PropTypes.shape({
     trackNumber: PropTypes.number,
   }),
 });
+export default trackPropType;
