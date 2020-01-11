@@ -1,14 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import styled from 'styled-components';
 import { imgURLGen, srcSetGen } from '../../util/img';
 
 import Song from '../Song';
 import Loader from '../Loader';
 
-import styles from './styles.scss';
+import LargeTitle from '../large-title';
 
 /* eslint-disable no-await-in-loop */
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-areas:
+    "art title"
+    "art metadata"
+    "description description"
+    "songs songs";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto 1fr;
+  grid-column-gap: 10px;
+  overflow: hidden;
+  height: 100%;
+`;
+
+const Art = styled.div`
+  grid-area: art;
+  width: 100px;
+  height: 100px;
+`;
+
+const Title = styled(LargeTitle)`
+  grid-area: title;
+`;
+
+const Metadata = styled.span`
+  grid-area: metadata;
+  color: ${(props) => props.theme.text.tertiary};
+  font-size: 0.9em;
+`;
+
+const Description = styled.span`
+  grid-area: description;
+  font-size: 0.8em;
+  font-weight: 300;
+
+  color: ${(props) => props.theme.text.tertiary};
+`;
+
+const Songs = styled.div`
+  grid-area: songs;
+  display: grid;
+  grid-auto-flow: row;
+  grid-row-gap: 8px;
+  overflow-y: scroll;
+  align-items: self-start;
+`;
 
 function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
   const [songs, setSongs] = useState([]);
@@ -27,7 +75,7 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
       setPlaylist(await requestAPI.playlist(playlistID));
     }
     loadPlaylistMetadata();
-  }, []);
+  }, [match]);
 
   useEffect(() => {
     async function loadTracks() {
@@ -69,7 +117,7 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
     }
 
     loadTracks();
-  }, []);
+  }, [match]);
 
   if (playlist === null) {
     return <Loader />;
@@ -78,21 +126,20 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
   const artworkURL = attributes.artwork ? attributes.artwork.url : '';
   const description = 'description' in attributes ? attributes.description.standard : '';
   return (
-    <div className={styles.container}>
-      <img
-        className={styles.art}
+    <Wrapper>
+      <Art
         src={imgURLGen(artworkURL, { w: 75 })}
         srcSet={srcSetGen(artworkURL)}
         alt="Playlist artwork"
       />
-      <span className={styles.title}>{attributes.name}</span>
-      <span className={styles.metadata}>
+      <Title>{attributes.name}</Title>
+      <Metadata>
         {songs.length}
         {' '}
 songs
-      </span>
-      <p className={styles.description}>{description}</p>
-      <div className={styles.songs}>
+      </Metadata>
+      <Description>{description}</Description>
+      <Songs>
         {songs.length > 0 ? (
           songs.map((song, index) => (
             <Song
@@ -104,8 +151,8 @@ songs
         ) : (
           <Loader />
         )}
-      </div>
-    </div>
+      </Songs>
+    </Wrapper>
   );
 }
 
