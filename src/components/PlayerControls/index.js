@@ -1,15 +1,103 @@
 import React, { useState, useEffect } from 'react';
 import {
-  PlaybackControls,
-  TimeMarker,
-  ProgressBar,
-  VolumeSlider,
-  ControlDirection,
+  Button,
+  FormattedTime,
+  PlayerIcon,
+  Slider,
+  Direction,
 } from 'react-player-controls';
 import PropTypes from 'prop-types';
 
-import styles from './styles.scss';
-import controlsStyles from './controls.scss';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  height: 100%;
+  display: grid;
+  align-items: center;
+  grid-template-areas: "playback-controls volume progress-bar time-marker bitrate";
+  grid-template-columns: auto 1fr 10fr auto auto;
+  grid-template-rows: 1fr;
+  grid-column-gap: 10px;
+`;
+
+const StyledSlider = styled(Slider)`
+  display: grid;
+`;
+
+const SliderBar = styled.div`
+  height: 6px;
+  width: 100%;
+`;
+
+const SliderBarBackground = styled(SliderBar)`
+  background-color: ${(props) => props.theme.background.secondary};
+  grid-area: 1/1;
+`;
+const SliderBarBuffer = styled(SliderBar)`
+  background-color: ${(props) => props.theme.background.tertiary};
+  width: ${(props) => props.progress}%;
+  grid-area: 1/1;
+`;
+const SliderBarPlayTime = styled(SliderBar)`
+  background-color: ${(props) => props.theme.branding};
+  width: ${(props) => props.progress || 0}%;
+  grid-area: 1/1;
+`;
+const SliderBarSeek = styled(SliderBar)`
+  background-color: ${(props) => props.theme.branding};
+  opacity: 0.7;
+  width: ${(props) => props.progress}%;
+  grid-area: 1/1;
+`;
+
+const SliderHandle = styled.div`
+  position: absolute;
+  left: ${(props) => props.progress}%;
+  background: ${(props) => props.theme.branding};
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  transform: translate(-50%, -30%);
+  opacity: 0;
+  transition: opacity 40ms;
+`;
+
+const SliderWrapper = styled.div`
+  grid-area: ${(props) => props.gridArea};
+
+  &:hover {
+    cursor: pointer;
+    ${SliderHandle} {
+      opacity: 1;
+    }
+  }
+`;
+
+const TimeDisplay = styled(FormattedTime)`
+  color: ${(props) => props.theme.text.primary};
+`;
+
+const Controls = styled.div`
+  grid-area: playback-controls;
+`;
+
+const Bitrate = styled.span`
+  grid-area: bitrate;
+  color: ${(props) => props.theme.text.secondary};
+  font-weight: 100;
+  font-size: 0.7em;
+`;
+
+const StyledButton = styled(Button)`
+  background: none;
+  border: none;
+  transition: transform 40ms;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.3);
+  }
+`;
 
 function PlayerControls({
   onSeek,
@@ -29,8 +117,11 @@ function PlayerControls({
   const [playbackDuration, setPlaybackDuration] = useState(0);
   const [currentBufferedProgress, setCurrentBufferedProgress] = useState(0);
   const [volume, setVolume] = useState(player.volume);
+  const [seekIntentValue, setSeekIntentValue] = useState(0);
 
   const progressMax = nowPlayingItem !== null ? nowPlayingItem.attributes.durationInMillis : 0;
+
+  const isPlaying = playbackState === PlaybackStates.playing;
 
   const isBuffering = playbackState === PlaybackStates.waiting
     || playbackState === PlaybackStates.loading;
@@ -55,7 +146,7 @@ function PlayerControls({
       setPlaybackDuration(currentPlaybackDuration);
       setCurrentBufferedProgress(player.currentBufferedProgress);
     };
-    const volumeCb = ({ volume: v }) => setVolume(v);
+    const volumeCb = ({ target }) => setVolume(target.volume);
     const mediaItemDidChangeCb = ({ item }) => setNowPlayingItem(item);
     const bitrateCb = ({ bitrate: b }) => setBitrate(b);
     player.addEventListener(Events.playbackStateDidChange, playbackStateCb);
@@ -65,7 +156,10 @@ function PlayerControls({
     player.addEventListener(Events.playbackBitrateDidChange, bitrateCb);
 
     return () => {
-      player.removeEventListener(Events.playbackStateDidChange, playbackStateCb);
+      player.removeEventListener(
+        Events.playbackStateDidChange,
+        playbackStateCb,
+      );
       player.removeEventListener(Events.playbackProgressDidChange, progressCb);
       player.removeEventListener(Events.playbackVolumeDidChange, volumeCb);
       player.removeEventListener(
@@ -77,80 +171,52 @@ function PlayerControls({
   }, []);
 
   return (
-    <div className={styles.container}>
-      <div className={styles['progress-bar']}>
-        <ProgressBar
-          className={controlsStyles.ProgressBar}
-          childClasses={{
-            buffered: controlsStyles['ProgressBar-buffered'],
-            elapsed: controlsStyles['ProgressBar-elapsed'],
-            intent: controlsStyles['ProgressBar-intent'],
-            handle: controlsStyles['ProgressBar-handle'],
-            seek: controlsStyles['ProgressBar-seek'],
-          }}
-          extraClasses={[
-            nowPlayingItem !== null ? controlsStyles.isSeekable : '',
-            playbackState === PlaybackStates.loading
-              ? controlsStyles.isLoading
-              : '',
-          ].join(' ')}
-          bufferedTime={(currentBufferedProgress / 100) * playbackDuration}
-          currentTime={playbackTime}
-          totalTime={progressMax / 1000}
-          isSeekable={nowPlayingItem !== null}
-          onSeek={onSeek}
-        />
-      </div>
-      <div className={styles['time-marker']}>
-        <TimeMarker
-          currentTime={playbackTime}
-          totalTime={progressMax / 1000}
-          markerSeparator="/"
-        />
-      </div>
-      <div className={styles['playback-controls']}>
-        <PlaybackControls
-          className={controlsStyles.TimeMarker}
-          childClasses={controlsStyles}
-          extraClasses={[
-            nowPlayingItem !== null ? controlsStyles.isPlayable : '',
-            playbackState === PlaybackStates.playing
-              ? controlsStyles.isPlaying
-              : '',
-          ].join(' ')}
-          isPlaying={playbackState === PlaybackStates.playing}
-          isPlayable={!isBuffering && nowPlayingItem !== null}
-          hasPrevious={!isBuffering && hasPrevious}
-          hasNext={!isBuffering && hasNext}
-          onPrevious={onPrevious}
-          onNext={onNext}
-          onPlaybackChange={onPlaybackChange}
-        />
-      </div>
-      <div className={styles.volume}>
-        <VolumeSlider
-          className={controlsStyles.VolumeSlider}
-          childClasses={{
-            value: controlsStyles['VolumeSlider-value'],
-            intent: controlsStyles['VolumeSlider-intent'],
-            handle: controlsStyles['VolumeSlider-handle'],
-            seek: controlsStyles['VolumeSlider-seek'],
-          }}
-          extraClasses={[
-            controlsStyles.isEnabled,
-            controlsStyles.isHorizontal,
-          ].join(' ')}
-          direction={ControlDirection.HORIZONTAL}
-          volume={volume}
-          isEnabled={!isBuffering && nowPlayingItem !== null}
-          onVolumeChange={onVolumeChange}
-        />
-      </div>
-      <span className={styles.bitrate}>
+    <Wrapper>
+      <SliderWrapper gridArea="progress-bar">
+        <StyledSlider
+          direction={Direction.HORIZONTAL}
+          onIntent={setSeekIntentValue}
+          onIntentEnd={() => setSeekIntentValue(0)}
+          onChange={(value) => onSeek(value * playbackDuration)}
+        >
+          <SliderBarBackground />
+          <SliderBarBuffer progress={currentBufferedProgress} />
+          <SliderBarSeek progress={seekIntentValue * 100} />
+          <SliderBarPlayTime
+            progress={(playbackTime / playbackDuration) * 100}
+          />
+          <SliderHandle progress={(playbackTime / playbackDuration) * 100} />
+        </StyledSlider>
+      </SliderWrapper>
+      <SliderWrapper gridArea="volume">
+        <StyledSlider
+          direction={Direction.HORIZONTAL}
+          onChange={onVolumeChange}
+        >
+          <SliderBarBackground />
+          <SliderBarPlayTime progress={volume * 100} />
+          <SliderHandle progress={volume * 100} />
+        </StyledSlider>
+      </SliderWrapper>
+
+      <TimeDisplay numSeconds={playbackTime} />
+      <Controls>
+        <StyledButton onClick={onPrevious}>
+          <PlayerIcon.Previous />
+        </StyledButton>
+        <StyledButton onClick={() => onPlaybackChange(!isPlaying)}>
+          {isPlaying && <PlayerIcon.Pause />}
+          {!isPlaying && <PlayerIcon.Play />}
+        </StyledButton>
+        <StyledButton onClick={onNext}>
+          <PlayerIcon.Next />
+        </StyledButton>
+      </Controls>
+      <Bitrate>
         {bitrate}
         kbps
-      </span>
-    </div>
+      </Bitrate>
+    </Wrapper>
   );
 }
 

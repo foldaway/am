@@ -34,6 +34,7 @@ const theme = useDarkTheme
     background: {
       primary: 'rgb(51, 51, 51)',
       secondary: 'rgba(0, 0, 0, 0.0470588)',
+      tertiary: 'rgb(248, 248, 250)',
     },
     branding: 'rgb(255, 45, 85)',
 
@@ -55,6 +56,7 @@ const theme = useDarkTheme
     background: {
       primary: 'rgb(248, 248, 250)',
       secondary: 'rgb(187, 187, 187)',
+      tertiary: 'rgb(51, 51, 51)',
     },
     branding: 'rgb(255, 45, 85)',
   };
