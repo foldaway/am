@@ -13,6 +13,7 @@ const Wrapper = styled.div`
 
 const BrandTitle = styled(LargeTitle)`
   color: ${(props) => props.theme.branding};
+  text-align: center;
 `;
 
 const Version = styled.span`
