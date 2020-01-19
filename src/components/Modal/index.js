@@ -1,22 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styles from './styles.scss';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 8vw;
+`;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  background-color: #fff;
+  border-radius: 5px;
+  min-height: 300px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: ${(props) => props.theme.background.primary};
+`;
+
+const Footer = styled.div`
+  margin-top: 8px;
+`;
 
 const Modal = ({ children, show, onClose }) => {
   if (!show) return null;
   return (
-    <div className={styles.backdrop}>
-      <div className={styles.modal}>
+    <Wrapper>
+      <Content>
         {children}
 
-        <div className={styles.modal__footer}>
-          <button className={styles.modal__footer__close} onClick={onClose} type="button">
+        <Footer>
+          <button onClick={onClose} type="button">
             Close
           </button>
-        </div>
-      </div>
-    </div>
+        </Footer>
+      </Content>
+    </Wrapper>
   );
 };
 
