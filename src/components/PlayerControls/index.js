@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Button,
   FormattedTime,
   PlayerIcon,
   Slider,
@@ -88,7 +87,10 @@ const Bitrate = styled.span`
   font-size: 0.7em;
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled.button`
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
   background: none;
   border: none;
   transition: transform 40ms;
@@ -96,6 +98,10 @@ const StyledButton = styled(Button)`
   &:hover {
     cursor: pointer;
     transform: scale(1.3);
+  }
+
+  svg {
+    fill: ${(props) => props.theme.branding};
   }
 `;
 
