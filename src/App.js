@@ -1,7 +1,7 @@
 import 'normalize.css';
 import 'babel-polyfill';
 
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import { ThemeProvider } from 'styled-components';
@@ -61,200 +61,180 @@ const theme = useDarkTheme
     branding: 'rgb(255, 45, 85)',
   };
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const { Events, PlaybackStates } = window.MusicKit;
+  const { player, isAuthorized } = window.MusicKitInstance;
 
-    const { Events, PlaybackStates } = window.MusicKit;
-    const { player } = window.MusicKitInstance;
+  const [isLoggedIn, setIsLoggedIn] = useState(isAuthorized);
+  const [viewArgs, setViewArgs] = useState(null);
+  const [queue, setQueue] = useState({ items: [] });
+  const [playbackState, setPlaybackState] = useState(player.playbackState);
+  const [error, setError] = useState(null);
+  const [nowPlayingItemIndex, setNowPlayingItemIndex] = useState(-1);
 
-    this.state = {
-      isLoggedIn: window.MusicKitInstance.isAuthorized,
-      viewArgs: null,
-      queue: { items: [] },
-      playbackState: player.playbackState,
-      error: null,
+  useEffect(() => {
+    const playbackStateCb = ({ state }) => setPlaybackState(state);
+    const queueCb = (items) => setQueue({ items });
+    const queuePosCb = ({ position }) => setNowPlayingItemIndex(position);
+    player.addEventListener(Events.playbackStateDidChange, playbackStateCb);
+    player.addEventListener(Events.queueItemsDidChange, queueCb);
+    player.addEventListener(Events.queuePositionDidChange, queuePosCb);
+
+    return () => {
+      player.removeEventListener(
+        Events.playbackStateDidChange,
+        playbackStateCb,
+      );
+      player.removeEventListener(Events.queueItemsDidChange, queueCb);
+      player.removeEventListener(Events.queuePositionDidChange, queuePosCb);
     };
+  }, []);
 
-    this.onLoginSuccess = this.onLoginSuccess.bind(this);
-    this.updateState = this.updateState.bind(this);
-
-    player.addEventListener(Events.playbackStateDidChange, this.updateState);
-    player.queue.addEventListener(Events.queueItemsDidChange, this.updateState);
-    player.queue.addEventListener(
-      Events.queuePositionDidChange,
-      this.updateState,
-    );
-
-    this.playQueue = async (queueObj, queueIndex) => {
-      try {
-        if (this.state.playbackState === PlaybackStates.playing) {
-          await player.stop();
-        }
-        await window.MusicKitInstance.setQueue(queueObj);
-        await player.changeToMediaAtIndex(queueIndex);
-        await player.play();
-      } catch (e) {
-        this.setState({ error: e.message });
+  async function playQueue(queueObj, queueIndex) {
+    try {
+      if (playbackState === PlaybackStates.playing) {
+        await player.stop();
       }
-    };
-
-    this.playAlbum = async (album, queueIndex) => this.playQueue({ album: album.id }, queueIndex);
-    this.playPlaylist = async (playlist, queueIndex) => this.playQueue({ playlist: playlist.id }, queueIndex);
-    this.playSong = async (items, queueIndex) => this.playQueue({ items: items.slice(queueIndex) }, 0);
+      await window.MusicKitInstance.setQueue(queueObj);
+      await player.changeToMediaAtIndex(queueIndex);
+      await player.play();
+    } catch (e) {
+      setError(e.message);
+    }
   }
 
-  componentWillUnmount() {
-    document.querySelector('#apple-music-player').remove();
-  }
+  const playAlbum = async (album, queueIndex) => playQueue({ album: album.id }, queueIndex);
+  const playPlaylist = async (playlist, queueIndex) => playQueue({ playlist: playlist.id }, queueIndex);
+  const playSong = async (items, queueIndex) => playQueue({ items: items.slice(queueIndex) }, 0);
 
-  onLoginSuccess() {
-    this.setState({ isLoggedIn: true });
-  }
-
-  updateState() {
-    const { player } = window.MusicKitInstance;
-    this.setState({
-      queue: player.queue,
-      playbackState: player.playbackState,
-      nowPlayingItemIndex: player.nowPlayingItemIndex,
-    });
-  }
-
-  render() {
-    const { error } = this.state;
-    return (
-      <ThemeProvider theme={theme}>
-        <div className={styles.container}>
-          <Header />
-          <Router>
-            <div className={styles['main-content']}>
-              {this.state.isLoggedIn ? <SideMenu /> : null}
-              {this.state.isLoggedIn ? (
-                <div className={styles.player}>
-                  <Player
-                    queue={this.state.queue}
-                    nowPlayingItemIndex={this.state.nowPlayingItemIndex}
-                    playbackState={this.state.playbackState}
-                  />
-                </div>
-              ) : null}
-              <div className={styles.view}>
-                <Route
-                  exact
-                  path="/library/recently-added"
-                  render={(props) => (
-                    <RecentlyAddedLibrary
-                      onAlbumSelected={this.playAlbum}
-                      onPlaylistSelected={console.log}
-                      {...props}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/library/artists"
-                  render={(props) => (
-                    <ArtistLibrary
-                      onAlbumSelected={this.playAlbum}
-                      {...props}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/library/albums"
-                  render={(props) => (
-                    <AlbumLibrary onAlbumSelected={this.playAlbum} {...props} />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/library/songs"
-                  render={(props) => (
-                    <SongLibrary onSongSelected={this.playSong} {...props} />
-                  )}
-                />
-                <Route
-                  path="/library/playlist/:playlistID"
-                  render={(props) => (
-                    <PlaylistLibrary
-                      isLibrary
-                      onSongSelected={this.playPlaylist}
-                      {...props}
-                    />
-                  )}
-                />
-                <Route
-                  path="/playlist/:playlistID"
-                  render={(props) => (
-                    <PlaylistLibrary
-                      isLibrary={false}
-                      onSongSelected={this.playPlaylist}
-                      {...props}
-                    />
-                  )}
-                />
-                <Route
-                  path="/artist/:artistID"
-                  render={(props) => (
-                    <ArtistPage
-                      onSongSelected={this.playSong}
-                      onAlbumSelected={this.playAlbum}
-                      {...props}
-                    />
-                  )}
-                />
-                <Route
-                  path="/search"
-                  render={(props) => (
-                    <SearchCatalog
-                      onSongSelected={this.playSong}
-                      onAlbumSelected={this.playAlbum}
-                      {...props}
-                    />
-                  )}
-                />
-                <Route
-                  exact
-                  path="/for-you"
-                  render={() => <ForYouPage onAlbumSelected={this.playAlbum} />}
-                />
-                <Route
-                  path="/artist/id"
-                  render={(props) => (
-                    <ArtistPage
-                      artist={this.state.viewArgs}
-                      onAlbumSelected={this.playAlbum}
-                      onSongSelected={this.playSong}
-                      {...props}
-                    />
-                  )}
+  return (
+    <ThemeProvider theme={theme}>
+      <div className={styles.container}>
+        <Header />
+        <Router>
+          <div className={styles['main-content']}>
+            {isLoggedIn ? <SideMenu /> : null}
+            {isLoggedIn ? (
+              <div className={styles.player}>
+                <Player
+                  queue={queue}
+                  nowPlayingItemIndex={nowPlayingItemIndex}
+                  playbackState={playbackState}
                 />
               </div>
+            ) : null}
+            <div className={styles.view}>
               <Route
                 exact
-                path="/login"
+                path="/library/recently-added"
                 render={(props) => (
-                  <LoginContainer
-                    onLoginSuccess={this.onLoginSuccess}
+                  <RecentlyAddedLibrary
+                    onAlbumSelected={playAlbum}
+                    onPlaylistSelected={console.log}
                     {...props}
                   />
                 )}
               />
-
-              {this.state.isLoggedIn ? null : <Redirect to="/login" />}
-              {error !== null ? (
-                <Modal onClose={() => this.setState({ error: null })}>
-                  <span>{error}</span>
-                </Modal>
-              ) : null}
+              <Route
+                exact
+                path="/library/artists"
+                render={(props) => (
+                  <ArtistLibrary onAlbumSelected={playAlbum} {...props} />
+                )}
+              />
+              <Route
+                exact
+                path="/library/albums"
+                render={(props) => (
+                  <AlbumLibrary onAlbumSelected={playAlbum} {...props} />
+                )}
+              />
+              <Route
+                exact
+                path="/library/songs"
+                render={(props) => (
+                  <SongLibrary onSongSelected={playSong} {...props} />
+                )}
+              />
+              <Route
+                path="/library/playlist/:playlistID"
+                render={(props) => (
+                  <PlaylistLibrary
+                    isLibrary
+                    onSongSelected={playPlaylist}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
+                path="/playlist/:playlistID"
+                render={(props) => (
+                  <PlaylistLibrary
+                    isLibrary={false}
+                    onSongSelected={playPlaylist}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
+                path="/artist/:artistID"
+                render={(props) => (
+                  <ArtistPage
+                    onSongSelected={playSong}
+                    onAlbumSelected={playAlbum}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
+                path="/search"
+                render={(props) => (
+                  <SearchCatalog
+                    onSongSelected={playSong}
+                    onAlbumSelected={playAlbum}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/for-you"
+                render={() => <ForYouPage onAlbumSelected={playAlbum} />}
+              />
+              <Route
+                path="/artist/id"
+                render={(props) => (
+                  <ArtistPage
+                    artist={viewArgs}
+                    onAlbumSelected={playAlbum}
+                    onSongSelected={playSong}
+                    {...props}
+                  />
+                )}
+              />
             </div>
-          </Router>
-        </div>
-      </ThemeProvider>
-    );
-  }
+            <Route
+              exact
+              path="/login"
+              render={(props) => (
+                <LoginContainer
+                  onLoginSuccess={() => setIsLoggedIn(true)}
+                  {...props}
+                />
+              )}
+            />
+
+            {isLoggedIn ? null : <Redirect to="/login" />}
+            {error !== null ? (
+              <Modal onClose={() => setError(null)}>
+                <span>{error}</span>
+              </Modal>
+            ) : null}
+          </div>
+        </Router>
+      </div>
+    </ThemeProvider>
+  );
 }
 
 export default App;
