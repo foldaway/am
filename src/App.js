@@ -4,7 +4,7 @@ import 'babel-polyfill';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
 import AlbumLibrary from './components/AlbumLibrary';
@@ -14,7 +14,6 @@ import Player from './components/Player';
 import SideMenu from './components/SideMenu';
 import SearchCatalog from './components/SearchCatalog';
 
-import styles from './App.scss';
 import ArtistPage from './components/ArtistPage';
 import ArtistLibrary from './components/ArtistLibrary';
 import ForYouPage from './components/ForYouPage';
@@ -60,6 +59,40 @@ const theme = useDarkTheme
     },
     branding: 'rgb(255, 45, 85)',
   };
+
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main-content";
+  grid-auto-flow: row;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+`;
+
+const MainContent = styled.div`
+  grid-area: main-content;
+  display: grid;
+  grid-template-areas:
+    "side-menu view"
+    "side-menu player";
+  grid-template-columns: 1fr 5fr;
+  grid-template-rows: 3fr 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 10px;
+  overflow: hidden;
+`;
+
+const View = styled.div`
+  grid-area: view;
+  padding-right: 20px;
+  overflow-y: scroll;
+`;
+
+const PlayerWrapper = styled.div`
+  grid-area: player;
+  overflow: hidden;
+`;
 
 function App() {
   const { Events, PlaybackStates } = window.MusicKit;
@@ -109,21 +142,21 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className={styles.container}>
+      <Wrapper>
         <Header />
         <Router>
-          <div className={styles['main-content']}>
+          <MainContent>
             {isLoggedIn ? <SideMenu /> : null}
             {isLoggedIn ? (
-              <div className={styles.player}>
+              <PlayerWrapper>
                 <Player
                   queue={queue}
                   nowPlayingItemIndex={nowPlayingItemIndex}
                   playbackState={playbackState}
                 />
-              </div>
+              </PlayerWrapper>
             ) : null}
-            <div className={styles.view}>
+            <View>
               <Route
                 exact
                 path="/library/recently-added"
@@ -212,7 +245,7 @@ function App() {
                   />
                 )}
               />
-            </div>
+            </View>
             <Route
               exact
               path="/login"
@@ -230,9 +263,9 @@ function App() {
                 <span>{error}</span>
               </Modal>
             ) : null}
-          </div>
+          </MainContent>
         </Router>
-      </div>
+      </Wrapper>
     </ThemeProvider>
   );
 }
