@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import LazyImage from 'react-lazy-progressive-image';
 
 const ArtWrapper = styled.div`
   position: relative;
@@ -20,6 +21,12 @@ const Image = styled.img`
   height: 100%;
   object-fit: cover;
   background: ${(props) => props.theme.background.secondary};
+  transition: 200ms filter;
+
+  ${(props) => props.loading
+    && css`
+      filter: blur(5px);
+    `}
 `;
 
 const Spacer = styled.svg`
@@ -28,24 +35,28 @@ const Spacer = styled.svg`
 `;
 
 function SquareImage(props) {
-  const { src, srcSet, alt } = props;
+  const { artwork, alt } = props;
+  const { formatArtworkURL } = window.MusicKit;
   return (
     <ArtWrapper {...props}>
       <Spacer viewBox="0 0 1 1" />
-      <Image src={src} srcSet={srcSet} alt={alt} />
+      <LazyImage
+        placeholder={formatArtworkURL(artwork, 30)}
+        src={formatArtworkURL(artwork, 300)}
+      >
+        {(src, loading) => <Image src={src} loading={loading} alt={alt} />}
+      </LazyImage>
     </ArtWrapper>
   );
 }
 
 SquareImage.defaultProps = {
-  src: null,
-  srcSet: null,
+  artwork: { url: '' },
   alt: '',
 };
 
 SquareImage.propTypes = {
-  src: PropTypes.string,
-  srcSet: PropTypes.string,
+  artwork: PropTypes.shape(),
   alt: PropTypes.string,
 };
 

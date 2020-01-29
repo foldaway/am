@@ -86,13 +86,10 @@ function Album({ album, onSelected }) {
     setSongListVisible(!songListVisible);
   }
 
-  const { url } = album.attributes.artwork || { url: '' };
-
   return (
     <Wrapper onClick={toggleSongList} role="presentation">
       <StyledSquareImage
-        src={url && imgURLGen(url, { w: 75 })}
-        srcSet={url && srcSetGen(url)}
+        artwork={album.attributes.artwork}
         alt="album artwork"
       />
       <Title>{album.attributes.name}</Title>

@@ -90,19 +90,7 @@ function Song(props) {
       onClick={() => onSelected(song)}
       role="presentation"
     >
-      <Art
-        src={
-          'artwork' in song.attributes
-            ? imgURLGen(song.attributes.artwork.url, { w: 75 })
-            : null
-        }
-        srcSet={
-          'artwork' in song.attributes
-            ? srcSetGen(song.attributes.artwork.url)
-            : null
-        }
-        alt="Song artwork"
-      />
+      <Art artwork={song.attributes.artwork} alt="Song artwork" />
       <Title>{song.attributes.name}</Title>
       <Artist>{song.attributes.artistName}</Artist>
       <Album>{song.attributes.albumName}</Album>

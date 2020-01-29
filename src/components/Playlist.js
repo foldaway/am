@@ -46,13 +46,7 @@ const Curator = styled.span`
 
 const Playlist = ({ playlist, playlist: { attributes } }) => (
   <Wrapper>
-    <StyledSquareImage
-      src={
-        attributes.artwork ? imgURLGen(attributes.artwork.url, { w: 75 }) : null
-      }
-      srcSet={attributes.artwork ? srcSetGen(attributes.artwork.url) : null}
-      alt="Playlist artwork"
-    />
+    <StyledSquareImage artwork={attributes.artwork} alt="Playlist artwork" />
     <Title>{playlist.attributes.name}</Title>
     <Curator>{playlist.attributes.curatorName}</Curator>
   </Wrapper>
