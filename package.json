@@ -23,8 +23,8 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "core-js": "^3.6.4",
     "lodash": "^4.17.15",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.24.0",
@@ -37,6 +37,7 @@
     "react-player-controls": "^1.1.0",
     "react-router-dom": "^5.1.2",
     "react-spinners": "^0.8.0",
+    "regenerator-runtime": "^0.13.3",
     "styled-components": "^4.4.1",
     "typeface-ibm-plex-mono": "^0.0.61",
     "typeface-ibm-plex-sans": "^0.0.75"

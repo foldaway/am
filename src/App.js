@@ -1,5 +1,6 @@
 import 'normalize.css';
-import 'babel-polyfill';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import 'typeface-ibm-plex-sans';
 import 'typeface-ibm-plex-mono';
 
