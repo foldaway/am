@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled, { css } from 'styled-components';
 import {
@@ -73,6 +73,7 @@ const Queue = styled.div`
 `;
 
 const QueueSong = styled(Song)`
+  flex: 0 0 auto;
   border-radius: 3px;
   ${(props) => props.active
     && css`
@@ -93,7 +94,6 @@ function Player() {
   const { Events } = window.MusicKit;
   const { player } = window.MusicKitInstance;
   const [isOpen, setIsOpen] = useState(false);
-  const activeRef = useRef(null);
 
   const [queue, setQueue] = useState({ items: [] });
   const [nowPlayingItemIndex, setNowPlayingItemIndex] = useState(-1);
@@ -109,12 +109,6 @@ function Player() {
       player.removeEventListener(Events.queuePositionDidChange, queuePosCb);
     };
   }, []);
-
-  useEffect(() => {
-    if (activeRef.current) {
-      activeRef.current.scrollIntoView({ behaviour: 'smooth' });
-    }
-  }, [isOpen]);
 
   function toggleOpen() {
     setIsOpen(!isOpen);
@@ -133,7 +127,6 @@ function Player() {
           <QueueSong
             key={item.id}
             active={nowPlayingItemIndex === index}
-            ref={nowPlayingItemIndex === index ? activeRef : null}
             song={item}
             onSelected={() => player.changeToMediaAtIndex(index)}
           />

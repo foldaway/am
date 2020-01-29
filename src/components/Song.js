@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
@@ -75,9 +75,21 @@ const StyledFormattedTime = styled(FormattedTime)`
 `;
 
 function Song(props) {
-  const { onSelected, song } = props;
+  const { onSelected, song, active } = props;
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    if (wrapperRef.current) {
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [active]);
   return (
-    <Wrapper {...props} onClick={() => onSelected(song)} role="presentation">
+    <Wrapper
+      ref={wrapperRef}
+      {...props}
+      onClick={() => onSelected(song)}
+      role="presentation"
+    >
       <Art
         src={
           'artwork' in song.attributes
@@ -103,11 +115,13 @@ function Song(props) {
 
 Song.defaultProps = {
   onSelected: () => {},
+  active: false,
 };
 
 Song.propTypes = {
   song: trackPropType.isRequired,
   onSelected: PropTypes.func,
+  active: PropTypes.bool,
 };
 
 export default Song;
