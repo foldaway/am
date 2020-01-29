@@ -9,7 +9,7 @@ import {
   IoIosMicrophone,
 } from 'react-icons/io';
 import { MdAlbum } from 'react-icons/md';
-import LargeTitle from './large-title';
+import LargeTitle from './ui/LargeTitle';
 import SearchBox from './SearchBox';
 
 const Wrapper = styled.div`

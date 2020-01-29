@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 import Playlist from '../components/Playlist';
-import AlbumGrid from '../components/album-grid';
+import AlbumGrid from '../components/ui/AlbumGrid';
 import Loader from '../components/Loader';
 
 /* eslint-disable no-await-in-loop */

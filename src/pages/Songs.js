@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Song from '../components/Song';
 import Loader from '../components/Loader';
-import LargeTitle from '../components/large-title';
+import LargeTitle from '../components/ui/LargeTitle';
 import { playSong } from '../util/play';
 
 /* eslint-disable no-await-in-loop */

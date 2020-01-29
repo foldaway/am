@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import Album from '../Album';
-import Loader from '../Loader';
-import Song from '../Song';
-import Modal from '../Modal';
-import Playlist from '../Playlist';
+import Album from './Album';
+import Loader from './Loader';
+import Song from './Song';
+import Modal from './Modal';
+import Playlist from './Playlist';
 
-import { imgURLGen, srcSetGen } from '../../util/img';
-import fetchArtistImage from '../../util/fetch-artist-img';
-import MusicVideo from '../MusicVideo';
-import LargeTitle from '../large-title';
-import AlbumGrid from '../album-grid';
-import { playAlbum, playSong } from '../../util/play';
+import { imgURLGen, srcSetGen } from '../util/img';
+import fetchArtistImage from '../util/fetch-artist-img';
+import MusicVideo from './MusicVideo';
+import LargeTitle from './ui/LargeTitle';
+import AlbumGrid from './ui/AlbumGrid';
+import { playAlbum, playSong } from '../util/play';
 
 const Wrapper = styled.div`
   display: grid;

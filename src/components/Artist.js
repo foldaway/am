@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import { imgURLGen, srcSetGen } from '../../util/img';
-import fetchArtistImage from '../../util/fetch-artist-img';
-import artistPropType from '../../prop_types/artist';
+import { imgURLGen, srcSetGen } from '../util/img';
+import fetchArtistImage from '../util/fetch-artist-img';
+import artistPropType from '../prop_types/artist';
 
 const Wrapper = styled.div`
   display: flex;

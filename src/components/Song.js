@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { FormattedTime } from 'react-player-controls';
-import { imgURLGen, srcSetGen } from '../../util/img';
+import { imgURLGen, srcSetGen } from '../util/img';
 
-import trackPropType from '../../prop_types/track';
-import SquareImage from '../SquareImage';
+import trackPropType from '../prop_types/track';
+import SquareImage from './ui/SquareImage';
 
 const Wrapper = styled.div`
   display: grid;

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-import { imgURLGen, srcSetGen } from '../../util/img';
+import { imgURLGen, srcSetGen } from '../util/img';
 
-import musicVideoPropType from '../../prop_types/musicVideo';
+import musicVideoPropType from '../prop_types/musicVideo';
 
 const Art = styled.img`
   width: 100%;

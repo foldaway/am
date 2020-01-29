@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import styled from 'styled-components';
-import LargeTitle from '../large-title';
+import LargeTitle from './ui/LargeTitle';
 
 const Wrapper = styled.div`
   display: flex;

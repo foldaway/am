@@ -3,13 +3,13 @@ import { sumBy } from 'lodash';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import { imgURLGen, srcSetGen } from '../../util/img';
+import { imgURLGen, srcSetGen } from '../util/img';
 
-import Song from '../Song';
-import Loader from '../Loader';
+import Song from './Song';
+import Loader from './Loader';
 
-import LargeTitle from '../large-title';
-import { playPlaylist } from '../../util/play';
+import LargeTitle from './ui/LargeTitle';
+import { playPlaylist } from '../util/play';
 
 /* eslint-disable no-await-in-loop */
 

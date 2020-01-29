@@ -12,8 +12,8 @@ import albumPropType from '../prop_types/album';
 import trackPropType from '../prop_types/track';
 import playlistPropType from '../prop_types/playlist';
 import artistPropType from '../prop_types/artist';
-import LargeTitle from '../components/large-title';
-import AlbumGrid from '../components/album-grid';
+import LargeTitle from '../components/ui/LargeTitle';
+import AlbumGrid from '../components/ui/AlbumGrid';
 import { playSong, playAlbum } from '../util/play';
 
 const Wrapper = styled.div`

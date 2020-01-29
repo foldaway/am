@@ -13,8 +13,8 @@ import moment from 'moment';
 import styled from 'styled-components';
 import Album from '../components/Album';
 import Loader from '../components/Loader';
-import AlbumGrid from '../components/album-grid';
-import LargeTitle from '../components/large-title';
+import AlbumGrid from '../components/ui/AlbumGrid';
+import LargeTitle from '../components/ui/LargeTitle';
 
 import { playAlbum } from '../util/play';
 

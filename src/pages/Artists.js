@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import Loader from '../components/Loader';
 import Artist from '../components/Artist';
 import Album from '../components/Album';
-import AlbumGrid from '../components/album-grid';
-import LargeTitle from '../components/large-title';
+import AlbumGrid from '../components/ui/AlbumGrid';
+import LargeTitle from '../components/ui/LargeTitle';
 import { playAlbum } from '../util/play';
 
 /* eslint-disable no-await-in-loop */

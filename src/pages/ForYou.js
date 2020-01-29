@@ -9,8 +9,8 @@ import recPropType from '../prop_types/recommendation';
 import Album from '../components/Album';
 import Playlist from '../components/Playlist';
 import Loader from '../components/Loader';
-import LargeTitle from '../components/large-title';
-import AlbumGrid from '../components/album-grid';
+import LargeTitle from '../components/ui/LargeTitle';
+import AlbumGrid from '../components/ui/AlbumGrid';
 import { playAlbum } from '../util/play';
 
 const Wrapper = styled.div`

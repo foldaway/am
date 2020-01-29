@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Album from '../components/Album';
 import Loader from '../components/Loader';
-import AlbumGrid from '../components/album-grid';
+import AlbumGrid from '../components/ui/AlbumGrid';
 import { playAlbum } from '../util/play';
 
 /* eslint-disable no-await-in-loop */

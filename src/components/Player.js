@@ -6,12 +6,12 @@ import {
   IoIosArrowDropupCircle,
   IoIosArrowDropdownCircle,
 } from 'react-icons/io';
-import Song from '../Song';
-import PlayerControls from '../PlayerControls';
+import Song from './Song';
+import PlayerControls from './PlayerControls';
 
-import trackPropType from '../../prop_types/track';
+import trackPropType from '../prop_types/track';
 
-import SmallTitle from '../ui/SmallTitle';
+import SmallTitle from './ui/SmallTitle';
 
 const Wrapper = styled.div`
   position: absolute;

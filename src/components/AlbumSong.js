@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
-import trackPropType from '../../prop_types/track';
+import trackPropType from '../prop_types/track';
 
 const Wrapper = styled.div`
   display: grid;
