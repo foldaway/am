@@ -12,11 +12,11 @@ import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
 import Albums from './pages/Albums';
 import Songs from './pages/Songs';
-import PlaylistLibrary from './components/PlaylistLibrary';
+import PlaylistLibrary from './pages/media/Playlist';
 import Player from './components/Player';
 import SearchCatalog from './pages/Search';
 
-import ArtistPage from './components/ArtistPage';
+import ArtistPage from './pages/media/Artist';
 import Artists from './pages/Artists';
 import ForYou from './pages/ForYou';
 import RecentlyAdded from './pages/RecentlyAdded';
