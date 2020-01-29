@@ -3,7 +3,7 @@ import 'babel-polyfill';
 import 'typeface-ibm-plex-sans';
 import 'typeface-ibm-plex-mono';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import styled, { ThemeProvider } from 'styled-components';
@@ -72,25 +72,10 @@ const View = styled.div`
 `;
 
 function App() {
-  const { Events } = window.MusicKit;
-  const { player, isAuthorized } = window.MusicKitInstance;
+  const { isAuthorized } = window.MusicKitInstance;
 
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthorized);
-  const [queue, setQueue] = useState({ items: [] });
   const [error, setError] = useState(null);
-  const [nowPlayingItemIndex, setNowPlayingItemIndex] = useState(-1);
-
-  useEffect(() => {
-    const queueCb = (items) => setQueue({ items });
-    const queuePosCb = ({ position }) => setNowPlayingItemIndex(position);
-    player.addEventListener(Events.queueItemsDidChange, queueCb);
-    player.addEventListener(Events.queuePositionDidChange, queuePosCb);
-
-    return () => {
-      player.removeEventListener(Events.queueItemsDidChange, queueCb);
-      player.removeEventListener(Events.queuePositionDidChange, queuePosCb);
-    };
-  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -132,9 +117,7 @@ function App() {
                 )}
               />
             </View>
-            {isLoggedIn && (
-              <Player queue={queue} nowPlayingItemIndex={nowPlayingItemIndex} />
-            )}
+            {isLoggedIn && <Player />}
             {!isLoggedIn && <Redirect to="/login" />}
             {error !== null && (
               <Modal onClose={() => setError(null)}>

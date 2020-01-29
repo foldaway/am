@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 import styled, { css } from 'styled-components';
 import {
@@ -8,8 +7,6 @@ import {
 } from 'react-icons/io';
 import Song from './Song';
 import PlayerControls from './PlayerControls';
-
-import trackPropType from '../prop_types/track';
 
 import SmallTitle from './ui/SmallTitle';
 
@@ -92,20 +89,32 @@ const EmptyState = styled.span`
   margin: 10px 0;
 `;
 
-function Player(props) {
-  const { queue, nowPlayingItemIndex } = props;
+function Player() {
+  const { Events } = window.MusicKit;
+  const { player } = window.MusicKitInstance;
   const [isOpen, setIsOpen] = useState(false);
   const activeRef = useRef(null);
+
+  const [queue, setQueue] = useState({ items: [] });
+  const [nowPlayingItemIndex, setNowPlayingItemIndex] = useState(-1);
+
+  useEffect(() => {
+    const queueCb = (items) => setQueue({ items });
+    const queuePosCb = ({ position }) => setNowPlayingItemIndex(position);
+    player.addEventListener(Events.queueItemsDidChange, queueCb);
+    player.addEventListener(Events.queuePositionDidChange, queuePosCb);
+
+    return () => {
+      player.removeEventListener(Events.queueItemsDidChange, queueCb);
+      player.removeEventListener(Events.queuePositionDidChange, queuePosCb);
+    };
+  }, []);
 
   useEffect(() => {
     if (activeRef.current) {
       activeRef.current.scrollIntoView({ behaviour: 'smooth' });
     }
   }, [isOpen]);
-
-  const {
-    MusicKitInstance: { player },
-  } = window;
 
   function toggleOpen() {
     setIsOpen(!isOpen);
@@ -141,17 +150,5 @@ function Player(props) {
     </Wrapper>
   );
 }
-Player.defaultProps = {
-  nowPlayingItemIndex: 0,
-};
-
-Player.propTypes = {
-  queue: PropTypes.shape({
-    items: PropTypes.arrayOf(trackPropType),
-    position: PropTypes.number,
-    length: PropTypes.number,
-  }).isRequired,
-  nowPlayingItemIndex: PropTypes.number,
-};
 
 export default Player;
