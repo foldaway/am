@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import styled, { css } from 'styled-components';
 import LazyImage from 'react-lazy-progressive-image';
+import { IoIosMusicalNotes } from 'react-icons/io';
 
 const ArtWrapper = styled.div`
   position: relative;
@@ -11,6 +12,7 @@ const ArtWrapper = styled.div`
   border-radius: 6px;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
   transition: 200ms transform;
+  background: ${(props) => props.theme.background.secondary};
 `;
 
 const Image = styled.img`
@@ -20,12 +22,17 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  background: ${(props) => props.theme.background.secondary};
   transition: 200ms filter;
 
   ${(props) => props.loading
+    && props.src
     && css`
       filter: blur(5px);
+    `}
+
+  ${(props) => !props.src
+    && css`
+      display: none;
     `}
 `;
 
@@ -34,12 +41,22 @@ const Spacer = styled.svg`
   height: auto;
 `;
 
+const FallbackImage = styled(IoIosMusicalNotes)`
+  position: absolute;
+  width: 55%;
+  height: 55%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
 function SquareImage(props) {
   const { artwork, alt } = props;
   const { formatArtworkURL } = window.MusicKit;
   return (
     <ArtWrapper {...props}>
       <Spacer viewBox="0 0 1 1" />
+      <FallbackImage />
       <LazyImage
         placeholder={formatArtworkURL(artwork, 30)}
         src={formatArtworkURL(artwork, 300)}
