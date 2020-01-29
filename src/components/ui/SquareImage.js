@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import styled, { css } from 'styled-components';
-import LazyImage from 'react-lazy-progressive-image';
 import { IoIosMusicalNotes } from 'react-icons/io';
 
 const ArtWrapper = styled.div`
@@ -57,15 +56,7 @@ function SquareImage(props) {
     <ArtWrapper {...props}>
       <Spacer viewBox="0 0 1 1" />
       <FallbackImage />
-      <LazyImage
-        placeholder={formatArtworkURL(artwork, 30)}
-        src={formatArtworkURL(artwork, 300)}
-        visibilitySensorProps={{
-          scrollThrottle: 2,
-        }}
-      >
-        {(src, loading) => <Image src={src} loading={loading} alt={alt} />}
-      </LazyImage>
+      <Image src={formatArtworkURL(artwork, 300, 300)} alt={alt} />
     </ArtWrapper>
   );
 }
