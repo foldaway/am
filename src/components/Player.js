@@ -139,8 +139,6 @@ function Player(props) {
       {nowPlayingItemIndex === -1 && <EmptyState>Nothing playing</EmptyState>}
       <PlayerControls
         onSeek={(time) => player.seekToTime(time)}
-        onPrevious={() => player.changeToMediaAtIndex(queue.position - 1)}
-        onNext={() => player.skipToNextItem()}
         onPlaybackChange={(isPaused) => (isPaused ? player.play() : player.pause())}
         onVolumeChange={(vol) => {
           player.volume = vol;

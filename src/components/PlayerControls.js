@@ -114,9 +114,7 @@ const StyledButton = styled.button`
   }
 `;
 
-function PlayerControls({
-  onSeek, onPrevious, onNext, onVolumeChange,
-}) {
+function PlayerControls({ onSeek, onVolumeChange }) {
   const { player } = window.MusicKitInstance;
   const { Events, PlaybackStates } = window.MusicKit;
 
@@ -168,6 +166,8 @@ function PlayerControls({
     };
   }, []);
 
+  const playbackPercentage = (playbackTime / playbackDuration) * 100; // out of 100
+
   return (
     <Wrapper>
       <SliderWrapper gridArea="progress-bar">
@@ -180,10 +180,8 @@ function PlayerControls({
           <SliderBarBackground />
           <SliderBarBuffer progress={currentBufferedProgress} />
           <SliderBarSeek progress={seekIntentValue * 100} />
-          <SliderBarPlayTime
-            progress={(playbackTime / playbackDuration) * 100}
-          />
-          <SliderHandle progress={(playbackTime / playbackDuration) * 100} />
+          <SliderBarPlayTime progress={playbackPercentage} />
+          <SliderHandle progress={playbackPercentage} />
         </StyledSlider>
       </SliderWrapper>
       <SliderWrapper gridArea="volume">
@@ -199,14 +197,22 @@ function PlayerControls({
 
       <TimeDisplay numSeconds={playbackTime} />
       <Controls>
-        <StyledButton onClick={onPrevious}>
+        <StyledButton
+          onClick={() => {
+            if (playbackPercentage <= 10) {
+              player.skipToPreviousItem();
+            } else {
+              player.seekToTime(0);
+            }
+          }}
+        >
           <PlayerIcon.Previous />
         </StyledButton>
         <StyledButton onClick={() => onPlaybackChange(!isPlaying)}>
           {isPlaying && <PlayerIcon.Pause />}
           {!isPlaying && <PlayerIcon.Play />}
         </StyledButton>
-        <StyledButton onClick={onNext}>
+        <StyledButton onClick={() => player.skipToNextItem()}>
           <PlayerIcon.Next />
         </StyledButton>
       </Controls>
@@ -220,8 +226,6 @@ function PlayerControls({
 
 PlayerControls.propTypes = {
   onSeek: PropTypes.func.isRequired,
-  onPrevious: PropTypes.func.isRequired,
-  onNext: PropTypes.func.isRequired,
   onVolumeChange: PropTypes.func.isRequired,
 };
 
