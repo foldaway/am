@@ -60,6 +60,9 @@ function SquareImage(props) {
       <LazyImage
         placeholder={formatArtworkURL(artwork, 30)}
         src={formatArtworkURL(artwork, 300)}
+        visibilitySensorProps={{
+          scrollThrottle: 2,
+        }}
       >
         {(src, loading) => <Image src={src} loading={loading} alt={alt} />}
       </LazyImage>
