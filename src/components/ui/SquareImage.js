@@ -21,13 +21,6 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: 200ms filter;
-
-  ${(props) => props.loading
-    && props.src
-    && css`
-      filter: blur(5px);
-    `}
 
   ${(props) => !props.src
     && css`
@@ -56,7 +49,11 @@ function SquareImage(props) {
     <ArtWrapper {...props}>
       <Spacer viewBox="0 0 1 1" />
       <FallbackImage />
-      <Image src={formatArtworkURL(artwork, 300, 300)} alt={alt} />
+      <Image
+        loading="lazy"
+        src={formatArtworkURL(artwork, 300, 300)}
+        alt={alt}
+      />
     </ArtWrapper>
   );
 }
