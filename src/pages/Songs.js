@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import Song from '../components/Song';
 import Loader from '../components/Loader';
 import LargeTitle from '../components/large-title';
+import { playSong } from '../util/play';
 
 /* eslint-disable no-await-in-loop */
 
@@ -24,7 +24,7 @@ const GroupTitle = styled.span`
   color: ${(props) => props.theme.text.tertiary};
 `;
 
-function SongLibrary({ onSongSelected }) {
+function SongLibrary() {
   const [songs, setSongs] = useState([]);
 
   function getSongElements() {
@@ -46,7 +46,7 @@ function SongLibrary({ onSongSelected }) {
         <Song
           key={song.id}
           song={song}
-          onSelected={() => onSongSelected(songs, index)}
+          onSelected={() => playSong(songs, index)}
         />,
       );
     });
@@ -95,9 +95,5 @@ function SongLibrary({ onSongSelected }) {
     </Wrapper>
   );
 }
-
-SongLibrary.propTypes = {
-  onSongSelected: PropTypes.func.isRequired,
-};
 
 export default SongLibrary;

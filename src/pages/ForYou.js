@@ -11,6 +11,7 @@ import Playlist from '../components/Playlist';
 import Loader from '../components/Loader';
 import LargeTitle from '../components/large-title';
 import AlbumGrid from '../components/album-grid';
+import { playAlbum } from '../util/play';
 
 const Wrapper = styled.div`
   display: grid;
@@ -44,7 +45,6 @@ const StyledLink = styled(Link)`
 const Recommendation = (props) => {
   const {
     rec: { attributes, id, relationships },
-    onAlbumSelected,
   } = props;
   const { title, reason } = attributes;
   const { data } = relationships.recommendations || relationships.contents;
@@ -65,13 +65,11 @@ const Recommendation = (props) => {
           <Recommendation
             key={item.id}
             rec={item}
-            onAlbumSelected={onAlbumSelected}
+            onAlbumSelected={playAlbum}
           />
         );
       case 'albums':
-        return (
-          <Album key={item.id} album={item} onSelected={onAlbumSelected} />
-        );
+        return <Album key={item.id} album={item} onSelected={playAlbum} />;
       default:
         return null;
     }

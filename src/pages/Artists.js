@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 import Loader from '../components/Loader';
@@ -7,6 +6,7 @@ import Artist from '../components/Artist';
 import Album from '../components/Album';
 import AlbumGrid from '../components/album-grid';
 import LargeTitle from '../components/large-title';
+import { playAlbum } from '../util/play';
 
 /* eslint-disable no-await-in-loop */
 
@@ -43,7 +43,7 @@ const AlbumCount = styled.span`
   color: ${(props) => props.theme.text.secondary};
 `;
 
-function ArtistLibrary({ onAlbumSelected }) {
+function ArtistLibrary() {
   const [artists, setArtists] = useState([]);
   const [currentArtist, setCurrentArtist] = useState(null);
   const [indivAlbums, setIndivAlbums] = useState([]);
@@ -108,11 +108,7 @@ albums
         <AlbumGrid>
           {indivAlbums.length > 0 ? (
             indivAlbums.map((album) => (
-              <Album
-                key={album.id}
-                album={album}
-                onSelected={onAlbumSelected}
-              />
+              <Album key={album.id} album={album} onSelected={playAlbum} />
             ))
           ) : (
             <Loader />
@@ -137,9 +133,5 @@ albums
     </Wrapper>
   );
 }
-
-ArtistLibrary.propTypes = {
-  onAlbumSelected: PropTypes.func.isRequired,
-};
 
 export default ArtistLibrary;

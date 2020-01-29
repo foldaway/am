@@ -92,20 +92,6 @@ function App() {
     };
   }, []);
 
-  async function playQueue(queueObj, queueIndex) {
-    try {
-      await window.MusicKitInstance.setQueue(queueObj);
-      await player.changeToMediaAtIndex(queueIndex);
-      await player.play();
-    } catch (e) {
-      setError(e.message);
-    }
-  }
-
-  const playAlbum = async (album, queueIndex) => playQueue({ album: album.id }, queueIndex);
-  const playPlaylist = async (playlist, queueIndex) => playQueue({ playlist: playlist.id }, queueIndex);
-  const playSong = async (items, queueIndex) => playQueue({ items: items.slice(queueIndex) }, 0);
-
   return (
     <ThemeProvider theme={theme}>
       <IconContext.Provider value={{ color: theme.text.primary }}>
@@ -116,89 +102,25 @@ function App() {
               <Route
                 exact
                 path="/library/recently-added"
-                render={(props) => (
-                  <RecentlyAdded
-                    onAlbumSelected={playAlbum}
-                    onPlaylistSelected={console.log}
-                    {...props}
-                  />
-                )}
+                component={RecentlyAdded}
               />
-              <Route
-                exact
-                path="/library/artists"
-                render={(props) => (
-                  <Artists onAlbumSelected={playAlbum} {...props} />
-                )}
-              />
-              <Route
-                exact
-                path="/library/albums"
-                render={(props) => (
-                  <Albums onAlbumSelected={playAlbum} {...props} />
-                )}
-              />
-              <Route
-                exact
-                path="/library/songs"
-                render={(props) => <Songs onSongSelected={playSong} {...props} />}
-              />
+              <Route exact path="/library/artists" component={Artists} />
+              <Route exact path="/library/albums" component={Albums} />
+              <Route exact path="/library/songs" component={Songs} />
               <Route exact path="/library/playlists" component={Playlists} />
               <Route
                 path="/library/playlists/:playlistID"
-                render={(props) => (
-                  <PlaylistLibrary
-                    isLibrary
-                    onSongSelected={playPlaylist}
-                    {...props}
-                  />
-                )}
+                render={(props) => <PlaylistLibrary isLibrary {...props} />}
               />
               <Route
                 path="/playlist/:playlistID"
                 render={(props) => (
-                  <PlaylistLibrary
-                    isLibrary={false}
-                    onSongSelected={playPlaylist}
-                    {...props}
-                  />
+                  <PlaylistLibrary isLibrary={false} {...props} />
                 )}
               />
-              <Route
-                path="/artist/:artistID"
-                render={(props) => (
-                  <ArtistPage
-                    onSongSelected={playSong}
-                    onAlbumSelected={playAlbum}
-                    {...props}
-                  />
-                )}
-              />
-              <Route
-                path="/search"
-                render={(props) => (
-                  <SearchCatalog
-                    onSongSelected={playSong}
-                    onAlbumSelected={playAlbum}
-                    {...props}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/for-you"
-                render={() => <ForYou onAlbumSelected={playAlbum} />}
-              />
-              <Route
-                path="/artist/id"
-                render={(props) => (
-                  <ArtistPage
-                    onAlbumSelected={playAlbum}
-                    onSongSelected={playSong}
-                    {...props}
-                  />
-                )}
-              />
+              <Route path="/artist/:artistID" component={ArtistPage} />
+              <Route path="/search" component={SearchCatalog} />
+              <Route exact path="/for-you" component={ForYou} />
               <Route
                 exact
                 path="/login"

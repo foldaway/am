@@ -14,6 +14,7 @@ import playlistPropType from '../prop_types/playlist';
 import artistPropType from '../prop_types/artist';
 import LargeTitle from '../components/large-title';
 import AlbumGrid from '../components/album-grid';
+import { playSong, playAlbum } from '../util/play';
 
 const Wrapper = styled.div`
   display: grid;
@@ -145,7 +146,7 @@ ArtistsView.propTypes = {
   artists: PropTypes.arrayOf(artistPropType).isRequired,
 };
 
-function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
+function SearchCatalog({ location }) {
   const { term } = location.state;
 
   const [isSearching, setIsSearching] = useState(term !== null);
@@ -180,8 +181,8 @@ function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
       {!isSearching && (
         <ResultsWrapper>
           <ArtistsView artists={artists} />
-          <SongsView songs={songs} onSongSelected={onSongSelected} />
-          <AlbumsView albums={albums} onAlbumSelected={onAlbumSelected} />
+          <SongsView songs={songs} onSongSelected={playSong} />
+          <AlbumsView albums={albums} onAlbumSelected={playAlbum} />
           <PlaylistsView playlists={playlists} />
         </ResultsWrapper>
       )}
@@ -191,8 +192,6 @@ function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
 
 SearchCatalog.propTypes = {
   location: PropTypes.object.isRequired,
-  onAlbumSelected: PropTypes.func.isRequired,
-  onSongSelected: PropTypes.func.isRequired,
 };
 
 export default SearchCatalog;

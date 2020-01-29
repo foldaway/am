@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import {
   groupBy,
   omitBy,
@@ -17,6 +16,8 @@ import Loader from '../components/Loader';
 import AlbumGrid from '../components/album-grid';
 import LargeTitle from '../components/large-title';
 
+import { playAlbum } from '../util/play';
+
 /* eslint-disable no-await-in-loop */
 
 const sleep = async (msec) => new Promise((resolve) => setTimeout(resolve, msec));
@@ -31,7 +32,7 @@ const Wrapper = styled.div`
   }
 `;
 
-function RecentlyAddedLibrary({ onAlbumSelected, onPlaylistSelected }) {
+function RecentlyAddedLibrary() {
   const [media, setMedia] = useState([]);
 
   useEffect(() => {
@@ -80,7 +81,7 @@ function RecentlyAddedLibrary({ onAlbumSelected, onPlaylistSelected }) {
   function mediaView(m) {
     switch (m.type) {
       case 'library-albums':
-        return <Album key={m.id} album={m} onSelected={onAlbumSelected} />;
+        return <Album key={m.id} album={m} onSelected={playAlbum} />;
       // case 'library-playlists':
       //   return (
       //     <Playlist
@@ -124,10 +125,5 @@ function RecentlyAddedLibrary({ onAlbumSelected, onPlaylistSelected }) {
     </Wrapper>
   );
 }
-
-RecentlyAddedLibrary.propTypes = {
-  onAlbumSelected: PropTypes.func.isRequired,
-  onPlaylistSelected: PropTypes.func.isRequired,
-};
 
 export default RecentlyAddedLibrary;

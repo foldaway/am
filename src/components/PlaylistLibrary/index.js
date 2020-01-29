@@ -9,6 +9,7 @@ import Song from '../Song';
 import Loader from '../Loader';
 
 import LargeTitle from '../large-title';
+import { playPlaylist } from '../../util/play';
 
 /* eslint-disable no-await-in-loop */
 
@@ -67,7 +68,7 @@ const Songs = styled.div`
   overflow-x: scroll;
 `;
 
-function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
+function PlaylistLibrary({ match, isLibrary }) {
   const [songs, setSongs] = useState([]);
   const [playlist, setPlaylist] = useState(null);
   const { playlistID } = match.params;
@@ -158,7 +159,7 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
             <StyledSong
               key={song.id}
               song={song}
-              onSelected={() => onSongSelected(playlist, index)}
+              onSelected={() => playPlaylist(playlist, index)}
             />
           ))
         ) : (
@@ -172,7 +173,6 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
 PlaylistLibrary.propTypes = {
   isLibrary: PropTypes.bool.isRequired,
   match: PropTypes.object.isRequired,
-  onSongSelected: PropTypes.func.isRequired,
 };
 
 export default PlaylistLibrary;

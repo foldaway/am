@@ -14,6 +14,7 @@ import fetchArtistImage from '../../util/fetch-artist-img';
 import MusicVideo from '../MusicVideo';
 import LargeTitle from '../large-title';
 import AlbumGrid from '../album-grid';
+import { playAlbum, playSong } from '../../util/play';
 
 const Wrapper = styled.div`
   display: grid;
@@ -125,7 +126,7 @@ const MetadataLink = styled.a`
   grid-area: metadata;
 `;
 
-function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
+function ArtistPage({ match }) {
   const [artist, setArtist] = useState(null);
   const [albums, setAlbums] = useState([]);
   const [songs, setSongs] = useState([]);
@@ -209,7 +210,7 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
         <LargeTitle>Latest Release</LargeTitle>
         {albums && albums.length > 0 ? (
           <AlbumGrid>
-            <Album album={albums[0]} onSelected={onAlbumSelected} />
+            <Album album={albums[0]} onSelected={playAlbum} />
           </AlbumGrid>
         ) : null}
       </LatestReleaseContainer>
@@ -220,7 +221,7 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
             <Song
               key={song.id}
               song={song}
-              onSelected={() => onSongSelected(songs, index)}
+              onSelected={() => playSong(songs, index)}
             />
           ))}
         </Songs>
@@ -229,7 +230,7 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
         <LargeTitle>Albums</LargeTitle>
         <AlbumGrid>
           {albums.slice(1).map((album) => (
-            <Album key={album.id} album={album} onSelected={onAlbumSelected} />
+            <Album key={album.id} album={album} onSelected={playAlbum} />
           ))}
         </AlbumGrid>
       </AlbumsContainer>
@@ -282,8 +283,6 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
 
 ArtistPage.propTypes = {
   match: PropTypes.object.isRequired,
-  onAlbumSelected: PropTypes.func.isRequired,
-  onSongSelected: PropTypes.func.isRequired,
 };
 
 export default ArtistPage;
