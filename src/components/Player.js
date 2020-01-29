@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   IoIosArrowDropupCircle,
   IoIosArrowDropdownCircle,
@@ -73,10 +73,14 @@ const Queue = styled.div`
   :last-child {
     margin-bottom: 0;
   }
+`;
 
-  .active {
-    background: ${(props) => props.theme.background.secondary};
-  }
+const QueueSong = styled(Song)`
+  border-radius: 3px;
+  ${(props) => props.active
+    && css`
+      background: ${props.theme.background.secondary};
+    `}
 `;
 
 const CurrentSong = styled(Song)`
@@ -117,16 +121,13 @@ function Player(props) {
       </Header>
       <Queue visible={isOpen}>
         {queue.items.map((item, index) => (
-          <div
+          <QueueSong
             key={item.id}
-            className={nowPlayingItemIndex === index && 'active'}
+            active={nowPlayingItemIndex === index}
             ref={nowPlayingItemIndex === index ? activeRef : null}
-          >
-            <Song
-              song={item}
-              onSelected={() => player.changeToMediaAtIndex(index)}
-            />
-          </div>
+            song={item}
+            onSelected={() => player.changeToMediaAtIndex(index)}
+          />
         ))}
       </Queue>
       {!isOpen && nowPlayingItemIndex !== -1 && (
