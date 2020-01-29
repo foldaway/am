@@ -5,6 +5,7 @@ const AlbumGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(160px, 190px));
   grid-column-gap: 30px;
   grid-row-gap: 30px;
+  justify-content: start;
 `;
 
 export default AlbumGrid;

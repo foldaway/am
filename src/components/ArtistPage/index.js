@@ -135,13 +135,12 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
   const [currentMusicVideo, setCurrentMusicVideo] = useState(null);
   const [bannerURL, setBannerURL] = useState(null);
 
+  const { artistID } = match.params;
+
   useEffect(() => {
-    if (match.params.artistID === null) {
+    if (artistID === null) {
       return;
     }
-    const artistID = Buffer.from(match.params.artistID, 'base64').toString(
-      'ascii',
-    );
 
     async function fetchArtistData() {
       const artistResult = await window.MusicKitInstance.api.artist(artistID);
@@ -250,8 +249,8 @@ function ArtistPage({ match, onAlbumSelected, onSongSelected }) {
         <AlbumGrid>
           {playlists.map((playlist) => (
             <Link
-              href={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}
-              to={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}
+              href={`/playlist/${playlist.id}`}
+              to={`/playlist/${playlist.id}`}
             >
               <Playlist playlist={playlist} />
             </Link>

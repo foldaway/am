@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { imgURLGen, srcSetGen } from '../../util/img';
 
 import playlistPropType from '../../prop_types/playlist';
+import SquareImage from '../SquareImage';
+
+const StyledSquareImage = styled(SquareImage)``;
 
 const Wrapper = styled.div`
   display: grid;
@@ -18,46 +21,32 @@ const Wrapper = styled.div`
   &:hover {
     cursor: pointer;
 
-    .title,
-    .curator {
-      text-decoration: underline;
+    ${StyledSquareImage} {
+      transform: scale(1.04);
     }
   }
 `;
 
-const Image = styled.img`
-  width: 100%;
-  margin-bottom: 4px;
-  border-radius: 6px;
-  align-self: center;
-
-  object-fit: cover;
-  border: 1px solid $faintgray;
-
-  &::before {
-    content: "";
-    display: block;
-    padding-top: 100%;
-  }
-`;
-
 const Title = styled.span`
-  font-weight: 400;
+  font-weight: 500;
   color: ${(props) => props.theme.text.primary};
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  text-align: center;
+  margin-top: 4px;
 `;
 
 const Curator = styled.span`
   font-weight: 400;
   color: ${(props) => props.theme.text.secondary};
   font-size: 0.9em;
+  text-align: center;
 `;
 
 const Playlist = ({ playlist, playlist: { attributes } }) => (
   <Wrapper>
-    <Image
+    <StyledSquareImage
       src={
         attributes.artwork ? imgURLGen(attributes.artwork.url, { w: 75 }) : null
       }

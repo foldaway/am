@@ -10,11 +10,15 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  height: 100%;
   display: grid;
   align-items: center;
-  grid-template-areas: "playback-controls volume progress-bar time-marker bitrate";
-  grid-template-columns: auto 1fr 10fr auto auto;
+  justify-items: center;
+  grid-template-areas:
+    "progress-bar progress-bar"
+    "time-marker bitrate"
+    "playback-controls playback-controls"
+    "volume volume";
+  grid-template-columns: "1fr 1fr";
   grid-template-rows: 1fr;
   grid-column-gap: 10px;
 `;
@@ -64,6 +68,7 @@ const SliderHandle = styled.div`
 const SliderWrapper = styled.div`
   grid-area: ${(props) => props.gridArea};
 
+  justify-self: stretch;
   &:hover {
     cursor: pointer;
     ${SliderHandle} {
@@ -73,7 +78,10 @@ const SliderWrapper = styled.div`
 `;
 
 const TimeDisplay = styled(FormattedTime)`
-  color: ${(props) => props.theme.text.primary};
+  justify-self: start;
+  color: ${(props) => props.theme.text.secondary};
+  font-weight: 100;
+  font-size: 0.7em;
 `;
 
 const Controls = styled.div`
@@ -81,6 +89,7 @@ const Controls = styled.div`
 `;
 
 const Bitrate = styled.span`
+  justify-self: end;
   grid-area: bitrate;
   color: ${(props) => props.theme.text.secondary};
   font-weight: 100;
@@ -106,18 +115,12 @@ const StyledButton = styled.button`
 `;
 
 function PlayerControls({
-  onSeek,
-  onPrevious,
-  onNext,
-  hasPrevious,
-  hasNext,
-  onVolumeChange,
+  onSeek, onPrevious, onNext, onVolumeChange,
 }) {
   const { player } = window.MusicKitInstance;
   const { Events, PlaybackStates } = window.MusicKit;
 
   const [bitrate, setBitrate] = useState(player.bitrate);
-  const [nowPlayingItem, setNowPlayingItem] = useState(null);
   const [playbackTime, setPlaybackTime] = useState(0);
   const [playbackState, setPlaybackState] = useState(player.playbackState);
   const [playbackDuration, setPlaybackDuration] = useState(0);
@@ -125,12 +128,7 @@ function PlayerControls({
   const [volume, setVolume] = useState(player.volume);
   const [seekIntentValue, setSeekIntentValue] = useState(0);
 
-  const progressMax = nowPlayingItem !== null ? nowPlayingItem.attributes.durationInMillis : 0;
-
   const isPlaying = playbackState === PlaybackStates.playing;
-
-  const isBuffering = playbackState === PlaybackStates.waiting
-    || playbackState === PlaybackStates.loading;
 
   function onPlaybackChange() {
     switch (playbackState) {
@@ -153,12 +151,10 @@ function PlayerControls({
       setCurrentBufferedProgress(player.currentBufferedProgress);
     };
     const volumeCb = ({ target }) => setVolume(target.volume);
-    const mediaItemDidChangeCb = ({ item }) => setNowPlayingItem(item);
     const bitrateCb = ({ bitrate: b }) => setBitrate(b);
     player.addEventListener(Events.playbackStateDidChange, playbackStateCb);
     player.addEventListener(Events.playbackTimeDidChange, progressCb);
     player.addEventListener(Events.playbackVolumeDidChange, volumeCb);
-    player.addEventListener(Events.mediaItemDidChange, mediaItemDidChangeCb);
     player.addEventListener(Events.playbackBitrateDidChange, bitrateCb);
 
     return () => {
@@ -168,10 +164,6 @@ function PlayerControls({
       );
       player.removeEventListener(Events.playbackProgressDidChange, progressCb);
       player.removeEventListener(Events.playbackVolumeDidChange, volumeCb);
-      player.removeEventListener(
-        Events.mediaItemDidChange,
-        mediaItemDidChangeCb,
-      );
       player.removeEventListener(Events.playbackBitrateDidChange, bitrateCb);
     };
   }, []);
@@ -227,8 +219,6 @@ function PlayerControls({
 }
 
 PlayerControls.propTypes = {
-  hasPrevious: PropTypes.bool.isRequired,
-  hasNext: PropTypes.bool.isRequired,
   onSeek: PropTypes.func.isRequired,
   onPrevious: PropTypes.func.isRequired,
   onNext: PropTypes.func.isRequired,

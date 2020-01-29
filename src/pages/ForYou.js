@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
-import recPropType from '../../prop_types/recommendation';
+import recPropType from '../prop_types/recommendation';
 
-import Album from '../Album';
-import Playlist from '../Playlist';
-import Loader from '../Loader';
-import LargeTitle from '../large-title';
-import AlbumGrid from '../album-grid';
+import Album from '../components/Album';
+import Playlist from '../components/Playlist';
+import Loader from '../components/Loader';
+import LargeTitle from '../components/large-title';
+import AlbumGrid from '../components/album-grid';
 
 const Wrapper = styled.div`
   display: grid;
@@ -37,6 +37,10 @@ const Reason = styled.span`
   font-weight: 300;
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const Recommendation = (props) => {
   const {
     rec: { attributes, id, relationships },
@@ -44,38 +48,34 @@ const Recommendation = (props) => {
   } = props;
   const { title, reason } = attributes;
   const { data } = relationships.recommendations || relationships.contents;
-  let views = null;
-
-  switch (data[0].type) {
-    case 'playlists':
-      views = data.map((p) => (
-        <Link
-          key={p.id}
-          href={`/playlist/${Buffer.from(p.id).toString('base64')}`}
-          to={`/playlist/${Buffer.from(p.id).toString('base64')}`}
-        >
-          <Playlist playlist={p} />
-        </Link>
-      ));
-      break;
-    case 'personal-recommendation':
-      views = data.map((rec) => (
-        <Recommendation
-          key={rec.id}
-          rec={rec}
-          onAlbumSelected={onAlbumSelected}
-        />
-      ));
-      break;
-    case 'albums':
-      views = data.map((album) => (
-        <Album key={album.id} album={album} onSelected={onAlbumSelected} />
-      ));
-      break;
-    default:
-      views = null;
-      break;
-  }
+  const views = data.map((item) => {
+    switch (item.type) {
+      case 'playlists':
+        return (
+          <StyledLink
+            key={item.id}
+            href={`/playlist/${item.id}`}
+            to={`/playlist/${item.id}`}
+          >
+            <Playlist playlist={item} />
+          </StyledLink>
+        );
+      case 'personal-recommendation':
+        return (
+          <Recommendation
+            key={item.id}
+            rec={item}
+            onAlbumSelected={onAlbumSelected}
+          />
+        );
+      case 'albums':
+        return (
+          <Album key={item.id} album={item} onSelected={onAlbumSelected} />
+        );
+      default:
+        return null;
+    }
+  });
 
   return (
     <RecommendationWrapper key={id}>

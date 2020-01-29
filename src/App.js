@@ -1,123 +1,92 @@
 import 'normalize.css';
 import 'babel-polyfill';
+import 'typeface-ibm-plex-sans';
+import 'typeface-ibm-plex-mono';
 
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import styled, { ThemeProvider } from 'styled-components';
+import { IconContext } from 'react-icons';
 import Header from './components/Header';
 import LoginContainer from './components/LoginContainer';
-import AlbumLibrary from './components/AlbumLibrary';
-import SongLibrary from './components/SongLibrary';
+import Albums from './pages/Albums';
+import Songs from './pages/Songs';
 import PlaylistLibrary from './components/PlaylistLibrary';
 import Player from './components/Player';
-import SideMenu from './components/SideMenu';
-import SearchCatalog from './components/SearchCatalog';
+import SearchCatalog from './pages/Search';
 
 import ArtistPage from './components/ArtistPage';
-import ArtistLibrary from './components/ArtistLibrary';
-import ForYouPage from './components/ForYouPage';
-import RecentlyAddedLibrary from './components/RecentlyAddedLibrary';
+import Artists from './pages/Artists';
+import ForYou from './pages/ForYou';
+import RecentlyAdded from './pages/RecentlyAdded';
 import Modal from './components/Modal';
+import Playlists from './pages/Playlists';
 
 const now = new Date();
 const useDarkTheme = now.getHours() >= 19 || now.getHours() <= 7;
 
-const theme = useDarkTheme
-  ? {
-    text: {
-      primary: 'hsl(208, 12%, 88%)',
-      secondary: 'hsl(207, 12%, 43%)',
-      tertiary: 'rgb(248, 248, 250)',
-    },
-    background: {
-      primary: 'rgb(51, 51, 51)',
-      secondary: 'rgba(0, 0, 0, 0.0470588)',
-      tertiary: 'rgb(248, 248, 250)',
-    },
-    branding: 'rgb(255, 45, 85)',
+const commonTheme = {
+  branding: 'rgb(255, 45, 85)',
+};
 
-    black: 'rgb(17, 17, 17)',
-    lightblack: 'rgb(51, 51, 51)',
-    darkgray: 'rgb(59, 59, 59)',
-    gray: 'rgb(102, 102, 102)',
-    lightgray: 'rgb(187, 187, 187)',
-    faintgray: 'rgb(248, 248, 250)',
-    dullwhite: 'rgb(230, 230, 230)',
-    highlightgray: 'rgba(0, 0, 0, 0.0470588)',
-  }
-  : {
-    text: {
-      primary: 'hsl(209, 15%, 28%)',
-      secondary: 'hsl(208, 12%, 63%)',
-      tertiary: 'rgb(187, 187, 187)',
-    },
-    background: {
-      primary: 'rgb(248, 248, 250)',
-      secondary: 'rgb(187, 187, 187)',
-      tertiary: 'rgb(51, 51, 51)',
-    },
-    branding: 'rgb(255, 45, 85)',
-  };
+const dayTheme = {
+  text: {
+    primary: 'hsl(209, 15%, 28%)',
+    secondary: 'hsl(208, 12%, 63%)',
+    tertiary: 'rgb(187, 187, 187)',
+  },
+  background: {
+    primary: 'rgb(248, 248, 250)',
+    secondary: 'rgb(187, 187, 187)',
+    tertiary: 'rgb(51, 51, 51)',
+  },
+  branding: 'rgb(255, 45, 85)',
+};
+
+const nightTheme = {
+  text: {
+    primary: 'hsl(208, 12%, 88%)',
+    secondary: 'hsl(207, 12%, 43%)',
+    tertiary: 'rgb(248, 248, 250)',
+  },
+  background: {
+    primary: 'rgb(51, 51, 51)',
+    secondary: 'rgb(96, 96, 96)',
+    tertiary: 'rgb(248, 248, 250)',
+  },
+};
+
+const theme = Object.assign(commonTheme, useDarkTheme ? nightTheme : dayTheme);
 
 const Wrapper = styled.div`
-  display: grid;
-  grid-template-areas:
-    "header"
-    "main-content";
-  grid-auto-flow: row;
-  grid-template-rows: auto 1fr;
+  display: flex;
+  flex-direction: column;
   height: 100%;
 `;
 
-const MainContent = styled.div`
-  grid-area: main-content;
-  display: grid;
-  grid-template-areas:
-    "side-menu view"
-    "side-menu player";
-  grid-template-columns: 1fr 5fr;
-  grid-template-rows: 3fr 1fr;
-  grid-column-gap: 10px;
-  grid-row-gap: 10px;
-  overflow: hidden;
-`;
-
 const View = styled.div`
-  grid-area: view;
-  padding-right: 20px;
+  height: 100%;
+  padding: 20px;
   overflow-y: scroll;
 `;
 
-const PlayerWrapper = styled.div`
-  grid-area: player;
-  overflow: hidden;
-`;
-
 function App() {
-  const { Events, PlaybackStates } = window.MusicKit;
+  const { Events } = window.MusicKit;
   const { player, isAuthorized } = window.MusicKitInstance;
 
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthorized);
-  const [viewArgs, setViewArgs] = useState(null);
   const [queue, setQueue] = useState({ items: [] });
-  const [playbackState, setPlaybackState] = useState(player.playbackState);
   const [error, setError] = useState(null);
   const [nowPlayingItemIndex, setNowPlayingItemIndex] = useState(-1);
 
   useEffect(() => {
-    const playbackStateCb = ({ state }) => setPlaybackState(state);
     const queueCb = (items) => setQueue({ items });
     const queuePosCb = ({ position }) => setNowPlayingItemIndex(position);
-    player.addEventListener(Events.playbackStateDidChange, playbackStateCb);
     player.addEventListener(Events.queueItemsDidChange, queueCb);
     player.addEventListener(Events.queuePositionDidChange, queuePosCb);
 
     return () => {
-      player.removeEventListener(
-        Events.playbackStateDidChange,
-        playbackStateCb,
-      );
       player.removeEventListener(Events.queueItemsDidChange, queueCb);
       player.removeEventListener(Events.queuePositionDidChange, queuePosCb);
     };
@@ -125,9 +94,6 @@ function App() {
 
   async function playQueue(queueObj, queueIndex) {
     try {
-      if (playbackState === PlaybackStates.playing) {
-        await player.stop();
-      }
       await window.MusicKitInstance.setQueue(queueObj);
       await player.changeToMediaAtIndex(queueIndex);
       await player.play();
@@ -142,26 +108,16 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Wrapper>
-        <Header />
-        <Router>
-          <MainContent>
-            {isLoggedIn ? <SideMenu /> : null}
-            {isLoggedIn ? (
-              <PlayerWrapper>
-                <Player
-                  queue={queue}
-                  nowPlayingItemIndex={nowPlayingItemIndex}
-                  playbackState={playbackState}
-                />
-              </PlayerWrapper>
-            ) : null}
+      <IconContext.Provider value={{ color: theme.text.primary }}>
+        <Wrapper>
+          <Router>
+            <Header />
             <View>
               <Route
                 exact
                 path="/library/recently-added"
                 render={(props) => (
-                  <RecentlyAddedLibrary
+                  <RecentlyAdded
                     onAlbumSelected={playAlbum}
                     onPlaylistSelected={console.log}
                     {...props}
@@ -172,25 +128,24 @@ function App() {
                 exact
                 path="/library/artists"
                 render={(props) => (
-                  <ArtistLibrary onAlbumSelected={playAlbum} {...props} />
+                  <Artists onAlbumSelected={playAlbum} {...props} />
                 )}
               />
               <Route
                 exact
                 path="/library/albums"
                 render={(props) => (
-                  <AlbumLibrary onAlbumSelected={playAlbum} {...props} />
+                  <Albums onAlbumSelected={playAlbum} {...props} />
                 )}
               />
               <Route
                 exact
                 path="/library/songs"
-                render={(props) => (
-                  <SongLibrary onSongSelected={playSong} {...props} />
-                )}
+                render={(props) => <Songs onSongSelected={playSong} {...props} />}
               />
+              <Route exact path="/library/playlists" component={Playlists} />
               <Route
-                path="/library/playlist/:playlistID"
+                path="/library/playlists/:playlistID"
                 render={(props) => (
                   <PlaylistLibrary
                     isLibrary
@@ -232,40 +187,41 @@ function App() {
               <Route
                 exact
                 path="/for-you"
-                render={() => <ForYouPage onAlbumSelected={playAlbum} />}
+                render={() => <ForYou onAlbumSelected={playAlbum} />}
               />
               <Route
                 path="/artist/id"
                 render={(props) => (
                   <ArtistPage
-                    artist={viewArgs}
                     onAlbumSelected={playAlbum}
                     onSongSelected={playSong}
                     {...props}
                   />
                 )}
               />
+              <Route
+                exact
+                path="/login"
+                render={(props) => (
+                  <LoginContainer
+                    onLoginSuccess={() => setIsLoggedIn(true)}
+                    {...props}
+                  />
+                )}
+              />
             </View>
-            <Route
-              exact
-              path="/login"
-              render={(props) => (
-                <LoginContainer
-                  onLoginSuccess={() => setIsLoggedIn(true)}
-                  {...props}
-                />
-              )}
-            />
-
-            {isLoggedIn ? null : <Redirect to="/login" />}
-            {error !== null ? (
+            {isLoggedIn && (
+              <Player queue={queue} nowPlayingItemIndex={nowPlayingItemIndex} />
+            )}
+            {!isLoggedIn && <Redirect to="/login" />}
+            {error !== null && (
               <Modal onClose={() => setError(null)}>
                 <span>{error}</span>
               </Modal>
-            ) : null}
-          </MainContent>
-        </Router>
-      </Wrapper>
+            )}
+          </Router>
+        </Wrapper>
+      </IconContext.Provider>
     </ThemeProvider>
   );
 }

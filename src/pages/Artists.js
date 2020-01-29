@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import Loader from '../Loader';
-import Artist from '../Artist';
-import Album from '../Album';
-import AlbumGrid from '../album-grid';
-import LargeTitle from '../large-title';
+import Loader from '../components/Loader';
+import Artist from '../components/Artist';
+import Album from '../components/Album';
+import AlbumGrid from '../components/album-grid';
+import LargeTitle from '../components/large-title';
 
 /* eslint-disable no-await-in-loop */
 

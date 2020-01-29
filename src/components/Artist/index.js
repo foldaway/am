@@ -9,6 +9,7 @@ import artistPropType from '../../prop_types/artist';
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 8px;
 
   &:hover {
     cursor: pointer;
@@ -16,14 +17,19 @@ const Wrapper = styled.div`
 `;
 
 const Art = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   margin-right: 5px;
+  background-color: ${(props) => props.theme.background.secondary};
+  font-size: 0.7em;
+  text-align: center;
 `;
 
 const Title = styled.span`
   color: ${(props) => props.theme.text.primary};
+  font-weight: 500;
+  font-size: 0.9em;
 `;
 
 function Artist({ artist, artwork, onClick }) {
@@ -46,7 +52,7 @@ function Artist({ artist, artwork, onClick }) {
 
   return (
     <Wrapper onClick={onClick}>
-      <Art src={src} srcSet={srcSet} alt="artist" />
+      <Art src={src} srcSet={srcSet} alt="artist image" />
       <Title>{artist.attributes.name}</Title>
     </Wrapper>
   );

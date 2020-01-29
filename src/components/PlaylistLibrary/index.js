@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { sumBy } from 'lodash';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
@@ -14,21 +15,22 @@ import LargeTitle from '../large-title';
 const Wrapper = styled.div`
   display: grid;
   grid-template-areas:
-    "art title"
-    "art metadata"
-    "description description"
-    "songs songs";
-  grid-template-columns: auto 1fr;
+    "art songs"
+    "title songs"
+    "description songs"
+    "metadata songs";
+  grid-template-columns: 1fr 5fr;
   grid-template-rows: auto auto auto 1fr;
-  grid-column-gap: 10px;
+  column-gap: 10px;
+  row-gap: 10px;
   overflow: hidden;
   height: 100%;
 `;
 
-const Art = styled.div`
+const Art = styled.img`
   grid-area: art;
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
 `;
 
 const Title = styled(LargeTitle)`
@@ -37,38 +39,42 @@ const Title = styled(LargeTitle)`
 
 const Metadata = styled.span`
   grid-area: metadata;
-  color: ${(props) => props.theme.text.tertiary};
+  color: ${(props) => props.theme.text.secondary};
   font-size: 0.9em;
 `;
 
 const Description = styled.span`
   grid-area: description;
-  font-size: 0.8em;
-  font-weight: 300;
+  font-size: 0.9em;
+  font-weight: 400;
+  line-height: 130%;
 
-  color: ${(props) => props.theme.text.tertiary};
+  color: ${(props) => props.theme.text.secondary};
+`;
+
+const StyledSong = styled(Song)`
+  width: 25vw;
+  margin-right: 48px;
+  margin-bottom: 16px;
 `;
 
 const Songs = styled.div`
   grid-area: songs;
-  display: grid;
-  grid-auto-flow: row;
-  grid-row-gap: 8px;
-  overflow-y: scroll;
-  align-items: self-start;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: start;
+  overflow-x: scroll;
 `;
 
 function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
   const [songs, setSongs] = useState([]);
   const [playlist, setPlaylist] = useState(null);
+  const { playlistID } = match.params;
 
   useEffect(() => {
     async function loadPlaylistMetadata() {
       setPlaylist(null);
-      const playlistID = Buffer.from(
-        match.params.playlistID,
-        'base64',
-      ).toString('ascii');
       const requestAPI = isLibrary
         ? window.MusicKitInstance.api.library
         : window.MusicKitInstance.api;
@@ -83,10 +89,6 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
       let offset = 0;
 
       setSongs([]);
-      const playlistID = Buffer.from(
-        match.params.playlistID,
-        'base64',
-      ).toString('ascii');
 
       if (isLibrary) {
         do {
@@ -125,6 +127,10 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
   const { attributes } = playlist;
   const artworkURL = attributes.artwork ? attributes.artwork.url : '';
   const description = 'description' in attributes ? attributes.description.standard : '';
+  const totalDuration = sumBy(songs, (song) => song.attributes.durationInMillis);
+  const { hours, minutes } = window.MusicKit.formattedMilliseconds(
+    totalDuration,
+  );
   return (
     <Wrapper>
       <Art
@@ -135,14 +141,21 @@ function PlaylistLibrary({ match, isLibrary, onSongSelected }) {
       <Title>{attributes.name}</Title>
       <Metadata>
         {songs.length}
-        {' '}
-songs
+        &nbsp;song
+        {songs.length > 1 && 's'}
+        <br />
+        {hours}
+        &nbsp;hour
+        {hours > 1 && 's'}
+        &nbsp;
+        {minutes}
+        &nbsp;minutes
       </Metadata>
       <Description>{description}</Description>
       <Songs>
         {songs.length > 0 ? (
           songs.map((song, index) => (
-            <Song
+            <StyledSong
               key={song.id}
               song={song}
               onSelected={() => onSongSelected(playlist, index)}

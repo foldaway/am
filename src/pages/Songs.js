@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import Song from '../Song';
-import Loader from '../Loader';
-import LargeTitle from '../large-title';
+import Song from '../components/Song';
+import Loader from '../components/Loader';
+import LargeTitle from '../components/large-title';
 
 /* eslint-disable no-await-in-loop */
 

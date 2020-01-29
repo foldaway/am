@@ -1,37 +1,67 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
+import {
+  IoIosArrowDropupCircle,
+  IoIosArrowDropdownCircle,
+} from 'react-icons/io';
 import Song from '../Song';
 import PlayerControls from '../PlayerControls';
 
 import trackPropType from '../../prop_types/track';
 
-import LargeTitle from '../large-title';
+import SmallTitle from '../ui/SmallTitle';
 
 const Wrapper = styled.div`
-  grid-area: player;
-  display: grid;
-
-  grid-template-areas:
-    "queue"
-    "controls";
-  grid-template-columns: 1fr;
-  grid-template-rows: 3fr 1fr;
-  grid-column-gap: 10px;
-  grid-row-gap: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
   overflow: hidden;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+
+  width: 400px;
+  height: ${(props) => (props.isOpen ? '50vh' : '180px')};
+  transition: height 200ms;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   background-color: ${(props) => props.theme.background.primary};
-  padding: 20px;
-  height: 100%;
+  padding: 10px;
   box-sizing: border-box;
 `;
 
-const Queue = styled.div`
-  grid-area: queue;
+const Header = styled.div`
   display: flex;
+  justify-content: space-between;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const CloseButton = styled.button`
+  color: ${(props) => props.theme.text.secondary};
+  background: none;
+  border: none;
+  transition: 200ms transform;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+  }
+`;
+
+const Queue = styled.div`
+  display: ${(props) => (props.visible ? 'flex' : 'none')};
   flex-direction: column;
   overflow-y: scroll;
+  flex: 1 1 auto;
+  margin: 10px 0;
 
   & > .title,
   & > div {
@@ -49,28 +79,43 @@ const Queue = styled.div`
   }
 `;
 
-const StyledPlayerControls = styled(PlayerControls)`
-  grid-area: controls;
+const CurrentSong = styled(Song)`
+  margin: 10px 0;
+`;
+
+const EmptyState = styled.span`
+  color: ${(props) => props.theme.text.secondary};
+  margin: 10px 0;
 `;
 
 function Player(props) {
-  const { queue, nowPlayingItemIndex, playbackState } = props;
+  const { queue, nowPlayingItemIndex } = props;
+  const [isOpen, setIsOpen] = useState(false);
   const activeRef = useRef(null);
 
   useEffect(() => {
     if (activeRef.current) {
       activeRef.current.scrollIntoView({ behaviour: 'smooth' });
     }
-  }, [activeRef]);
+  }, [isOpen]);
 
   const {
     MusicKitInstance: { player },
   } = window;
 
+  function toggleOpen() {
+    setIsOpen(!isOpen);
+  }
+
   return (
-    <Wrapper>
-      <Queue>
-        <LargeTitle>Queue</LargeTitle>
+    <Wrapper isOpen={isOpen}>
+      <Header onClick={toggleOpen}>
+        <SmallTitle>{isOpen ? 'Queue' : 'Player'}</SmallTitle>
+        <CloseButton onClick={toggleOpen}>
+          {isOpen ? <IoIosArrowDropdownCircle /> : <IoIosArrowDropupCircle />}
+        </CloseButton>
+      </Header>
+      <Queue visible={isOpen}>
         {queue.items.map((item, index) => (
           <div
             key={item.id}
@@ -84,9 +129,14 @@ function Player(props) {
           </div>
         ))}
       </Queue>
-      <StyledPlayerControls
-        hasPrevious={queue.position > 0}
-        hasNext={queue.position < queue.length - 1}
+      {!isOpen && nowPlayingItemIndex !== -1 && (
+        <CurrentSong
+          song={queue.items[nowPlayingItemIndex]}
+          onSelected={toggleOpen}
+        />
+      )}
+      {nowPlayingItemIndex === -1 && <EmptyState>Nothing playing</EmptyState>}
+      <PlayerControls
         onSeek={(time) => player.seekToTime(time)}
         onPrevious={() => player.changeToMediaAtIndex(queue.position - 1)}
         onNext={() => player.skipToNextItem()}
@@ -94,7 +144,6 @@ function Player(props) {
         onVolumeChange={(vol) => {
           player.volume = vol;
         }}
-        playbackState={playbackState}
       />
     </Wrapper>
   );
@@ -110,7 +159,6 @@ Player.propTypes = {
     length: PropTypes.number,
   }).isRequired,
   nowPlayingItemIndex: PropTypes.number,
-  playbackState: PropTypes.number.isRequired,
 };
 
 export default Player;

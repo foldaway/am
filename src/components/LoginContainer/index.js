@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 
 import styled from 'styled-components';
+import LargeTitle from '../large-title';
 
 const Wrapper = styled.div`
   display: flex;
@@ -14,6 +15,18 @@ const Wrapper = styled.div`
 
 const WelcomeMessage = styled.span`
   color: ${(props) => props.theme.text.primary};
+`;
+
+const LoginButton = styled.button`
+  background: none;
+  border: none;
+  color: ${(props) => props.theme.text.primary};
+  padding: 4px;
+
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 `;
 
 function LoginContainer({ onLoginSuccess }) {
@@ -31,10 +44,17 @@ function LoginContainer({ onLoginSuccess }) {
   }
   return (
     <Wrapper>
-      <WelcomeMessage>Welcome to AM.</WelcomeMessage>
-      <button type="button" onClick={onLoginButtonClicked}>
-        Log in
-      </button>
+      <WelcomeMessage>
+        <LargeTitle>
+          Welcome to AM, the robust web client for Apple Music.
+        </LargeTitle>
+        {' '}
+        Click
+        <LoginButton type="button" onClick={onLoginButtonClicked}>
+          here
+        </LoginButton>
+        to sign in.
+      </WelcomeMessage>
     </Wrapper>
   );
 }

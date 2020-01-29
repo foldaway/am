@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect, Link } from 'react-router-dom';
-import Autosuggest from 'react-autosuggest';
-import { debounce, get } from 'lodash';
-import styled, { css } from 'styled-components';
-import Album from '../Album';
-import Song from '../Song';
-import Artist from '../Artist';
-import Loader from '../Loader';
-import Playlist from '../Playlist';
-import albumPropType from '../../prop_types/album';
-import trackPropType from '../../prop_types/track';
-import playlistPropType from '../../prop_types/playlist';
-import artistPropType from '../../prop_types/artist';
-import LargeTitle from '../large-title';
-import AlbumGrid from '../album-grid';
+import { Link } from 'react-router-dom';
+import { get } from 'lodash';
+import styled from 'styled-components';
+import Album from '../components/Album';
+import Song from '../components/Song';
+import Artist from '../components/Artist';
+import Loader from '../components/Loader';
+import Playlist from '../components/Playlist';
+import albumPropType from '../prop_types/album';
+import trackPropType from '../prop_types/track';
+import playlistPropType from '../prop_types/playlist';
+import artistPropType from '../prop_types/artist';
+import LargeTitle from '../components/large-title';
+import AlbumGrid from '../components/album-grid';
 
 const Wrapper = styled.div`
   display: grid;
@@ -46,53 +45,8 @@ const ArtistsList = styled.div`
   overflow-y: hidden;
 `;
 
-const SuggestionsList = styled.div`
-  display: grid;
-  grid-auto-flow: row;
-  grid-row-gap: 2px;
-  padding: 2px 0 2px 0;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const Suggestion = styled.span`
-  color: ${(props) => props.theme.text.secondary};
-  font-size: 0.9em;
-
-  &:hover {
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  ${(props) => (props.isHighlighted
-    ? css`
-          background: ${props.theme.background.primary};
-        `
-    : null)}
-`;
-
-const SearchContainer = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-areas:
-    "input search"
-    "input nothing";
-  grid-template-columns: 5fr auto;
-  grid-template-rows: auto 1fr;
-`;
-
-const SearchInput = styled.input`
-  grid-area: input;
-
-  input[type="text"] {
-    width: 100%;
-    box-sizing: border-box;
-  }
-`;
-
-const SearchSubmit = styled.input`
-  grid-area: search;
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;
 
 function SongsView({ songs, onSongSelected }) {
@@ -148,13 +102,13 @@ function PlaylistsView({ playlists }) {
       <LargeTitle>Playlists</LargeTitle>
       <AlbumGrid>
         {playlists.map((playlist) => (
-          <Link
+          <StyledLink
             key={playlist.id}
-            href={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}
-            to={`/playlist/${Buffer.from(playlist.id).toString('base64')}`}
+            href={`/playlist/${playlist.id}`}
+            to={`/playlist/${playlist.id}`}
           >
             <Playlist playlist={playlist} />
-          </Link>
+          </StyledLink>
         ))}
       </AlbumGrid>
     </Section>
@@ -174,13 +128,13 @@ function ArtistsView({ artists }) {
       <LargeTitle>Artists</LargeTitle>
       <ArtistsList>
         {artists.map((artist) => (
-          <Link
+          <StyledLink
             key={artist.id}
-            href={`/artist/${Buffer.from(artist.id).toString('base64')}`}
-            to={`/artist/${Buffer.from(artist.id).toString('base64')}`}
+            href={`/artist/${artist.id}`}
+            to={`/artist/${artist.id}`}
           >
             <Artist artist={artist} artwork />
-          </Link>
+          </StyledLink>
         ))}
       </ArtistsList>
     </Section>
@@ -192,27 +146,13 @@ ArtistsView.propTypes = {
 };
 
 function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
-  const query = new URLSearchParams(location.search);
+  const { term } = location.state;
 
-  const [term, setTerm] = useState(query.get('term') || '');
-  const [input, setInput] = useState(term);
   const [isSearching, setIsSearching] = useState(term !== null);
   const [songs, setSongs] = useState([]);
   const [albums, setAlbums] = useState([]);
   const [artists, setArtists] = useState([]);
   const [playlists, setPlaylists] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
-
-  useEffect(
-    debounce(() => {
-      async function fetchSuggestions() {
-        const hints = await window.MusicKitInstance.api.searchHints(input);
-        setSuggestions(hints.terms);
-      }
-      fetchSuggestions();
-    }, 300),
-    [input],
-  );
 
   useEffect(() => {
     async function search() {
@@ -236,42 +176,6 @@ function SearchCatalog({ location, onAlbumSelected, onSongSelected }) {
 
   return (
     <Wrapper>
-      <Redirect to={`/search?term=${term}`} />
-      <SearchContainer>
-        <Autosuggest
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={() => {}}
-          onSuggestionsClearRequested={() => setSuggestions([])}
-          onSuggestionSelected={(_, { suggestion }) => setTerm(suggestion)}
-          getSuggestionValue={(sug) => sug}
-          inputProps={{
-            value: input,
-            onChange: (_, { newValue }) => setInput(newValue),
-          }}
-          renderSuggestion={(suggestion, { isHighlighted }) => (
-            <Suggestion isHighlighted={isHighlighted}>{suggestion}</Suggestion>
-          )}
-          renderInputComponent={(props) => (
-            <SearchInput
-              {...props}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  setTerm(input);
-                  setSuggestions([]);
-                } else {
-                  // Propagate the event to react-autosuggest
-                  props.onKeyDown(e);
-                }
-              }}
-            />
-          )}
-          renderSuggestionsContainer={({ containerProps, children }) => (
-            <SuggestionsList {...containerProps}>{children}</SuggestionsList>
-          )}
-          theme={{}}
-        />
-        <SearchSubmit type="submit" value="Search" />
-      </SearchContainer>
       {isSearching && <Loader />}
       {!isSearching && (
         <ResultsWrapper>

@@ -7,17 +7,9 @@ import Loader from '../Loader';
 
 import { imgURLGen, srcSetGen } from '../../util/img';
 import albumPropType from '../../prop_types/album';
+import SquareImage from '../SquareImage';
 
-const Image = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: 50ms filter;
-  background: gray;
-`;
+const StyledSquareImage = styled(SquareImage)``;
 
 const Wrapper = styled.div`
   position: relative;
@@ -34,38 +26,27 @@ const Wrapper = styled.div`
   &:hover {
     cursor: pointer;
 
-    ${Image} {
-      filter: brightness(120%);
+    ${StyledSquareImage} {
+      transform: scale(1.04);
     }
   }
 `;
 
-const ArtWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 6px;
-  border: 1px solid $faintgray;
-  margin-bottom: 4px;
-`;
-
-const Spacer = styled.svg`
-  width: 100%;
-  height: auto;
-`;
-
 const Title = styled.span`
-  font-weight: 400;
+  font-weight: 500;
   color: ${(props) => props.theme.text.primary};
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  text-align: center;
+  margin-top: 4px;
 `;
 
 const Artist = styled.span`
   font-weight: 400;
   color: ${(props) => props.theme.text.secondary};
   font-size: 0.9em;
+  text-align: center;
 `;
 
 const SongList = styled.div`
@@ -109,14 +90,11 @@ function Album({ album, onSelected }) {
 
   return (
     <Wrapper onClick={toggleSongList} role="presentation">
-      <ArtWrapper>
-        <Spacer viewBox="0 0 1 1" />
-        <Image
-          src={imgURLGen(url, { w: 75 })}
-          srcSet={srcSetGen(url)}
-          alt="album artwork"
-        />
-      </ArtWrapper>
+      <StyledSquareImage
+        src={url && imgURLGen(url, { w: 75 })}
+        srcSet={url && srcSetGen(url)}
+        alt="album artwork"
+      />
       <Title>{album.attributes.name}</Title>
       <Artist>{album.attributes.artistName}</Artist>
       <SongList>

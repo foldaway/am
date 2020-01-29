@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 `;
 
 const TrackNumber = styled.span`
-  font-family: "SF Mono", Consolas, monospace;
+  font-family: "IBM Plex Mono", "SF Mono", Consolas, monospace;
   color: ${(props) => props.theme.text.secondary};
 `;
 

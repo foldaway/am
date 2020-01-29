@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import Album from '../Album';
-import Loader from '../Loader';
-import AlbumGrid from '../album-grid';
+import Album from '../components/Album';
+import Loader from '../components/Loader';
+import AlbumGrid from '../components/album-grid';
 
 /* eslint-disable no-await-in-loop */
 
