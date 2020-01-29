@@ -79,7 +79,7 @@ function Song(props) {
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    if (wrapperRef.current) {
+    if (active && wrapperRef.current) {
       wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [active]);
