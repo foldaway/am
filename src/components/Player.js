@@ -137,13 +137,7 @@ function Player(props) {
         />
       )}
       {nowPlayingItemIndex === -1 && <EmptyState>Nothing playing</EmptyState>}
-      <PlayerControls
-        onSeek={(time) => player.seekToTime(time)}
-        onPlaybackChange={(isPaused) => (isPaused ? player.play() : player.pause())}
-        onVolumeChange={(vol) => {
-          player.volume = vol;
-        }}
-      />
+      <PlayerControls />
     </Wrapper>
   );
 }

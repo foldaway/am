@@ -5,7 +5,6 @@ import {
   Slider,
   Direction,
 } from 'react-player-controls';
-import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
 
@@ -114,7 +113,7 @@ const StyledButton = styled.button`
   }
 `;
 
-function PlayerControls({ onSeek, onVolumeChange }) {
+function PlayerControls() {
   const { player } = window.MusicKitInstance;
   const { Events, PlaybackStates } = window.MusicKit;
 
@@ -175,7 +174,7 @@ function PlayerControls({ onSeek, onVolumeChange }) {
           direction={Direction.HORIZONTAL}
           onIntent={setSeekIntentValue}
           onIntentEnd={() => setSeekIntentValue(0)}
-          onChange={(value) => onSeek(value * playbackDuration)}
+          onChange={(value) => player.seekToTime(value * playbackDuration)}
         >
           <SliderBarBackground />
           <SliderBarBuffer progress={currentBufferedProgress} />
@@ -187,7 +186,9 @@ function PlayerControls({ onSeek, onVolumeChange }) {
       <SliderWrapper gridArea="volume">
         <StyledSlider
           direction={Direction.HORIZONTAL}
-          onChange={onVolumeChange}
+          onChange={(vol) => {
+            player.volume = vol;
+          }}
         >
           <SliderBarBackground />
           <SliderBarPlayTime progress={volume * 100} />
@@ -223,10 +224,5 @@ function PlayerControls({ onSeek, onVolumeChange }) {
     </Wrapper>
   );
 }
-
-PlayerControls.propTypes = {
-  onSeek: PropTypes.func.isRequired,
-  onVolumeChange: PropTypes.func.isRequired,
-};
 
 export default PlayerControls;
