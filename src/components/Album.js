@@ -5,11 +5,12 @@ import styled from 'styled-components';
 import AlbumSong from './AlbumSong';
 import Loader from './Loader';
 
-import { imgURLGen, srcSetGen } from '../util/img';
 import albumPropType from '../prop_types/album';
 import SquareImage from './ui/SquareImage';
 
-const StyledSquareImage = styled(SquareImage)``;
+const StyledSquareImage = styled(SquareImage)`
+  will-change: transform;
+`;
 
 const Wrapper = styled.div`
   position: relative;

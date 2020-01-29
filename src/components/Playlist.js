@@ -1,12 +1,13 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { imgURLGen, srcSetGen } from '../util/img';
 
 import playlistPropType from '../prop_types/playlist';
 import SquareImage from './ui/SquareImage';
 
-const StyledSquareImage = styled(SquareImage)``;
+const StyledSquareImage = styled(SquareImage)`
+  will-change: transform;
+`;
 
 const Wrapper = styled.div`
   display: grid;
