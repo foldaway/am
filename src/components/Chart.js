@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import LargeTitle from './ui/LargeTitle';
 import chartPropType from '../prop_types/chart';
 import AlbumGrid from './ui/AlbumGrid';
@@ -39,6 +40,10 @@ const MoreButton = styled.button`
   }
 `;
 
+const StyledLink = styled(Link)`
+  text-decoration: none;
+`;
+
 function Chart(props) {
   const { chart } = props;
 
@@ -66,7 +71,11 @@ function Chart(props) {
       case 'songs':
         return <Song song={data} onClick={() => playSongs(chartData, index)} />;
       case 'playlists':
-        return <Playlist playlist={data} />;
+        return (
+          <StyledLink to={`/playlist/${data.id}`}>
+            <Playlist playlist={data} />
+          </StyledLink>
+        );
       case 'music-videos':
         return <MusicVideo musicVideo={data} />;
       default:
