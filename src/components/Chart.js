@@ -4,7 +4,7 @@ import LargeTitle from './ui/LargeTitle';
 import chartPropType from '../prop_types/chart';
 import AlbumGrid from './ui/AlbumGrid';
 import Album from './Album';
-import { playAlbum, playSong, playPlaylist } from '../util/play';
+import { playSongs } from '../util/play';
 import Song from './Song';
 import Playlist from './Playlist';
 import Loader from './Loader';
@@ -59,14 +59,14 @@ function Chart(props) {
     setChartData((prevState) => [...prevState, ...data[mediaType][0].data]);
   }
 
-  function mediaView(data) {
+  function mediaView(data, index) {
     switch (data.type) {
       case 'albums':
-        return <Album album={data} onSelected={playAlbum} />;
+        return <Album album={data} />;
       case 'songs':
-        return <Song song={data} onSelected={playSong} />;
+        return <Song song={data} onClick={() => playSongs(chartData, index)} />;
       case 'playlists':
-        return <Playlist playlist={data} onSelected={playPlaylist} />;
+        return <Playlist playlist={data} />;
       case 'music-videos':
         return <MusicVideo musicVideo={data} />;
       default:

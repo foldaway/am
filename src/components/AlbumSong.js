@@ -29,11 +29,11 @@ const Title = styled.span`
   }
 `;
 
-const AlbumSong = ({ onSelected, song, song: { attributes } }) => (
+const AlbumSong = ({ onClick, song: { attributes } }) => (
   <Wrapper
     onClick={(e) => {
       e.stopPropagation();
-      onSelected(song);
+      onClick(e);
     }}
     role="presentation"
   >
@@ -42,13 +42,9 @@ const AlbumSong = ({ onSelected, song, song: { attributes } }) => (
   </Wrapper>
 );
 
-AlbumSong.defaultProps = {
-  onSelected: () => {},
-};
-
 AlbumSong.propTypes = {
   song: trackPropType.isRequired,
-  onSelected: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default AlbumSong;

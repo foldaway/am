@@ -7,6 +7,7 @@ import Loader from './Loader';
 
 import albumPropType from '../prop_types/album';
 import SquareImage from './ui/SquareImage';
+import { playAlbum } from '../util/play';
 
 const StyledSquareImage = styled(SquareImage)`
   will-change: transform;
@@ -66,7 +67,7 @@ const SongList = styled.div`
   }
 `;
 
-function Album({ album, onSelected }) {
+function Album({ album }) {
   const [songs, setSongs] = useState([]);
   const [songListVisible, setSongListVisible] = useState(false);
 
@@ -101,7 +102,7 @@ function Album({ album, onSelected }) {
             <AlbumSong
               key={song.id}
               song={song}
-              onSelected={() => onSelected(album, index)}
+              onClick={() => playAlbum(album, index)}
             />
           ))
           : null}
@@ -115,13 +116,8 @@ function Album({ album, onSelected }) {
   );
 }
 
-Album.defaultProps = {
-  onSelected: () => {},
-};
-
 Album.propTypes = {
   album: albumPropType.isRequired,
-  onSelected: PropTypes.func,
 };
 
 export default Album;

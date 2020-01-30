@@ -128,7 +128,7 @@ function Player() {
             key={item.id}
             active={nowPlayingItemIndex === index}
             song={item}
-            onSelected={() => player.changeToMediaAtIndex(index)}
+            onClick={() => player.changeToMediaAtIndex(index)}
           />
         ))}
       </Queue>

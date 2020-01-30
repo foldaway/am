@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import PropTypes from 'prop-types';
 
 import { Link } from 'react-router-dom';
 
@@ -11,7 +10,6 @@ import Playlist from '../components/Playlist';
 import Loader from '../components/Loader';
 import LargeTitle from '../components/ui/LargeTitle';
 import AlbumGrid from '../components/ui/AlbumGrid';
-import { playAlbum } from '../util/play';
 
 const Wrapper = styled.div`
   display: grid;
@@ -61,15 +59,9 @@ const Recommendation = (props) => {
           </StyledLink>
         );
       case 'personal-recommendation':
-        return (
-          <Recommendation
-            key={item.id}
-            rec={item}
-            onAlbumSelected={playAlbum}
-          />
-        );
+        return <Recommendation key={item.id} rec={item} />;
       case 'albums':
-        return <Album key={item.id} album={item} onSelected={playAlbum} />;
+        return <Album key={item.id} album={item} />;
       default:
         return null;
     }
@@ -87,10 +79,9 @@ const Recommendation = (props) => {
 
 Recommendation.propTypes = {
   rec: recPropType.isRequired,
-  onAlbumSelected: PropTypes.func.isRequired,
 };
 
-function ForYouPage({ onAlbumSelected }) {
+function ForYouPage() {
   const [recommendations, setRecommendations] = useState([]);
 
   useEffect(() => {
@@ -112,7 +103,6 @@ function ForYouPage({ onAlbumSelected }) {
           <Recommendation
             rec={rec}
             key={rec.id}
-            onAlbumSelected={onAlbumSelected}
           />
         ))}
       </Fragment>
@@ -126,9 +116,5 @@ function ForYouPage({ onAlbumSelected }) {
     </Wrapper>
   );
 }
-
-ForYouPage.propTypes = {
-  onAlbumSelected: PropTypes.func.isRequired,
-};
 
 export default ForYouPage;

@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 import { FormattedTime } from 'react-player-controls';
-import { imgURLGen, srcSetGen } from '../util/img';
 
 import trackPropType from '../prop_types/track';
 import SquareImage from './ui/SquareImage';
+import { playSong } from '../util/play';
 
 const Wrapper = styled.div`
   display: grid;
@@ -75,7 +75,7 @@ const StyledFormattedTime = styled(FormattedTime)`
 `;
 
 function Song(props) {
-  const { onSelected, song, active } = props;
+  const { onClick, song, active } = props;
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -83,11 +83,16 @@ function Song(props) {
       wrapperRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [active]);
+
+  function fallbackOnClick() {
+    playSong(song);
+  }
+
   return (
     <Wrapper
       ref={wrapperRef}
       {...props}
-      onClick={() => onSelected(song)}
+      onClick={onClick || fallbackOnClick}
       role="presentation"
     >
       <Art artwork={song.attributes.artwork} alt="Song artwork" />
@@ -102,14 +107,14 @@ function Song(props) {
 }
 
 Song.defaultProps = {
-  onSelected: () => {},
   active: false,
+  onClick: null,
 };
 
 Song.propTypes = {
   song: trackPropType.isRequired,
-  onSelected: PropTypes.func,
   active: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Song;

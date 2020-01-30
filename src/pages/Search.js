@@ -14,7 +14,7 @@ import playlistPropType from '../prop_types/playlist';
 import artistPropType from '../prop_types/artist';
 import LargeTitle from '../components/ui/LargeTitle';
 import AlbumGrid from '../components/ui/AlbumGrid';
-import { playSong, playAlbum } from '../util/play';
+import { playSongs } from '../util/play';
 
 const Wrapper = styled.div`
   display: grid;
@@ -50,7 +50,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-function SongsView({ songs, onSongSelected }) {
+function SongsView({ songs }) {
   if (songs.length === 0) {
     return null;
   }
@@ -61,7 +61,7 @@ function SongsView({ songs, onSongSelected }) {
         <Song
           key={song.id}
           song={song}
-          onSelected={() => onSongSelected(songs, index)}
+          onClick={() => playSongs(songs, index)}
         />
       ))}
     </Section>
@@ -70,10 +70,9 @@ function SongsView({ songs, onSongSelected }) {
 
 SongsView.propTypes = {
   songs: PropTypes.arrayOf(trackPropType).isRequired,
-  onSongSelected: PropTypes.func.isRequired,
 };
 
-function AlbumsView({ albums, onAlbumSelected }) {
+function AlbumsView({ albums }) {
   if (albums.length === 0) {
     return null;
   }
@@ -82,7 +81,7 @@ function AlbumsView({ albums, onAlbumSelected }) {
       <LargeTitle>Albums</LargeTitle>
       <AlbumGrid>
         {albums.map((album) => (
-          <Album key={album.id} album={album} onSelected={onAlbumSelected} />
+          <Album key={album.id} album={album} />
         ))}
       </AlbumGrid>
     </Section>
@@ -91,7 +90,6 @@ function AlbumsView({ albums, onAlbumSelected }) {
 
 AlbumsView.propTypes = {
   albums: PropTypes.arrayOf(albumPropType).isRequired,
-  onAlbumSelected: PropTypes.func.isRequired,
 };
 
 function PlaylistsView({ playlists }) {
@@ -181,8 +179,8 @@ function SearchCatalog({ location }) {
       {!isSearching && (
         <ResultsWrapper>
           <ArtistsView artists={artists} />
-          <SongsView songs={songs} onSongSelected={playSong} />
-          <AlbumsView albums={albums} onAlbumSelected={playAlbum} />
+          <SongsView songs={songs} />
+          <AlbumsView albums={albums} />
           <PlaylistsView playlists={playlists} />
         </ResultsWrapper>
       )}

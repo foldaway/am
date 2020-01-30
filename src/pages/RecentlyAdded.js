@@ -16,8 +16,6 @@ import Loader from '../components/Loader';
 import AlbumGrid from '../components/ui/AlbumGrid';
 import LargeTitle from '../components/ui/LargeTitle';
 
-import { playAlbum } from '../util/play';
-
 /* eslint-disable no-await-in-loop */
 
 const sleep = async (msec) => new Promise((resolve) => setTimeout(resolve, msec));
@@ -81,13 +79,12 @@ function RecentlyAddedLibrary() {
   function mediaView(m) {
     switch (m.type) {
       case 'library-albums':
-        return <Album key={m.id} album={m} onSelected={playAlbum} />;
+        return <Album key={m.id} album={m} />;
       // case 'library-playlists':
       //   return (
       //     <Playlist
       //       key={m.id}
       //       playlist={m}
-      //       onSelected={() => onPlaylistSelected('playlist', m)}
       //     />
       //   );
       default:

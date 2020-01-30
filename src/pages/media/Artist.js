@@ -7,14 +7,14 @@ import Album from '../../components/Album';
 import Loader from '../../components/Loader';
 import Song from '../../components/Song';
 import Modal from '../../components/Modal';
-import Playlist from './Playlist';
+import Playlist from '../../components/Playlist';
 
 import { imgURLGen, srcSetGen } from '../../util/img';
 import fetchArtistImage from '../../util/fetch-artist-img';
 import MusicVideo from '../../components/MusicVideo';
 import LargeTitle from '../../components/ui/LargeTitle';
 import AlbumGrid from '../../components/ui/AlbumGrid';
-import { playAlbum, playSong } from '../../util/play';
+import { playSongs } from '../../util/play';
 
 const Wrapper = styled.div`
   display: grid;
@@ -210,7 +210,7 @@ function ArtistPage({ match }) {
         <LargeTitle>Latest Release</LargeTitle>
         {albums && albums.length > 0 ? (
           <AlbumGrid>
-            <Album album={albums[0]} onSelected={playAlbum} />
+            <Album album={albums[0]} />
           </AlbumGrid>
         ) : null}
       </LatestReleaseContainer>
@@ -221,7 +221,7 @@ function ArtistPage({ match }) {
             <Song
               key={song.id}
               song={song}
-              onSelected={() => playSong(songs, index)}
+              onClick={() => playSongs(songs, index)}
             />
           ))}
         </Songs>
@@ -230,7 +230,7 @@ function ArtistPage({ match }) {
         <LargeTitle>Albums</LargeTitle>
         <AlbumGrid>
           {albums.slice(1).map((album) => (
-            <Album key={album.id} album={album} onSelected={playAlbum} />
+            <Album key={album.id} album={album} />
           ))}
         </AlbumGrid>
       </AlbumsContainer>

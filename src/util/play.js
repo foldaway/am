@@ -1,8 +1,9 @@
 async function playQueue(queueObj, queueIndex) {
   const { player } = window.MusicKitInstance;
   try {
-    await window.MusicKitInstance.setQueue(queueObj);
-    await player.changeToMediaAtIndex(queueIndex);
+    await window.MusicKitInstance.setQueue(
+      Object.assign(queueObj, { startPosition: queueIndex - 1 }),
+    );
     await player.play();
   } catch (e) {
     console.error(e);
@@ -11,4 +12,5 @@ async function playQueue(queueObj, queueIndex) {
 
 export const playAlbum = async ({ id: album }, index = 0) => playQueue({ album }, index);
 export const playPlaylist = async ({ id: playlist }, index = 0) => playQueue({ playlist }, index);
-export const playSong = async (items, index = 0) => playQueue({ items: items.slice(index) }, 0);
+export const playSongs = async (songs, index = 0) => playQueue({ items: songs }, index);
+export const playSong = async ({ id: song }) => playQueue({ song }, 0);

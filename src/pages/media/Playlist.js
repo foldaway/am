@@ -159,7 +159,7 @@ function PlaylistLibrary({ match, isLibrary }) {
             <StyledSong
               key={song.id}
               song={song}
-              onSelected={() => playPlaylist(playlist, index)}
+              onClick={() => playPlaylist(playlist, index)}
             />
           ))
         ) : (
