@@ -132,11 +132,13 @@ function Player() {
           />
         ))}
       </Queue>
-      {!isOpen && nowPlayingItemIndex !== -1 && (
-        <CurrentSong
-          song={queue.items[nowPlayingItemIndex]}
-          onSelected={toggleOpen}
-        />
+      {!isOpen
+        && nowPlayingItemIndex !== -1
+        && queue.items[nowPlayingItemIndex] && (
+          <CurrentSong
+            song={queue.items[nowPlayingItemIndex]}
+            onClick={toggleOpen}
+          />
       )}
       {nowPlayingItemIndex === -1 && <EmptyState>Nothing playing</EmptyState>}
       <PlayerControls />
