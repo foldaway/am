@@ -23,6 +23,7 @@ import ForYou from './pages/ForYou';
 import RecentlyAdded from './pages/RecentlyAdded';
 import Modal from './components/Modal';
 import Playlists from './pages/Playlists';
+import TopCharts from './pages/TopCharts';
 
 const now = new Date();
 const useDarkTheme = now.getHours() >= 19 || now.getHours() <= 7;
@@ -107,6 +108,7 @@ function App() {
               <Route path="/artist/:artistID" component={ArtistPage} />
               <Route path="/search" component={SearchCatalog} />
               <Route exact path="/for-you" component={ForYou} />
+              <Route exact path="/top-charts" component={TopCharts} />
               <Route
                 exact
                 path="/login"

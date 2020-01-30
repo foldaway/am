@@ -8,7 +8,7 @@ import {
   IoIosList,
   IoIosMicrophone,
 } from 'react-icons/io';
-import { MdAlbum } from 'react-icons/md';
+import { MdAlbum, MdShowChart } from 'react-icons/md';
 import LargeTitle from './ui/LargeTitle';
 import SearchBox from './SearchBox';
 
@@ -89,6 +89,10 @@ function Header() {
           <HeaderLink to="/for-you">
             <IoIosHeart />
             For You
+          </HeaderLink>
+          <HeaderLink to="/top-charts">
+            <MdShowChart />
+            Top Charts
           </HeaderLink>
           <SearchBox />
         </React.Fragment>
