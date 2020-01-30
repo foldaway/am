@@ -6,7 +6,6 @@ import Artist from '../components/Artist';
 import Album from '../components/Album';
 import AlbumGrid from '../components/ui/AlbumGrid';
 import LargeTitle from '../components/ui/LargeTitle';
-import { playAlbum } from '../util/play';
 
 /* eslint-disable no-await-in-loop */
 
@@ -107,9 +106,7 @@ albums
         </AlbumCount>
         <AlbumGrid>
           {indivAlbums.length > 0 ? (
-            indivAlbums.map((album) => (
-              <Album key={album.id} album={album} onSelected={playAlbum} />
-            ))
+            indivAlbums.map((album) => <Album key={album.id} album={album} />)
           ) : (
             <Loader />
           )}
