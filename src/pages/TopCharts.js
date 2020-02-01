@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { isEmpty } from 'lodash';
 import Chart from '../components/Chart';
+import Loader from '../components/Loader';
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,6 +28,15 @@ function TopCharts() {
     }
     fetchData();
   }, []);
+
+  if (
+    isEmpty(songCharts)
+    || isEmpty(albumCharts)
+    || isEmpty(playlistCharts)
+    || isEmpty(musicVideoCharts)
+  ) {
+    return <Loader />;
+  }
 
   return (
     <Wrapper>
