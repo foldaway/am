@@ -65,6 +65,11 @@ function Chart(props) {
   }
 
   function mediaView(data, index) {
+    // Some invalid data
+    if (!data.attributes) {
+      return null;
+    }
+
     switch (data.type) {
       case 'albums':
         return <Album album={data} />;
