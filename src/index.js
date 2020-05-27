@@ -5,9 +5,11 @@ import App from './App';
 
 import './index.scss';
 
+const { MUSICKIT_TOKEN } = process.env;
+
 window.MusicKitInstance = window.MusicKit.configure({
   bitrate: window.MusicKit.PlaybackBitrate.HIGH,
-  developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ilc3RkFOTDlGNzUifQ.eyJpYXQiOjE1Nzg0OTYwNjAsImV4cCI6MTU4NjI3MjA2MCwiaXNzIjoiRVo0OTUzMjIzNiJ9.NWqW4XX3isOrXYW8QdExyn1ksigc4NzfT3T6fIXsv6VAJiMKtYotDxzzc2neDvU9x7wAjfzyU0iLh6fAAkar2A',
+  developerToken: MUSICKIT_TOKEN,
 });
 
 if (module.hot) {
