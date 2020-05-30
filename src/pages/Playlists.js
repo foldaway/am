@@ -45,8 +45,11 @@ function Playlists() {
       <AlbumGrid>
         {isEmpty(playlists) && <Loader />}
         {playlists.map((playlist) => (
-          <StyledLink to={`/library/playlists/${playlist.id}`}>
-            <Playlist key={playlist.id} playlist={playlist} />
+          <StyledLink
+            key={playlist.id}
+            to={`/library/playlists/${playlist.id}`}
+          >
+            <Playlist playlist={playlist} />
           </StyledLink>
         ))}
       </AlbumGrid>

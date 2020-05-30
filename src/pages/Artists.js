@@ -120,7 +120,11 @@ albums
       <ArtistList>
         {artists.length > 0 ? (
           artists.map((artist) => (
-            <Artist onClick={() => setCurrentArtist(artist)} artist={artist} />
+            <Artist
+              key={artist.id}
+              onClick={() => setCurrentArtist(artist)}
+              artist={artist}
+            />
           ))
         ) : (
           <Loader />

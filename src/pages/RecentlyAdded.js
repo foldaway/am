@@ -99,7 +99,7 @@ function RecentlyAddedLibrary() {
     }
     const isPlural = parseInt(key, 10) > 0;
     return (
-      <React.Fragment>
+      <React.Fragment key={key}>
         <LargeTitle>
           Last&nbsp;
           {isPlural ? key : ''}
