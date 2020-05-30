@@ -15,8 +15,7 @@ const Wrapper = styled.div`
   grid-template-areas:
     "progress-bar progress-bar"
     "time-marker bitrate"
-    "playback-controls playback-controls"
-    "volume volume";
+    "playback-controls playback-controls";
   grid-template-columns: "1fr 1fr";
   grid-template-rows: 1fr;
   grid-column-gap: 10px;
@@ -113,6 +112,17 @@ const StyledButton = styled.button`
   }
 `;
 
+const VolumeMenu = styled.div`
+  position: absolute;
+  background: #fff;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
+  width: 90px;
+  padding: 12px;
+  bottom: 12px;
+  right: 12px;
+  border-radius: 3px;
+`;
+
 function PlayerControls() {
   const { player } = window.MusicKitInstance;
   const { Events, PlaybackStates } = window.MusicKit;
@@ -124,6 +134,7 @@ function PlayerControls() {
   const [currentBufferedProgress, setCurrentBufferedProgress] = useState(0);
   const [volume, setVolume] = useState(player.volume);
   const [seekIntentValue, setSeekIntentValue] = useState(0);
+  const [isVolumeMenuOpen, setIsVolumeMenuOpen] = useState(false);
 
   const isPlaying = playbackState === PlaybackStates.playing;
 
@@ -183,18 +194,23 @@ function PlayerControls() {
           <SliderHandle progress={playbackPercentage} />
         </StyledSlider>
       </SliderWrapper>
-      <SliderWrapper gridArea="volume">
-        <StyledSlider
-          direction={Direction.HORIZONTAL}
-          onChange={(vol) => {
-            player.volume = vol;
-          }}
-        >
-          <SliderBarBackground />
-          <SliderBarPlayTime progress={volume * 100} />
-          <SliderHandle progress={volume * 100} />
-        </StyledSlider>
-      </SliderWrapper>
+
+      {isVolumeMenuOpen && (
+        <VolumeMenu>
+          <SliderWrapper gridArea="volume">
+            <StyledSlider
+              direction={Direction.HORIZONTAL}
+              onChange={(vol) => {
+                player.volume = vol;
+              }}
+            >
+              <SliderBarBackground />
+              <SliderBarPlayTime progress={volume * 100} />
+              <SliderHandle progress={volume * 100} />
+            </StyledSlider>
+          </SliderWrapper>
+        </VolumeMenu>
+      )}
 
       <TimeDisplay numSeconds={playbackTime} />
       <Controls>
@@ -215,6 +231,9 @@ function PlayerControls() {
         </StyledButton>
         <StyledButton onClick={() => player.skipToNextItem()}>
           <PlayerIcon.Next />
+        </StyledButton>
+        <StyledButton onClick={() => setIsVolumeMenuOpen((open) => !open)}>
+          <PlayerIcon.SoundOn />
         </StyledButton>
       </Controls>
       <Bitrate>

@@ -50,7 +50,7 @@ const Description = styled.span`
 `;
 
 const StyledSong = styled(Song)`
-  width: 25vw;
+  flex-basis: 28%;
   margin-right: 48px;
   margin-bottom: 16px;
 `;
@@ -58,10 +58,10 @@ const StyledSong = styled(Song)`
 const Songs = styled.div`
   grid-area: songs;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   align-content: start;
-  overflow-x: scroll;
+  overflow-y: scroll;
 `;
 
 const Controls = styled.div`
