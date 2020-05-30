@@ -75,10 +75,6 @@ const Queue = styled.div`
 const QueueSong = styled(Song)`
   flex: 0 0 auto;
   border-radius: 3px;
-  ${(props) => props.active
-    && css`
-      background: ${props.theme.background.secondary};
-    `}
 `;
 
 const CurrentSong = styled(Song)`

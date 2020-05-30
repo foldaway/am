@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { FormattedTime } from 'react-player-controls';
 
@@ -25,6 +25,12 @@ const Wrapper = styled.div`
     cursor: pointer;
     background-color: $highlightgray;
   }
+
+  ${(props) => (props.active
+    ? css`
+          background-color: rgba(0, 0, 0, 0.06);
+        `
+    : '')}
 `;
 
 const Art = styled(SquareImage)`
