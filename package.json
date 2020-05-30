@@ -38,7 +38,7 @@
     "react-router-dom": "^5.1.2",
     "react-spinners": "^0.8.0",
     "regenerator-runtime": "^0.13.3",
-    "styled-components": "^4.4.1",
+    "styled-components": "^5.1.1",
     "typeface-ibm-plex-mono": "^0.0.61",
     "typeface-ibm-plex-sans": "^0.0.75"
   }
