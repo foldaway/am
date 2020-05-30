@@ -10,6 +10,7 @@ import Loader from '../../components/Loader';
 
 import LargeTitle from '../../components/ui/LargeTitle';
 import { playPlaylist } from '../../util/play';
+import Button from '../../components/ui/Button';
 
 /* eslint-disable no-await-in-loop */
 
@@ -19,9 +20,10 @@ const Wrapper = styled.div`
     "art songs"
     "title songs"
     "description songs"
-    "metadata songs";
+    "metadata songs"
+    "controls songs";
   grid-template-columns: 1fr 5fr;
-  grid-template-rows: auto auto auto 1fr;
+  grid-template-rows: auto auto auto auto 1fr;
   column-gap: 10px;
   row-gap: 10px;
   overflow: hidden;
@@ -66,6 +68,16 @@ const Songs = styled.div`
   flex-wrap: wrap;
   align-content: start;
   overflow-x: scroll;
+`;
+
+const Controls = styled.div`
+  grid-area: controls;
+  display: flex;
+  align-items: flex-start;
+
+  ${Button} {
+    margin-right: 10px;
+  }
 `;
 
 function PlaylistLibrary({ match, isLibrary }) {
@@ -153,6 +165,16 @@ function PlaylistLibrary({ match, isLibrary }) {
         &nbsp;minutes
       </Metadata>
       <Description>{description}</Description>
+      <Controls>
+        <Button onClick={() => playPlaylist(playlist, 0)}>Play</Button>
+        <Button
+          onClick={() => {
+            playPlaylist(playlist, 0, true);
+          }}
+        >
+          Shuffle
+        </Button>
+      </Controls>
       <Songs>
         {songs.length > 0 ? (
           songs.map((song, index) => (
