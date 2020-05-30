@@ -19,6 +19,7 @@ const Wrapper = styled.div`
   grid-template-columns: "1fr 1fr";
   grid-template-rows: 1fr;
   grid-column-gap: 10px;
+  row-gap: 12px;
 `;
 
 const StyledSlider = styled(Slider)`
@@ -32,20 +33,24 @@ const SliderBar = styled.div`
 
 const SliderBarBackground = styled(SliderBar)`
   background-color: ${(props) => props.theme.background.secondary};
+  border-radius: 3px;
   grid-area: 1/1;
 `;
 const SliderBarBuffer = styled(SliderBar)`
   background-color: ${(props) => props.theme.background.tertiary};
   width: ${(props) => props.progress}%;
+  border-radius: 3px;
   grid-area: 1/1;
 `;
 const SliderBarPlayTime = styled(SliderBar)`
   background-color: ${(props) => props.theme.branding};
+  border-radius: 3px;
   width: ${(props) => props.progress || 0}%;
   grid-area: 1/1;
 `;
 const SliderBarSeek = styled(SliderBar)`
   background-color: ${(props) => props.theme.branding};
+  border-radius: 3px;
   opacity: 0.7;
   width: ${(props) => props.progress}%;
   grid-area: 1/1;
@@ -78,7 +83,7 @@ const SliderWrapper = styled.div`
 const TimeDisplay = styled(FormattedTime)`
   justify-self: start;
   color: ${(props) => props.theme.text.secondary};
-  font-weight: 100;
+  font-weight: 500;
   font-size: 0.7em;
 `;
 
@@ -90,7 +95,7 @@ const Bitrate = styled.span`
   justify-self: end;
   grid-area: bitrate;
   color: ${(props) => props.theme.text.secondary};
-  font-weight: 100;
+  font-weight: 500;
   font-size: 0.7em;
 `;
 
@@ -238,7 +243,7 @@ function PlayerControls() {
       </Controls>
       <Bitrate>
         {bitrate}
-        kbps
+k
       </Bitrate>
     </Wrapper>
   );
