@@ -9,7 +9,8 @@ const { MUSICKIT_TOKEN } = process.env;
 
 window.MusicKitInstance = window.MusicKit.configure({
   bitrate: window.MusicKit.PlaybackBitrate.HIGH,
-  developerToken: MUSICKIT_TOKEN,
+  developerToken:
+    'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjI3M1pZOUY4MlUifQ.eyJpYXQiOjE1OTA2MzA0MzcsImV4cCI6MTU5MzIyMjQzNywiaXNzIjoiRVo0OTUzMjIzNiJ9.6d23Cyzr5rGKgOqQMZ7WZYej2LwCg7Ng0QltBPb518-mUgfUvh3O3CP3x_pIG3ULTB5X3nQJU3T_pcyjleSzQg',
 });
 
 if (module.hot) {

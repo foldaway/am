@@ -4,7 +4,7 @@ import 'regenerator-runtime/runtime';
 import 'typeface-ibm-plex-sans';
 import 'typeface-ibm-plex-mono';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import styled, { ThemeProvider } from 'styled-components';
@@ -24,9 +24,6 @@ import RecentlyAdded from './pages/RecentlyAdded';
 import Modal from './components/Modal';
 import Playlists from './pages/Playlists';
 import TopCharts from './pages/TopCharts';
-
-const now = new Date();
-const useDarkTheme = now.getHours() >= 19 || now.getHours() <= 7;
 
 const commonTheme = {
   branding: 'rgb(255, 45, 85)',
@@ -59,8 +56,6 @@ const nightTheme = {
   },
 };
 
-const theme = Object.assign(commonTheme, useDarkTheme ? nightTheme : dayTheme);
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,6 +73,24 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(isAuthorized);
   const [error, setError] = useState(null);
+  const [isDarkThemeEnabled, setIsDarkThemeEnabled] = useState(false);
+
+  const theme = useMemo(
+    () => Object.assign(commonTheme, isDarkThemeEnabled ? nightTheme : dayTheme),
+    [isDarkThemeEnabled],
+  );
+
+  useEffect(() => {
+    if (typeof window.matchMedia === 'undefined') {
+      return null;
+    }
+    const match = window.matchMedia('(prefers-color-scheme: dark)');
+    const listener = (e) => {
+      setIsDarkThemeEnabled(e.matches);
+    };
+    match.addListener(listener);
+    return () => match.removeListener(listener);
+  }, [setIsDarkThemeEnabled]);
 
   return (
     <ThemeProvider theme={theme}>

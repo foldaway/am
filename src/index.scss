@@ -13,8 +13,8 @@
     overflow: hidden;
   }
 
-  #root {
-    &.dark-theme {
+  @media (prefers-color-scheme: dark) {
+    #root {
       background-color: $black;
     }
   }
