@@ -3,7 +3,6 @@ import { sumBy } from 'lodash';
 import PropTypes from 'prop-types';
 
 import styled from 'styled-components';
-import { imgURLGen, srcSetGen } from '../../util/img';
 
 import Song from '../../components/Song';
 import Loader from '../../components/Loader';
@@ -11,6 +10,7 @@ import Loader from '../../components/Loader';
 import LargeTitle from '../../components/ui/LargeTitle';
 import { playPlaylist } from '../../util/play';
 import Button from '../../components/ui/Button';
+import SquareImage from '../../components/ui/SquareImage';
 
 /* eslint-disable no-await-in-loop */
 
@@ -28,12 +28,6 @@ const Wrapper = styled.div`
   row-gap: 10px;
   overflow: hidden;
   height: 100%;
-`;
-
-const Art = styled.img`
-  grid-area: art;
-  width: 200px;
-  height: 200px;
 `;
 
 const Title = styled(LargeTitle)`
@@ -138,7 +132,6 @@ function PlaylistLibrary({ match, isLibrary }) {
     return <Loader />;
   }
   const { attributes } = playlist;
-  const artworkURL = attributes.artwork ? attributes.artwork.url : '';
   const description = 'description' in attributes ? attributes.description.standard : '';
   const totalDuration = sumBy(songs, (song) => song.attributes.durationInMillis);
   const { hours, minutes } = window.MusicKit.formattedMilliseconds(
@@ -146,10 +139,11 @@ function PlaylistLibrary({ match, isLibrary }) {
   );
   return (
     <Wrapper>
-      <Art
-        src={imgURLGen(artworkURL, { w: 75 })}
-        srcSet={srcSetGen(artworkURL)}
+      <SquareImage
+        artwork={attributes.artwork}
         alt="Playlist artwork"
+        shadow={false}
+        roundedCorners={false}
       />
       <Title>{attributes.name}</Title>
       <Metadata>

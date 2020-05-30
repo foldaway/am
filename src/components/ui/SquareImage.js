@@ -8,8 +8,10 @@ const ArtWrapper = styled.div`
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-radius: 6px;
-  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);
+  ${(props) => (props.roundedCorners ? 'border-radius: 6px;' : '')}
+  ${(props) => (props.shadow
+    ? 'box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.2);'
+    : '')}
   transition: 200ms transform;
   background: ${(props) => props.theme.background.secondary};
 `;
@@ -61,11 +63,15 @@ function SquareImage(props) {
 SquareImage.defaultProps = {
   artwork: { url: '' },
   alt: '',
+  shadow: true,
+  roundedCorners: true,
 };
 
 SquareImage.propTypes = {
   artwork: PropTypes.shape(),
   alt: PropTypes.string,
+  shadow: PropTypes.bool,
+  roundedCorners: PropTypes.bool,
 };
 
 export default SquareImage;
