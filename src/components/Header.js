@@ -53,10 +53,10 @@ const HeaderLink = styled(NavLink)`
 
   &.active {
     background-color: ${(props) => props.theme.branding};
-    color: hsl(208, 12%, 88%);
+    color: #fff;
 
     svg {
-      fill: hsl(208, 12%, 88%);
+      fill: #fff;
     }
   }
 `;
