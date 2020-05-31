@@ -85,6 +85,7 @@ function App() {
       return null;
     }
     const match = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDarkThemeEnabled(match.matches);
     const listener = (e) => {
       setIsDarkThemeEnabled(e.matches);
     };
