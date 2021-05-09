@@ -25,7 +25,7 @@
   "dependencies": {
     "babel-preset-env": "^1.7.0",
     "core-js": "^3.6.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.24.0",
     "normalize.css": "^8.0.0",
